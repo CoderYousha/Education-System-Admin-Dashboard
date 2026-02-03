@@ -1,0 +1,12 @@
+.none-view-scroll::-webkit-scrollbar{
+     display: none;
+}
+
+.active {
+     color: blue;
+     background-color: #bfdbfe;
+}
+
+.css-c7qa1g-MuiChartsWrapper-root{
+     display: flex !important;
+}
