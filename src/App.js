@@ -8,7 +8,7 @@ import { ThemeProvider, createTheme, useTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useMemo, useState } from 'react';
 import DarkModeToggle from './components/DarkModeToggle';
-import Dashboard from './pages/dashboard/Dashboard';
+import DashboardRoutes from './routes/DashboardRoutes';
 
 function App() {
   const theme = useTheme();
@@ -17,7 +17,11 @@ function App() {
       <div className="App" style={{backgroundColor: theme.palette.background.default}}>
         <BrowserRouter>
             <Routes>
-                <Route path='/dashboard' element={<AuthProvider><Dashboard /></AuthProvider>} />
+              {
+                DashboardRoutes().map((route, index) => 
+                  <Route key={index} path={route.path} element={<AuthProvider>{route.element}</AuthProvider>} />
+                )
+              }
             </Routes>
         </BrowserRouter>
       </div>

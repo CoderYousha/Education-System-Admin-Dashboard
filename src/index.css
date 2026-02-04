@@ -8,9 +8,10 @@
 }
 
 body {
+  height: 100vh;
   margin: 0;
   font-family: cairo !important;
-    
+  background-color: red;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

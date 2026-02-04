@@ -22,7 +22,7 @@ function RequestDetails({request, onClickClose, onClickReject, onClickAccept}) {
             if (!size) return null; 
             const sizeInMB = (size / (1024 * 1024)).toFixed(2); alert(sizeInMB); return sizeInMB; 
         } catch (error) { 
-            console.error("Error fetching video size:", error); 
+            console.error("Error fetching video size:", error);
             return null; 
         } };
 
@@ -92,9 +92,6 @@ function RequestDetails({request, onClickClose, onClickReject, onClickAccept}) {
                                     <img src={GrayVideoImage} className="ml-1" />
                                     <Typography variant="body1" className="">فيديو</Typography>
                                 </Box>
-                                {/* <Box className="flex items-center">
-                                    <Typography variant="body1" className=""> MB</Typography>
-                                </Box> */}
                                 <Box className="flex items-center">
                                     <img src={CalendarImage} className="ml-1" />
                                     <Typography variant="body1" className="">{content.content.created_at}</Typography>

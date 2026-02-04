@@ -37,21 +37,6 @@ function Dashboard() {
      const [request, setRequest] = useState('');
      const theme = useTheme();
 
-     const data = [
-          'كانون الثاني',
-          'شباط',
-          'آذار',
-          'نيسان',
-          'أيار',
-          'حزيران',
-          'تموز',
-          'آب',
-          'أيلول',
-          'تشرين الأول',
-          'تشرين الثاني',
-          'كانون الأول',
-     ];
-
      const StyledTableCell = styled(TableCell)(({ theme }) => ({
           [`&.${tableCellClasses.head}`]: {
           },
@@ -273,7 +258,6 @@ function Dashboard() {
                                                             <TableRow sx={{backgroundColor: theme.palette.background.paper}}>
                                                                  <StyledTableCell align="right">اسم الدورة</StyledTableCell>
                                                                  <StyledTableCell align="right">اسم المدرس</StyledTableCell>
-                                                                 {/* <StyledTableCell align="right">نوع المحتوى</StyledTableCell> */}
                                                                  <StyledTableCell align="right">تاريخ الطلب</StyledTableCell>
                                                                  <StyledTableCell align="right">الحالة</StyledTableCell>
                                                                  <StyledTableCell align="right">الإجراءات</StyledTableCell>
@@ -286,7 +270,6 @@ function Dashboard() {
                                                                            {language === 'en' ? request.name_en : request.name_ar}
                                                                       </StyledTableCell>
                                                                       <StyledTableCell align="right" className="!flex justify-end items-center"><Box className="mr-2">{request.teacher.first_name} {request.teacher.last_name}</Box><Box className="w-7 h-7 rounded-full bg-gray-300 flex justify-center items-center font-bold">{request.teacher.first_name.charAt(0)}</Box></StyledTableCell>
-                                                                      {/* <StyledTableCell align="right">{language === 'en' ? request.category.name_en : request.category.name_ar}</StyledTableCell> */}
                                                                       <StyledTableCell align="right">{request.created_at}</StyledTableCell>
                                                                       <StyledTableCell align="right"><Box className="text-center py-1 rounded-lg font-bold" sx={{backgroundColor: request.status === 'accepted'? "#CCFFCC" : request.status === 'rejected' ? "#FF9999" : "#FCF0CF", color: request.status === 'accepted'? "green" : request.status === 'rejected' ? "red" : "orange"}}>{request.status === 'accepted' ? 'تمت الموافقة' : request.status === 'rejected' ? 'تم الرفض' : 'بانتظار الموافقة'}</Box></StyledTableCell>
                                                                       <StyledTableCell align="right" className="!flex justify-between">
