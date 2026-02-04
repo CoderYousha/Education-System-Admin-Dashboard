@@ -27,7 +27,7 @@ function RequestDetails({request, onClickClose, onClickReject, onClickAccept}) {
         } };
 
     return (
-        <Box sx={{backgroundColor: theme.palette.background.paper}} className="fixed top-0 left-1/2 -translate-x-1/2 w-3/5 h-screen bg-white rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0" dir="rtl">
+        <Box sx={{backgroundColor: theme.palette.background.paper}} className="w-4/5 h-screen bg-white rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative" dir="rtl">
             <Typography variant="h5" className="!font-semibold max-sm:!text-xl">تفاصيل الطلب</Typography>
             <Typography variant="h6" className="text-gray-400 !mt-3 max-sm:!text-lg">مراجعة ملفات الدورة المقدمة من المعلم</Typography>
             <CloseIcon onClick={onClickClose} className="text-gray-700 cursor-pointer absolute top-5 left-5" fontSize="large"></CloseIcon>

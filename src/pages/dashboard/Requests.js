@@ -13,7 +13,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import BasicSelect from "../../components/Select";
+import RequestFilter from "../../popup/RequestsFilter";
 
 function Requests() {
     const host = `${process.env.REACT_APP_LOCAL_HOST}`;
@@ -69,7 +69,7 @@ function Requests() {
     const getCourseDetails = async (id) => {
         setRequest(coursesRequests.find((item) => item.id == id));
         console.log(coursesRequests.find((item) => item.id == id));
-        document.getElementById('popup').style.display = 'block';
+        document.getElementById('popup').style.display = 'flex';
     }
 
     const changeCourseStatus = async (courseId, status) => {
@@ -100,7 +100,7 @@ function Requests() {
                     <Box sx={{ backgroundColor: theme.palette.background.default }}>
                         <Sidebar />
                         <Header />
-                        <Box className="w-4/5 rounded-xl" dir="rtl">
+                        <Box className="w-4/5 rounded-xl relative" dir="rtl">
                             <Box className="bg-white rounded-xl">
                                 <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2">
                                     <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">طلبات الموافقة</Typography>
@@ -177,9 +177,12 @@ function Requests() {
                                 </Box>
                             </Box>
                         </Box>
-                        <Box id="popup" className="w-screen h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden max-sm:left-0">
-                            <RequestDetails onClickClose={closePopup} onClickAccept={changeCourseStatus} onClickReject={changeCourseStatus} request={request} />
-                        </Box>
+                            <Box id="popup" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center hidden max-sm:left-0">
+                                <RequestDetails onClickClose={closePopup} onClickAccept={changeCourseStatus} onClickReject={changeCourseStatus} request={request} />
+                            </Box>
+                            <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 flex justify-center hidden max-sm:left-0">
+                                <RequestFilter />
+                            </Box>
                         <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
                     </Box>
             }
