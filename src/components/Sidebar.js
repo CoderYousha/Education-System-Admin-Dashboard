@@ -67,7 +67,7 @@ function Sidebar () {
           },
      ];
      return (
-          <Box sx={{backgroundColor: theme.palette.background.paper}} className="bg-white w-1/5 h-screen fixed right-0 top-0 shadow-xl shadow-neutral-400 max-sm:w-1/6 overflow-y-scroll none-view-scroll">
+          <Box sx={{backgroundColor: theme.palette.background.paper}} className="bg-white w-1/5 h-screen fixed right-0 top-0 shadow-xl shadow-neutral-400 max-sm:w-1/6 overflow-y-scroll none-view-scroll z-50">
                <Box className="bg-red-700 w-4/5 mx-auto mt-5 text-white font-bold text-center py-3">LOGO HERE</Box>
                <Box className="mt-10 cursor-pointer">
                     {

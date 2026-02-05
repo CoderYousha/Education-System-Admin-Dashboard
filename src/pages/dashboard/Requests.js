@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 import useSnackBar from "../../hooks/UseSnackBar";
 import { useWaits } from "../../hooks/UseWait";
-import { Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TablePagination, TableRow, Typography, useTheme } from "@mui/material";
+import { Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, Typography, useTheme } from "@mui/material";
 import styled from "styled-components";
 import Fetch from "../../services/Fetch";
 import Sidebar from "../../components/Sidebar";
@@ -30,6 +30,12 @@ function Requests() {
     const [totalPages, setTotalPages] = useState(0);
     const [requestCounts, setRequestCounts] = useState('');
     const [search, setSearch] = useState('');
+    const [filterSearch, setFilterSearch] = useState('');
+    const [status, setStatus] = useState(['pending', 'accepted', 'rejected']);
+    const [from, setFrom] = useState('');
+    const [to, setTo] = useState('');
+    const [value, setValue] = useState(null);
+    const [teacherId, setTeacherId] = useState('');
     const theme = useTheme();
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -53,8 +59,70 @@ function Requests() {
         document.getElementById('popup').style.display = 'none';
     }
 
+    const openFilter = async () => {
+        document.getElementById('filter').style.display = 'flex';
+    }
+
+    const closeFilter = () => {
+        document.getElementById('filter').style.display = 'none';
+    }
+
+    const setFilterStatus = (s) => {
+        setStatus((prevStatus) => {
+            if (prevStatus.includes(s)) {
+                return prevStatus.filter((state) => s != state)
+            } else {
+                return [...prevStatus, s]
+            }
+        }
+        )
+    }
+
+    const resetFilter = () => {
+        setValue();
+        setStatus(['pending', 'accepted', 'rejected']);
+        setFrom('');
+        setTo('');
+        setTeacherId('');
+        setSearch('');
+    }
+
+    const checkInputs = () => {
+        console.log('status: ' + status);
+        console.log('from: ' + from);
+        console.log('to: ' + to);
+        console.log('teacher_id: ' + teacherId);
+    }
+
     const getCoursesRequests = async () => {
+        setGetWait(true);
+
+        // let result;
+        // if(from || to || teacherId){
+        //     result = await Fetch(host + `/courses?page=${page + 1}&search=${search}&status[]=${status}&from=${from}&to=${to}&teacher_id=${teacherId}`, 'GET', null); //&status[]=${status}&from=${from}&to=${to}
+        // }else{
         let result = await Fetch(host + `/courses?page=${page + 1}&search=${search}`, 'GET', null);
+
+        if (result.status === 200) {
+            setTotalPages(result.data.pagination.last_page);
+            setRequestCounts(result.data.pagination.total);
+            setCoursesRequests(result.data.data);
+            setCurrentPage(page);
+        }
+
+        setGetWait(false);
+    }
+
+    const requestsFiltering = async () => {
+        setGetWait(true);
+        let result;
+        const queryStatus = status.map(s => `status[]=${s}`).join("&");
+        result = await Fetch(host + `/courses?page=${page + 1}&search=${search}&${queryStatus}${from && to && `&from=${from}&to=${to}`}${teacherId && `&teacher_id=${teacherId}`}`, 'GET', null); 
+        // if (from && to) {
+        //     result = await Fetch(host + `/courses?page=${page + 1}&search=${search}&${queryStatus}&from=${from}&to=${to}&teacher_id=${teacherId}`, 'GET', null); //&status[]=${status}&from=${from}&to=${to}
+        // } else {
+        //     result = await Fetch(host + `/courses?page=${page + 1}&search=${search}&${queryStatus}&teacher_id=${teacherId}`, 'GET', null);
+        // }
 
         if (result.status === 200) {
             setTotalPages(result.data.pagination.last_page);
@@ -109,7 +177,7 @@ function Requests() {
                                     <TableContainer component={Paper} dir="rtl">
                                         <Box className="min-h-12 py-2 px-2 flex justify-between items-center">
                                             <Box className="w-full flex items-center">
-                                                <FilterAltOutlinedIcon className="cursor-pointer" fontSize="large" />
+                                                <FilterAltOutlinedIcon className="cursor-pointer" onClick={() => openFilter()} fontSize="large" />
                                                 <Box className="w-2/4 relative mr-3">
                                                     <input onChange={(e) => setSearch(e.target.value)} className="w-8/12 h-12 rounded-md border indent-14 outline-none" placeholder="البحث باسم الدورة أو المدرس" />
                                                     <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" />
@@ -177,12 +245,12 @@ function Requests() {
                                 </Box>
                             </Box>
                         </Box>
-                            <Box id="popup" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center hidden max-sm:left-0">
-                                <RequestDetails onClickClose={closePopup} onClickAccept={changeCourseStatus} onClickReject={changeCourseStatus} request={request} />
-                            </Box>
-                            <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 flex justify-center hidden max-sm:left-0">
-                                <RequestFilter />
-                            </Box>
+                        <Box id="popup" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center hidden max-sm:left-0">
+                            <RequestDetails onClickClose={closePopup} onClickAccept={changeCourseStatus} onClickReject={changeCourseStatus} request={request} />
+                        </Box>
+                        <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center hidden max-sm:left-0">
+                            <RequestFilter value={value} setValue={setValue} search={search} setSearch={setSearch} setFrom={setFrom} setTo={setTo} from={from} to={to} status={status} setTeacherId={setTeacherId} onClickClose={closeFilter} onClickReset={resetFilter} onClickStatus={setFilterStatus} onClickConfirm={requestsFiltering} />
+                        </Box>
                         <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
                     </Box>
             }

@@ -3,12 +3,10 @@ import './styles/colors.css';
 import './styles/constants.css';
 import './index.css';
 import AuthProvider from './providers/AuthProvider';
-import NotAuthProvider from './providers/NotAuthProvider';
-import { ThemeProvider, createTheme, useTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { useMemo, useState } from 'react';
-import DarkModeToggle from './components/DarkModeToggle';
+import { useTheme } from '@mui/material/styles';
 import DashboardRoutes from './routes/DashboardRoutes';
+import StudentsRoutes from './routes/StudentsRoutes';
+import TeachersRoutes from './routes/TeachersRoutes';
 
 function App() {
   const theme = useTheme();
@@ -19,6 +17,16 @@ function App() {
             <Routes>
               {
                 DashboardRoutes().map((route, index) => 
+                  <Route key={index} path={route.path} element={<AuthProvider>{route.element}</AuthProvider>} />
+                )
+              }
+              {
+                StudentsRoutes().map((route, index) => 
+                  <Route key={index} path={route.path} element={<AuthProvider>{route.element}</AuthProvider>} />
+                )
+              }
+              {
+                TeachersRoutes().map((route, index) => 
                   <Route key={index} path={route.path} element={<AuthProvider>{route.element}</AuthProvider>} />
                 )
               }
