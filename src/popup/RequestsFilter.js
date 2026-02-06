@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Typography, useTheme } from "@mui/material";
+import { Box, Button, CircularProgress, Divider, Typography, useTheme } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import CircleIcon from '@mui/icons-material/Circle';
 import CheckIcon from '@mui/icons-material/Check';
@@ -8,7 +8,7 @@ import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import { useEffect, useState } from "react";
 import Fetch from "../services/Fetch";
 
-function RequestFilter({ onClickClose, onClickConfirm, onClickReset, onClickStatus, status, from, setFrom, to, setTo, teacherId, value, setValue, search, setSearch, setTeacherId }) {
+function RequestFilter({ onClickClose, onClickConfirm, onClickReset, onClickStatus, status, from, setFrom, to, setTo, teacherId, value, setValue, setTeacherId, courseName, setCourseName, filterWait, setFilterWait }) {
     const host = `${process.env.REACT_APP_LOCAL_HOST}`;
     const theme = useTheme();
 
@@ -108,13 +108,20 @@ function RequestFilter({ onClickClose, onClickConfirm, onClickReset, onClickStat
             </Box>
             <Typography variant="body1" className="!font-semibold text-gray-400 !mt-5">اسم الدورة</Typography>
             <Box className="">
-                <input value={search} onChange={(e) => setSearch(e.target.value)} className="mt-2 w-full h-10 rounded-lg border bg-gray-200 indent-3" placeholder="أدخل اسم الدورة" />
+                <input value={courseName} onChange={(e) => setCourseName(e.target.value)} className="mt-2 w-full h-10 rounded-lg border bg-gray-200 indent-3 outline-none" placeholder="أدخل اسم الدورة" />
             </Box>
             <Box className="w-full flex justify-between mt-10 max-sm:flex-col">
                 <Button onClick={onClickReset} variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold max-sm:w-full">إعادة التعيين</Button>
-                <Button variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5" onClick={onClickConfirm}>
-                    تطبيق الفلترة
-                    <FilterAltOutlinedIcon />
+                <Button variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5" onClick={() => { setFilterWait(true); onClickConfirm();}}>
+                    {
+                        filterWait ?
+                            <CircularProgress size={20} className="" color="white" />
+                            :
+                            <Box sx={{ color: theme.palette.mode == 'dark' ?  'white' : 'black'}}>
+                                تطبيق الفلترة
+                                <FilterAltOutlinedIcon />
+                            </Box>
+                    }
                 </Button>
             </Box>
         </Box>

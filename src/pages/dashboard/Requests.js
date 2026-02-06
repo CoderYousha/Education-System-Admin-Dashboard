@@ -20,7 +20,7 @@ function Requests() {
     const language = localStorage.getItem('language') || 'ar';
     const { wait } = useContext(AuthContext);
     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
-    const { getWait, setGetWait, sendWait, setSendWait } = useWaits();
+    const { getWait, setGetWait, sendWait, setSendWait, filterWait, setFilterWait } = useWaits();
     const [request, setRequest] = useState('');
     const [coursesRequests, setCoursesRequests] = useState([]);
     const [courseId, setCourseId] = useState(null);
@@ -30,12 +30,13 @@ function Requests() {
     const [totalPages, setTotalPages] = useState(0);
     const [requestCounts, setRequestCounts] = useState('');
     const [search, setSearch] = useState('');
-    const [filterSearch, setFilterSearch] = useState('');
+    const [courseName, setCourseName] = useState('');
     const [status, setStatus] = useState(['pending', 'accepted', 'rejected']);
-    const [from, setFrom] = useState('');
-    const [to, setTo] = useState('');
+    const [from, setFrom] = useState('2026-01-01');
+    const [to, setTo] = useState('2026-01-01');
     const [value, setValue] = useState(null);
     const [teacherId, setTeacherId] = useState('');
+    const [order, setOrder] = useState('');
     const theme = useTheme();
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -81,8 +82,8 @@ function Requests() {
     const resetFilter = () => {
         setValue();
         setStatus(['pending', 'accepted', 'rejected']);
-        setFrom('');
-        setTo('');
+        setFrom('2026-01-01');
+        setTo('2026-01-01');
         setTeacherId('');
         setSearch('');
     }
@@ -97,11 +98,7 @@ function Requests() {
     const getCoursesRequests = async () => {
         setGetWait(true);
 
-        // let result;
-        // if(from || to || teacherId){
-        //     result = await Fetch(host + `/courses?page=${page + 1}&search=${search}&status[]=${status}&from=${from}&to=${to}&teacher_id=${teacherId}`, 'GET', null); //&status[]=${status}&from=${from}&to=${to}
-        // }else{
-        let result = await Fetch(host + `/courses?page=${page + 1}&search=${search}`, 'GET', null);
+        let result = await Fetch(host + `/courses?page=${page + 1}`, 'GET', null);
 
         if (result.status === 200) {
             setTotalPages(result.data.pagination.last_page);
@@ -113,25 +110,32 @@ function Requests() {
         setGetWait(false);
     }
 
-    const requestsFiltering = async () => {
-        setGetWait(true);
-        let result;
-        const queryStatus = status.map(s => `status[]=${s}`).join("&");
-        result = await Fetch(host + `/courses?page=${page + 1}&search=${search}&${queryStatus}${from && to && `&from=${from}&to=${to}`}${teacherId && `&teacher_id=${teacherId}`}`, 'GET', null); 
-        // if (from && to) {
-        //     result = await Fetch(host + `/courses?page=${page + 1}&search=${search}&${queryStatus}&from=${from}&to=${to}&teacher_id=${teacherId}`, 'GET', null); //&status[]=${status}&from=${from}&to=${to}
-        // } else {
-        //     result = await Fetch(host + `/courses?page=${page + 1}&search=${search}&${queryStatus}&teacher_id=${teacherId}`, 'GET', null);
-        // }
+    const orderingAndSearchCoursesRequests = async () => {
+        let result = await Fetch(host + `/courses?page=${page + 1}&search=${search}&${order}`, 'GET', null);
 
         if (result.status === 200) {
             setTotalPages(result.data.pagination.last_page);
             setRequestCounts(result.data.pagination.total);
             setCoursesRequests(result.data.data);
             setCurrentPage(page);
+            resetFilter();
+        }
+    }
+
+    const requestsFiltering = async () => {
+
+        const queryStatus = status.map(s => `status[]=${s}`).join("&");
+        let result = await Fetch(host + `/courses?page=${page + 1}&${queryStatus}${from && to && `&from=${from}&to=${to}`}${teacherId && `&teacher_id=${teacherId}`}${courseName && `&search=${courseName}`}`, 'GET', null); 
+
+        if (result.status === 200) {
+            setTotalPages(result.data.pagination.last_page);
+            setRequestCounts(result.data.pagination.total);
+            setCoursesRequests(result.data.data);
+            setCurrentPage(page);
+            closeFilter();
         }
 
-        setGetWait(false);
+        setFilterWait(false);
     }
 
     const getCourseDetails = async (id) => {
@@ -155,7 +159,11 @@ function Requests() {
 
     useEffect(() => {
         getCoursesRequests();
-    }, [page, search]);
+    }, [page]);
+
+    useEffect(() => {
+        orderingAndSearchCoursesRequests();
+    }, [order, search]);
 
     return (
         <>
@@ -169,7 +177,7 @@ function Requests() {
                         <Sidebar />
                         <Header />
                         <Box className="w-4/5 rounded-xl relative" dir="rtl">
-                            <Box className="bg-white rounded-xl">
+                            <Box className="rounded-xl">
                                 <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2">
                                     <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">طلبات الموافقة</Typography>
                                 </Box>
@@ -179,15 +187,15 @@ function Requests() {
                                             <Box className="w-full flex items-center">
                                                 <FilterAltOutlinedIcon className="cursor-pointer" onClick={() => openFilter()} fontSize="large" />
                                                 <Box className="w-2/4 relative mr-3">
-                                                    <input onChange={(e) => setSearch(e.target.value)} className="w-8/12 h-12 rounded-md border indent-14 outline-none" placeholder="البحث باسم الدورة أو المدرس" />
+                                                    <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-8/12 h-12 rounded-md border indent-14 outline-none" placeholder="البحث باسم الدورة أو المدرس" />
                                                     <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" />
                                                 </Box>
                                             </Box>
                                             <Box className="flex w-2/4 items-center">
-                                                <select className="w-2/5 py-1 rounded-lg ml-3 outline-none">
-                                                    <option>اسم الدورة</option>
-                                                    <option>اسم الأستاذ</option>
-                                                    <option>التاريخ</option>
+                                                <select style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setOrder(e.target.value)} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
+                                                    <option value=''>التاريخ</option>
+                                                    <option value={language == 'en' ? 'order_by=name_en&direction=asc' : 'order_by=name_ar&direction=asc'}>اسم الدورة</option>
+                                                    <option value='order_by=teacher.name&direction=asc'>اسم الأستاذ</option>
                                                 </select>
                                                 <Typography variant="body1" className="!text-gray-500">إجمالي الطلبات: {requestCounts}</Typography>
                                             </Box>
@@ -249,7 +257,7 @@ function Requests() {
                             <RequestDetails onClickClose={closePopup} onClickAccept={changeCourseStatus} onClickReject={changeCourseStatus} request={request} />
                         </Box>
                         <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center hidden max-sm:left-0">
-                            <RequestFilter value={value} setValue={setValue} search={search} setSearch={setSearch} setFrom={setFrom} setTo={setTo} from={from} to={to} status={status} setTeacherId={setTeacherId} onClickClose={closeFilter} onClickReset={resetFilter} onClickStatus={setFilterStatus} onClickConfirm={requestsFiltering} />
+                            <RequestFilter filterWait={filterWait} setFilterWait={setFilterWait} courseName={courseName} setCourseName={setCourseName} value={value} setValue={setValue} setFrom={setFrom} setTo={setTo} from={from} to={to} status={status} setTeacherId={setTeacherId} onClickClose={closeFilter} onClickReset={resetFilter} onClickStatus={setFilterStatus} onClickConfirm={requestsFiltering} />
                         </Box>
                         <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
                     </Box>
