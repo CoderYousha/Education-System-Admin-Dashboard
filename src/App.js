@@ -7,6 +7,8 @@ import { useTheme } from '@mui/material/styles';
 import DashboardRoutes from './routes/DashboardRoutes';
 import StudentsRoutes from './routes/StudentsRoutes';
 import TeachersRoutes from './routes/TeachersRoutes';
+import Header from './components/Header';
+import Sidebar from './components/Sidebar';
 
 function App() {
   const theme = useTheme();
@@ -15,7 +17,25 @@ function App() {
       <div className="App" style={{backgroundColor: theme.palette.background.default}}>
         <BrowserRouter>
             <Routes>
+              {/* <Route element={<AuthProvider><Header /> <Sidebar /></AuthProvider>}> */}
+
               {
+                DashboardRoutes().map((route, index) => 
+                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+                )
+              }
+              {
+                StudentsRoutes().map((route, index) => 
+                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+                )
+              }
+              {
+                TeachersRoutes().map((route, index) => 
+                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+                )
+              }
+              {/* </Route> */}
+              {/* {
                 DashboardRoutes().map((route, index) => 
                   <Route key={index} path={route.path} element={<AuthProvider>{route.element}</AuthProvider>} />
                 )
@@ -29,7 +49,7 @@ function App() {
                 TeachersRoutes().map((route, index) => 
                   <Route key={index} path={route.path} element={<AuthProvider>{route.element}</AuthProvider>} />
                 )
-              }
+              } */}
             </Routes>
         </BrowserRouter>
       </div>

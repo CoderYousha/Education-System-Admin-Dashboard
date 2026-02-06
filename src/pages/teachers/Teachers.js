@@ -23,14 +23,12 @@ function Teachers() {
     const { wait } = useContext(AuthContext);
     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
     const { getWait, setGetWait, sendWait, setSendWait } = useWaits();
-    const [request, setRequest] = useState('');
     const [coursesRequests, setCoursesRequests] = useState([]);
-    const [courseId, setCourseId] = useState(null);
-    const [operation, setOperation] = useState(null);
     const [page, setPage] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
-    const [requestCounts, setRequestCounts] = useState('');
+    const [teachersCounts, setTeachersCounts] = useState('');
+    const [teachers, setTeachers] = useState([]);
     const [search, setSearch] = useState('');
     const theme = useTheme();
 
@@ -55,126 +53,102 @@ function Teachers() {
         document.getElementById('popup').style.display = 'none';
     }
 
-    const openFilter = async () => {
-        document.getElementById('filter').style.display = 'flex';
-    }
-
-    const closeFilter = () => {
-        document.getElementById('filter').style.display = 'none';
-    }
-
-    const getCoursesRequests = async () => {
-        let result = await Fetch(host + `/courses?page=${page + 1}&search=${search}`, 'GET', null);
+    const getTeachers = async () => {
+        let result = await Fetch(host + `/admin/users?account_role=teacher&page=${page + 1}&search=${search}`, 'GET', null);
 
         if (result.status === 200) {
-            setTotalPages(result.data.pagination.last_page);
-            setRequestCounts(result.data.pagination.total);
-            setCoursesRequests(result.data.data);
+            setTotalPages(result.data.data.last_page);
+            setTeachersCounts(result.data.data.total);
+            setTeachers(result.data.data.data);
             setCurrentPage(page);
         }
 
         setGetWait(false);
     }
 
-    const changeCourseStatus = async (courseId, status) => {
-        setCourseId(courseId);
-        setOperation(status);
-        setSendWait(true);
-        let result = await Fetch(host + `/admin/courses/${courseId}/change-status`, 'POST', JSON.stringify({ 'new_status': status }));
-        if (result.status === 200) {
-            getCoursesRequests();
-            setSnackBar('success', status === 'accepted' ? 'تم التفعيل بنجاح' : 'تم الرفض بنجاح');
-            setCourseId(null);
-        }
-        setSendWait(false);
-    }
-
     useEffect(() => {
-        getCoursesRequests();
+        getTeachers();
     }, [page, search]);
 
     return (
         <>
             {
-                wait || getWait ?
+                wait ?
                     <Box className="w-full h-screen relative flex justify-center items-center">
                         <CircularProgress size={70} />
                     </Box>
                     :
                     <Box sx={{ backgroundColor: theme.palette.background.default }}>
-                        <Sidebar />
-                        <Header />
                         <Box className="w-4/5 rounded-xl relative" dir="rtl">
-                            <Box sx={{ backgroundColor: theme.palette.background.paper }} className="bg-white rounded-xl">
-                                <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2">
-                                    <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">المدرسون</Typography>
-                                    <Button variant="contained" className="">
-                                        <AddIcon />
-                                        إضافة مدرس جديد
-                                    </Button>
-                                </Box>
-                                <Box>
-                                    <TableContainer component={Paper} dir="rtl">
-                                        <Box className="min-h-12 py-2 px-2 flex justify-between items-center">
-                                            <Box className="w-full flex items-center">
-                                                <FilterAltOutlinedIcon className="cursor-pointer" onClick={() => openFilter()} fontSize="large" />
-                                                <Box className="w-2/4 relative mr-3">
-                                                    <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none" placeholder="البحث باسم المدرس أو البريد الإلكتروني" />
-                                                    <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" />
+                            {
+                                getWait ?
+                                    <Box className="w-full h-screen relative flex justify-center items-center">
+                                        <CircularProgress size={70} />
+                                    </Box>
+                                    :
+                                    <Box sx={{ backgroundColor: theme.palette.background.paper }} className="bg-white rounded-xl">
+                                        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2">
+                                            <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">المدرسون</Typography>
+                                            <Button variant="contained" className="">
+                                                <AddIcon />
+                                                إضافة مدرس جديد
+                                            </Button>
+                                        </Box>
+                                        <Box>
+                                            <TableContainer component={Paper} dir="rtl">
+                                                <Box className="min-h-12 py-2 px-2 flex justify-between items-center max-sm:flex-col">
+                                                    <Box className="w-full flex items-center">
+                                                        <FilterAltOutlinedIcon className="cursor-pointer" fontSize="large" />
+                                                        <Box className="w-2/4 relative mr-3 max-sm:w-full">
+                                                            <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder="البحث باسم المدرس أو البريد الإلكتروني" />
+                                                            <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" />
+                                                        </Box>
+                                                    </Box>
+                                                    <Box className="flex w-2/4 items-center max-sm:mt-2 max-sm:w-full max-sm:justify-between">
+                                                        <select style={{ backgroundColor: theme.palette.background.default }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
+                                                            <option>اسم المدرس</option>
+                                                            <option>البريد الإلكتروني</option>
+                                                        </select>
+                                                        <Typography variant="body1" className="!text-gray-500">إجمالي المدرسين: {teachersCounts}</Typography>
+                                                    </Box>
                                                 </Box>
-                                            </Box>
-                                            <Box className="flex w-2/4 items-center">
-                                                <select style={{ backgroundColor: theme.palette.background.default }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
-                                                    <option>اسم المدرس</option>
-                                                    <option>البريد الإلكتروني</option>
-                                                </select>
-                                                <Typography variant="body1" className="!text-gray-500">إجمالي المدرسين: {requestCounts}</Typography>
-                                            </Box>
+                                                <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
+                                                    <TableHead className="bg-gray-200">
+                                                        <TableRow sx={{ backgroundColor: theme.palette.background.paper }}>
+                                                            <StyledTableCell align="right">اسم المدرس</StyledTableCell>
+                                                            <StyledTableCell align="right">الإختصاص</StyledTableCell>
+                                                            <StyledTableCell align="right">التخصص التعليمي</StyledTableCell>
+                                                            <StyledTableCell align="right" className="!text-center">الدرجة العلمية</StyledTableCell>
+                                                            <StyledTableCell align="right">البريد الإلكتروني</StyledTableCell>
+                                                            <StyledTableCell align="right" className="!text-center">الرقم</StyledTableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        {teachers.map((teacher, index) => (
+                                                            <StyledTableRow key={index}>
+                                                                <StyledTableCell align="right" component="th" scope="row">{teacher.first_name + ' ' + teacher.last_name}</StyledTableCell>
+                                                                <StyledTableCell align="right" className="">{language == 'en' ? teacher.major?.name_en : teacher.major?.name_ar}</StyledTableCell>
+                                                                <StyledTableCell align="right">{teacher.major?.level}</StyledTableCell>
+                                                                <StyledTableCell align="right" className="text-center">{language == 'en' ? teacher.academic_degree?.name_en : teacher.academic_degree?.name_ar}</StyledTableCell>
+                                                                <StyledTableCell align="right" className="!text-center">{teacher.email}</StyledTableCell>
+                                                                <StyledTableCell align="right" className="!text-center" dir="ltr">{teacher.phone_code + teacher.phone}</StyledTableCell>
+                                                            </StyledTableRow>
+                                                        ))}
+                                                    </TableBody>
+                                                </Table>
+                                                <Box className="flex justify-center items-center" dir="rtl">
+                                                    <Button disabled={page + 1 == totalPages} className="cursor-pointer" onClick={() => setPage(currentPage + 1)}>
+                                                        <NavigateNextIcon fontSize="large" />
+                                                    </Button>
+                                                    <Typography variant="body1" className="!text-xl" dir='ltr'>{currentPage + 1} / {totalPages}</Typography>
+                                                    <Button disabled={page + 1 == 1} className="cursor-pointer" onClick={() => setPage(currentPage - 1)}>
+                                                        <NavigateBeforeIcon fontSize="large" />
+                                                    </Button>
+                                                </Box>
+                                            </TableContainer>
                                         </Box>
-                                        <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
-                                            <TableHead className="bg-gray-200">
-                                                <TableRow sx={{ backgroundColor: theme.palette.background.paper }}>
-                                                    <StyledTableCell align="right">اسم المدرس</StyledTableCell>
-                                                    <StyledTableCell align="right">الإختصاص</StyledTableCell>
-                                                    <StyledTableCell align="right">التخصص التعليمي</StyledTableCell>
-                                                    <StyledTableCell align="right" className="!text-center">الدرجة العلمية</StyledTableCell>
-                                                    <StyledTableCell align="right">البريد الإلكتروني</StyledTableCell>
-                                                    <StyledTableCell align="right" className="!text-center">الرقم</StyledTableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {coursesRequests.map((request, index) => (
-                                                    <StyledTableRow key={index}>
-                                                        <StyledTableCell align="right" component="th" scope="row">
-                                                            محمد عماد يوسف
-                                                        </StyledTableCell>
-                                                        <StyledTableCell align="right" className="">الأمن السيبراني</StyledTableCell>
-                                                        <StyledTableCell align="right">التعليم الجامعي  </StyledTableCell>
-                                                        <StyledTableCell align="right" className="text-center">دكتوراه</StyledTableCell>
-                                                        <StyledTableCell align="right" className="!text-center">mhdyou10@gmail.com</StyledTableCell>
-                                                        <StyledTableCell align="right" className="!text-center">0912345678</StyledTableCell>
-                                                    </StyledTableRow>
-                                                ))}
-                                            </TableBody>
-                                        </Table>
-                                        <Box className="flex justify-center items-center" dir="rtl">
-                                            <Button disabled={page + 1 == totalPages} className="cursor-pointer" onClick={() => setPage(currentPage + 1)}>
-                                                <NavigateNextIcon fontSize="large" />
-                                            </Button>
-                                            <Typography variant="body1" className="!text-xl" dir='ltr'>{currentPage + 1} / {totalPages}</Typography>
-                                            <Button disabled={page + 1 == 1} className="cursor-pointer" onClick={() => setPage(currentPage - 1)}>
-                                                <NavigateBeforeIcon fontSize="large" />
-                                            </Button>
-                                        </Box>
-                                    </TableContainer>
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Box id="popup" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center hidden max-sm:left-0">
-                            <RequestDetails onClickClose={closePopup} onClickAccept={changeCourseStatus} onClickReject={changeCourseStatus} request={request} />
-                        </Box>
-                        <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
-                            <StudentFilter onClickClose={closeFilter} />
+                                    </Box>
+                            }
                         </Box>
                         {/* <Box id="add" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center flex max-sm:left-0">
                             <AddTeacher onClickClose={closeFilter} />

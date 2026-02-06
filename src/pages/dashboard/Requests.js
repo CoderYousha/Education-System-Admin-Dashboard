@@ -125,7 +125,7 @@ function Requests() {
     const requestsFiltering = async () => {
 
         const queryStatus = status.map(s => `status[]=${s}`).join("&");
-        let result = await Fetch(host + `/courses?page=${page + 1}&${queryStatus}${from && to && `&from=${from}&to=${to}`}${teacherId && `&teacher_id=${teacherId}`}${courseName && `&search=${courseName}`}`, 'GET', null); 
+        let result = await Fetch(host + `/courses?page=${page + 1}&${queryStatus}${from && to && `&from=${from}&to=${to}`}${teacherId && `&teacher_id=${teacherId}`}${courseName && `&search=${courseName}`}`, 'GET', null);
 
         if (result.status === 200) {
             setTotalPages(result.data.pagination.last_page);
@@ -168,90 +168,95 @@ function Requests() {
     return (
         <>
             {
-                wait || getWait ?
+                wait ?
                     <Box className="w-full h-screen relative flex justify-center items-center">
                         <CircularProgress size={70} />
                     </Box>
                     :
                     <Box sx={{ backgroundColor: theme.palette.background.default }}>
-                        <Sidebar />
-                        <Header />
                         <Box className="w-4/5 rounded-xl relative" dir="rtl">
-                            <Box className="rounded-xl">
-                                <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2">
-                                    <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">طلبات الموافقة</Typography>
-                                </Box>
-                                <Box>
-                                    <TableContainer component={Paper} dir="rtl">
-                                        <Box className="min-h-12 py-2 px-2 flex justify-between items-center">
-                                            <Box className="w-full flex items-center">
-                                                <FilterAltOutlinedIcon className="cursor-pointer" onClick={() => openFilter()} fontSize="large" />
-                                                <Box className="w-2/4 relative mr-3">
-                                                    <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-8/12 h-12 rounded-md border indent-14 outline-none" placeholder="البحث باسم الدورة أو المدرس" />
-                                                    <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" />
+                            {
+                                getWait ?
+                                    <Box className="w-full h-screen relative flex justify-center items-center">
+                                        <CircularProgress size={70} />
+                                    </Box>
+                                    :
+                                    <Box className="rounded-xl">
+                                        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2">
+                                            <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">طلبات الموافقة</Typography>
+                                        </Box>
+                                        <Box>
+                                            <TableContainer component={Paper} dir="rtl">
+                                                <Box className="min-h-12 py-2 px-2 flex justify-between items-center max-sm:flex-col">
+                                                    <Box className="w-full flex items-center">
+                                                        <FilterAltOutlinedIcon className="cursor-pointer" onClick={() => openFilter()} fontSize="large" />
+                                                        <Box className="w-2/4 relative mr-3 max-sm:w-full">
+                                                            <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-8/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder="البحث باسم الدورة أو المدرس" />
+                                                            <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" />
+                                                        </Box>
+                                                    </Box>
+                                                    <Box className="flex w-2/4 items-center max-sm:w-full max-sm:mt-2 max-sm:justify-between">
+                                                        <select style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setOrder(e.target.value)} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
+                                                            <option value=''>التاريخ</option>
+                                                            <option value={language == 'en' ? 'order_by=name_en&direction=asc' : 'order_by=name_ar&direction=asc'}>اسم الدورة</option>
+                                                            <option value='order_by=teacher.name&direction=asc'>اسم الأستاذ</option>
+                                                        </select>
+                                                        <Typography variant="body1" className="!text-gray-500">إجمالي الطلبات: {requestCounts}</Typography>
+                                                    </Box>
                                                 </Box>
-                                            </Box>
-                                            <Box className="flex w-2/4 items-center">
-                                                <select style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setOrder(e.target.value)} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
-                                                    <option value=''>التاريخ</option>
-                                                    <option value={language == 'en' ? 'order_by=name_en&direction=asc' : 'order_by=name_ar&direction=asc'}>اسم الدورة</option>
-                                                    <option value='order_by=teacher.name&direction=asc'>اسم الأستاذ</option>
-                                                </select>
-                                                <Typography variant="body1" className="!text-gray-500">إجمالي الطلبات: {requestCounts}</Typography>
-                                            </Box>
+                                                <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
+                                                    <TableHead className="bg-gray-200">
+                                                        <TableRow sx={{ backgroundColor: theme.palette.background.paper }}>
+                                                            <StyledTableCell align="right">اسم الدورة</StyledTableCell>
+                                                            <StyledTableCell align="right">اسم المدرس</StyledTableCell>
+                                                            <StyledTableCell align="right">تاريخ الطلب</StyledTableCell>
+                                                            <StyledTableCell align="right">الحالة</StyledTableCell>
+                                                            <StyledTableCell align="right">الإجراءات</StyledTableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        {coursesRequests.map((request, index) => (
+                                                            <StyledTableRow key={index}>
+                                                                <StyledTableCell align="right" component="th" scope="row">
+                                                                    {language === 'en' ? request.name_en : request.name_ar}
+                                                                </StyledTableCell>
+                                                                <StyledTableCell align="right" className=""><Box className="flex flex-row-reverse items-center justify-end"><Box className="mr-2">{request.teacher.first_name} {request.teacher.last_name}</Box><Box className="w-7 h-7 rounded-full bg-gray-300 flex justify-center items-center font-bold">{request.teacher.first_name.charAt(0)}</Box><Box className=""></Box></Box></StyledTableCell>
+                                                                <StyledTableCell align="right">{request.created_at}</StyledTableCell>
+                                                                <StyledTableCell align="right"><Box className="text-center py-1 rounded-lg font-bold" sx={{ backgroundColor: request.status === 'accepted' ? "#CCFFCC" : request.status === 'rejected' ? "#FF9999" : "#FCF0CF", color: request.status === 'accepted' ? "green" : request.status === 'rejected' ? "red" : "orange" }}>{request.status === 'accepted' ? 'تمت الموافقة' : request.status === 'rejected' ? 'تم الرفض' : 'بانتظار الموافقة'}</Box></StyledTableCell>
+                                                                <StyledTableCell align="right" className="!flex justify-between">
+                                                                    <Button onClick={() => getCourseDetails(request.id)} disabled={request.status === 'rejected' || request.status === 'accepted'} className="h-8 !bg-gray-200 !text-gray-700">عرض التفاصيل</Button>
+                                                                    <Button disabled={request.status === 'rejected' || request.status === 'accepted'} onClick={() => changeCourseStatus(request.id, 'rejected')} variant="contained" sx={{ backgroundColor: request.status === 'rejected' || request.status === 'accepted' ? '#F2F2F2 !important' : '', color: request.status === 'rejected' || request.status === 'accepted' ? '#666666 !important' : '' }} className="mr-2 h-8 !bg-red-300 !text-red-600 !font-bold hover:!bg-red-600 hover:!text-white">
+                                                                        {sendWait && courseId === request.id && operation === 'rejected' ?
+                                                                            <CircularProgress size={20} className="" color="white" />
+                                                                            :
+                                                                            'رفض'
+                                                                        }
+                                                                    </Button>
+                                                                    <Button disabled={request.status === 'rejected' || request.status === 'accepted'} onClick={() => changeCourseStatus(request.id, 'accepted')} variant="contained" sx={{ backgroundColor: request.status === 'rejected' || request.status === 'accepted' ? '#F2F2F2 !important' : '', color: request.status === 'rejected' || request.status === 'accepted' ? '#666666 !important' : '' }} className="!font-bold h-8 mx-2 !text-green-600 !bg-green-300 hover:!bg-green-600 hover:!text-white">
+                                                                        {sendWait && courseId === request.id && operation === 'accepted' ?
+                                                                            <CircularProgress size={20} className="" color="white" />
+                                                                            :
+                                                                            'قبول'
+                                                                        }
+                                                                    </Button>
+                                                                </StyledTableCell>
+                                                            </StyledTableRow>
+                                                        ))}
+                                                    </TableBody>
+                                                </Table>
+                                                <Box className="flex justify-center items-center" dir="rtl">
+                                                    <Button disabled={page + 1 == totalPages} className="cursor-pointer" onClick={() => setPage(currentPage + 1)}>
+                                                        <NavigateNextIcon fontSize="large" />
+                                                    </Button>
+                                                    <Typography variant="body1" className="!text-xl" dir='ltr'>{currentPage + 1} / {totalPages}</Typography>
+                                                    <Button disabled={page + 1 == 1} className="cursor-pointer" onClick={() => setPage(currentPage - 1)}>
+                                                        <NavigateBeforeIcon fontSize="large" />
+                                                    </Button>
+                                                </Box>
+                                            </TableContainer>
                                         </Box>
-                                        <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
-                                            <TableHead className="bg-gray-200">
-                                                <TableRow sx={{ backgroundColor: theme.palette.background.paper }}>
-                                                    <StyledTableCell align="right">اسم الدورة</StyledTableCell>
-                                                    <StyledTableCell align="right">اسم المدرس</StyledTableCell>
-                                                    <StyledTableCell align="right">تاريخ الطلب</StyledTableCell>
-                                                    <StyledTableCell align="right">الحالة</StyledTableCell>
-                                                    <StyledTableCell align="right">الإجراءات</StyledTableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {coursesRequests.map((request, index) => (
-                                                    <StyledTableRow key={index}>
-                                                        <StyledTableCell align="right" component="th" scope="row">
-                                                            {language === 'en' ? request.name_en : request.name_ar}
-                                                        </StyledTableCell>
-                                                        <StyledTableCell align="right" className="!flex justify-end items-center"><Box className="mr-2">{request.teacher.first_name} {request.teacher.last_name}</Box><Box className="w-7 h-7 rounded-full bg-gray-300 flex justify-center items-center font-bold">{request.teacher.first_name.charAt(0)}</Box></StyledTableCell>
-                                                        <StyledTableCell align="right">{request.created_at}</StyledTableCell>
-                                                        <StyledTableCell align="right"><Box className="text-center py-1 rounded-lg font-bold" sx={{ backgroundColor: request.status === 'accepted' ? "#CCFFCC" : request.status === 'rejected' ? "#FF9999" : "#FCF0CF", color: request.status === 'accepted' ? "green" : request.status === 'rejected' ? "red" : "orange" }}>{request.status === 'accepted' ? 'تمت الموافقة' : request.status === 'rejected' ? 'تم الرفض' : 'بانتظار الموافقة'}</Box></StyledTableCell>
-                                                        <StyledTableCell align="right" className="!flex justify-between">
-                                                            <Button onClick={() => getCourseDetails(request.id)} disabled={request.status === 'rejected' || request.status === 'accepted'} className="h-8 !bg-gray-200 !text-gray-700">عرض التفاصيل</Button>
-                                                            <Button disabled={request.status === 'rejected' || request.status === 'accepted'} onClick={() => changeCourseStatus(request.id, 'rejected')} variant="contained" sx={{ backgroundColor: request.status === 'rejected' || request.status === 'accepted' ? '#F2F2F2 !important' : '', color: request.status === 'rejected' || request.status === 'accepted' ? '#666666 !important' : '' }} className="mr-2 h-8 !bg-red-300 !text-red-600 !font-bold hover:!bg-red-600 hover:!text-white">
-                                                                {sendWait && courseId === request.id && operation === 'rejected' ?
-                                                                    <CircularProgress size={20} className="" color="white" />
-                                                                    :
-                                                                    'رفض'
-                                                                }
-                                                            </Button>
-                                                            <Button disabled={request.status === 'rejected' || request.status === 'accepted'} onClick={() => changeCourseStatus(request.id, 'accepted')} variant="contained" sx={{ backgroundColor: request.status === 'rejected' || request.status === 'accepted' ? '#F2F2F2 !important' : '', color: request.status === 'rejected' || request.status === 'accepted' ? '#666666 !important' : '' }} className="!font-bold h-8 mx-2 !text-green-600 !bg-green-300 hover:!bg-green-600 hover:!text-white">
-                                                                {sendWait && courseId === request.id && operation === 'accepted' ?
-                                                                    <CircularProgress size={20} className="" color="white" />
-                                                                    :
-                                                                    'قبول'
-                                                                }
-                                                            </Button>
-                                                        </StyledTableCell>
-                                                    </StyledTableRow>
-                                                ))}
-                                            </TableBody>
-                                        </Table>
-                                        <Box className="flex justify-center items-center" dir="rtl">
-                                            <Button disabled={page + 1 == totalPages} className="cursor-pointer" onClick={() => setPage(currentPage + 1)}>
-                                                <NavigateNextIcon fontSize="large" />
-                                            </Button>
-                                            <Typography variant="body1" className="!text-xl" dir='ltr'>{currentPage + 1} / {totalPages}</Typography>
-                                            <Button disabled={page + 1 == 1} className="cursor-pointer" onClick={() => setPage(currentPage - 1)}>
-                                                <NavigateBeforeIcon fontSize="large" />
-                                            </Button>
-                                        </Box>
-                                    </TableContainer>
-                                </Box>
-                            </Box>
+                                    </Box>
+                        }
                         </Box>
                         <Box id="popup" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center hidden max-sm:left-0">
                             <RequestDetails onClickClose={closePopup} onClickAccept={changeCourseStatus} onClickReject={changeCourseStatus} request={request} />

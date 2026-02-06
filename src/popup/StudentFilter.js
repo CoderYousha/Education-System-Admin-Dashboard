@@ -22,29 +22,31 @@ function StudentFilter({ onClickClose }) {
             <Box className="flex justify-between mt-5 max-sm:flex-col">
                 <Box className="w-2/5 max-sm:w-full">
                     <Typography variant="body2" className="!font-semibold text-gray-400">من</Typography>
-                    <input type="number" className="mt-2 w-full rounded-lg h-10 bg-gray-200 px-2 outline-none" value="1" />
+                    <input type="number" className="text-black mt-2 w-full rounded-lg h-10 bg-gray-200 px-2 outline-none" value="1" />
                 </Box>
                 <Box className="w-2/5 max-sm:w-full">
                     <Typography variant="body2" className="!font-semibold text-gray-400">إلى</Typography>
-                    <input type="number" className="mt-2 w-full rounded-lg h-10 bg-gray-200 px-2 outline-none" value="5" />
+                    <input type="number" className="text-black mt-2 w-full rounded-lg h-10 bg-gray-200 px-2 outline-none" value="5" />
                 </Box>
             </Box>
             <Typography variant="body1" className="!font-semibold text-gray-400 !mt-5">تاريخ التسجيل</Typography>
             <Box className="flex justify-between mt-5 max-sm:flex-col">
                 <Box className="w-2/5 max-sm:w-full">
                     <Typography variant="body2" className="!font-semibold text-gray-400">من تاريخ</Typography>
-                    <input type="date" className="mt-2 w-full rounded-lg h-10 bg-gray-200 px-2 outline-none" value="2025-07-12" />
+                    <input type="date" className="text-black mt-2 w-full rounded-lg h-10 bg-gray-200 px-2 outline-none" value="2025-07-12" />
                 </Box>
                 <Box className="w-2/5 max-sm:w-full">
                     <Typography variant="body2" className="!font-semibold text-gray-400">إلى تاريخ</Typography>
-                    <input type="date" className="mt-2 w-full rounded-lg h-10 bg-gray-200 px-2 outline-none" value="2025-07-12" />
+                    <input type="date" className="text-black mt-2 w-full rounded-lg h-10 bg-gray-200 px-2 outline-none" value="2025-07-12" />
                 </Box>
             </Box>
             <Box className="w-full flex justify-between mt-10 max-sm:flex-col">
                 <Button variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold max-sm:w-full">إعادة التعيين</Button>
                 <Button variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5">
+                <Box sx={{ color: theme.palette.mode == 'dark' ? 'white' : 'black' }}>
                     تطبيق الفلترة
                     <FilterAltOutlinedIcon />
+                </Box>
                 </Button>
             </Box>
         </Box>

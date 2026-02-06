@@ -10,9 +10,13 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { NavLink } from "react-router-dom";
+import { useContext } from "react";
+import AuthContext from "../context/AuthContext";
 
 function Sidebar () {
      const theme = useTheme();
+     const {wait} = useContext(AuthContext);
+
      const items = [
           {
                'title': 'لوحة التحكم',
@@ -67,19 +71,24 @@ function Sidebar () {
           },
      ];
      return (
-          <Box sx={{backgroundColor: theme.palette.background.paper}} className="bg-white w-1/5 h-screen fixed right-0 top-0 shadow-xl shadow-neutral-400 max-sm:w-1/6 overflow-y-scroll none-view-scroll z-50">
-               <Box className="bg-red-700 w-4/5 mx-auto mt-5 text-white font-bold text-center py-3">LOGO HERE</Box>
-               <Box className="mt-10 cursor-pointer">
-                    {
-                         items.map( (item, index) => 
-                              <NavLink key={index} to={item.link} className="flex items-center w-4/5 mx-auto py-2 rounded-lg mt-5" dir="rtl">
-                                   {item.icon}
-                                   <Typography variant="h6" className="px-2 max-sm:hidden" style={{color: item.color}}>{item.title}</Typography> 
-                              </NavLink>
-                         )
-                    }
-               </Box>
-          </Box>
+          <>
+               {
+                    !wait &&
+                    <Box sx={{backgroundColor: theme.palette.background.paper}} className="bg-white w-1/5 h-screen fixed right-0 top-0 shadow-sm shadow-neutral-400 max-sm:w-1/6 overflow-y-scroll none-view-scroll z-50">
+                         <Box className="bg-red-700 w-4/5 mx-auto mt-5 text-white font-bold text-center py-3">LOGO HERE</Box>
+                         <Box className="mt-10 cursor-pointer">
+                              {
+                                   items.map( (item, index) => 
+                                        <NavLink key={index} to={item.link} className="flex items-center w-4/5 mx-auto py-2 rounded-lg mt-5" dir="rtl">
+                                             {item.icon}
+                                             <Typography variant="h6" className="px-2 max-sm:hidden" style={{color: item.color}}>{item.title}</Typography> 
+                                        </NavLink>
+                                   )
+                              }
+                         </Box>
+                    </Box>
+               }
+          </>
      );
 }
 
