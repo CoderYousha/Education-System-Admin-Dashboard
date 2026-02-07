@@ -5,9 +5,6 @@ import { useWaits } from "../../hooks/UseWait";
 import { Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, Typography, useTheme } from "@mui/material";
 import styled from "styled-components";
 import Fetch from "../../services/Fetch";
-import Sidebar from "../../components/Sidebar";
-import Header from "../../components/Header";
-import RequestDetails from "../../popup/RequestDetails";
 import SnackbarAlert from "../../components/SnackBar";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
@@ -23,7 +20,7 @@ function Students() {
     const language = localStorage.getItem('language') || 'ar';
     const { wait } = useContext(AuthContext);
     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
-    const { getWait, setGetWait, sendWait, setSendWait } = useWaits();
+    const { getWait, setGetWait, sendWait, setSendWait, filterWait, setFilterWait } = useWaits();
     const [students, setStudents] = useState([]);
     const [studentId, setStudentId] = useState(null);
     const [page, setPage] = useState(0);
@@ -32,6 +29,13 @@ function Students() {
     const [studentsCount, setStudentsCount] = useState('');
     const [search, setSearch] = useState('');
     const { description, open, setDialog, setOpen, title } = useDialog();
+    const [student, setStudent] = useState('');
+    const [majorId, setMajorId] = useState('');
+    const [value, setValue] = useState({value: '', label: 'الكل'});
+    const [fromCount, setFromCount] = useState(1);
+    const [toCount, setToCount] = useState(5);
+    const [fromDate, setFromDate] = useState('2026-01-01');
+    const [toDate, setToDate] = useState('2026-01-01');
     const theme = useTheme();
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -59,6 +63,23 @@ function Students() {
         document.getElementById('filter').style.display = 'none';
     }
 
+    const openDetails = async () => {
+        document.getElementById('details').style.display = 'flex';
+    }
+
+    const closeDetails = () => {
+        document.getElementById('details').style.display = 'none';
+    }
+
+    const resetFilter = () => {
+        setValue({value: '', label: 'الكل'});
+        setMajorId('');
+        setFromDate('2026-01-01');
+        setToDate('2026-01-01');
+        setFromCount(1);
+        setToCount(5);
+    }
+
     const getStudents = async () => {
         let result = await Fetch(host + `/admin/users?account_role=student&page=${page + 1}&search=${search}`, 'GET', null);
 
@@ -70,6 +91,25 @@ function Students() {
         }
 
         setGetWait(false);
+    }
+
+    const studentDetails = async (id) => {
+        setStudent(students.filter((student) => student.id === id)[0]);
+
+        openDetails();
+    }
+
+    const filteringStudents = async () => {
+        let result = await Fetch(host + `/admin/users?account_role=student&page=${page + 1}&search=${search}${fromCount && `&enrolled_courses[from]=${fromCount}`}${toCount && `&enrolled_courses[to]=${toCount}`}${fromDate && `&from=${fromDate}`}${toDate && `&to=${toDate}`}${majorId && `&major_id=${majorId}`}`, 'GET', null);
+        if (result.status === 200) {
+            setTotalPages(result.data.data.last_page);
+            setStudentsCount(result.data.data.total);
+            setStudents(result.data.data.data);
+            setCurrentPage(page);
+            closeFilter();
+        }
+
+        setFilterWait(false);
     }
 
     const deleteStudent = async () => {
@@ -141,7 +181,7 @@ function Students() {
                                                     </TableHead>
                                                     <TableBody>
                                                         {students.map((student, index) => (
-                                                            <StyledTableRow key={index}>
+                                                            <StyledTableRow key={index} onClick={() => studentDetails(student.id)} className="hover:bg-gray-400 duration-100 cursor-pointer">
                                                                 <StyledTableCell align="right" component="th" scope="row">
                                                                     {student.first_name + ' ' + student.last_name}
                                                                 </StyledTableCell>
@@ -168,14 +208,14 @@ function Students() {
                                             </TableContainer>
                                         </Box>
                                     </Box>
-                        }
+                            }
                         </Box>
                         <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
-                            <StudentFilter onClickClose={closeFilter} />
+                            <StudentFilter onClickConfirm={filteringStudents} onClickReset={resetFilter} value={value} setValue={setValue} majorId={majorId} setMajorId={setMajorId} fromCount={fromCount} setFromCount={setFromCount} toCount={toCount} setToCount={setToCount} fromDate={fromDate} setFromDate={setFromDate} toDate={toDate} setToDate={setToDate} onClickClose={closeFilter} filterWait={filterWait} setFilterWait={setFilterWait} />
                         </Box>
-                        {/* <Box id="details" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 flex justify-center items-center max-sm:left-0">
-                            <StudentDetails onClickClose={closeFilter} />
-                        </Box> */}
+                        <Box id="details" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+                            <StudentDetails student={student} onClickClose={closeDetails} />
+                        </Box>
                         <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
                         <AlertDialog wait={sendWait} openDialog={open} title={title} description={description} onCancel={() => setOpen(false)} onConfirm={() => deleteStudent()} />
                     </Box>

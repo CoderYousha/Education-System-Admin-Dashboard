@@ -5,31 +5,36 @@ import { useWaits } from "../../hooks/UseWait";
 import { Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, Typography, useTheme } from "@mui/material";
 import styled from "styled-components";
 import Fetch from "../../services/Fetch";
-import Sidebar from "../../components/Sidebar";
-import Header from "../../components/Header";
-import RequestDetails from "../../popup/RequestDetails";
 import SnackbarAlert from "../../components/SnackBar";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import StudentFilter from "../../popup/StudentFilter";
 import AddIcon from '@mui/icons-material/Add';
 import AddTeacher from "../../popup/AddTeacher";
+import TeacherDetails from "../../popup/TeacherDetails";
+import TeachersFilter from "../../popup/TeachersFilter";
 
 function Teachers() {
     const host = `${process.env.REACT_APP_LOCAL_HOST}`;
     const language = localStorage.getItem('language') || 'ar';
     const { wait } = useContext(AuthContext);
     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
-    const { getWait, setGetWait, sendWait, setSendWait } = useWaits();
-    const [coursesRequests, setCoursesRequests] = useState([]);
+    const { getWait, setGetWait, filterWait, setFilterWait } = useWaits();
     const [page, setPage] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [teachersCounts, setTeachersCounts] = useState('');
     const [teachers, setTeachers] = useState([]);
+    const [teacher, setTeacher] = useState('');
     const [search, setSearch] = useState('');
+    const [majorId, setMajorId] = useState('');
+    const [teacherSpecializations, setTeacherSpecializations] = useState('');
+    const [academicDegree, setAcademicDegree] = useState('');
+    const [majorsValue, setMajorsValue] = useState({value: '', label: 'الكل'});
+    const [teacherSpecializationsValue, setTeacherSpecializationsValue] = useState({value: '', label: 'الكل'});
+    const [academicDegreeValue, setAcademicDegreeValue] = useState({value: '', label: 'الكل'});
+
     const theme = useTheme();
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -49,11 +54,41 @@ function Teachers() {
         },
     }));
 
-    const closePopup = () => {
-        document.getElementById('popup').style.display = 'none';
+    const openDetails = async () => {
+        document.getElementById('details').style.display = 'flex';
+    }
+
+    const closeDetails = () => {
+        document.getElementById('details').style.display = 'none';
+    }
+
+    const openAdd = async () => {
+        document.getElementById('add').style.display = 'flex';
+    }
+
+    const closeAdd = () => {
+        document.getElementById('add').style.display = 'none';
+    }
+
+    const openFilter = async () => {
+        document.getElementById('filter').style.display = 'flex';
+    }
+
+    const closeFilter = () => {
+        document.getElementById('filter').style.display = 'none';
+    }
+
+    const resetFilter = async () => {
+        setAcademicDegreeValue({value: '', label: 'الكل'});
+        setTeacherSpecializationsValue({value: '', label: 'الكل'});
+        setMajorsValue({value: '', label: 'الكل'});
+        setMajorId('');
+        setTeacherSpecializations('');
+        setAcademicDegree('');
     }
 
     const getTeachers = async () => {
+        setGetWait(true);
         let result = await Fetch(host + `/admin/users?account_role=teacher&page=${page + 1}&search=${search}`, 'GET', null);
 
         if (result.status === 200) {
@@ -64,6 +99,26 @@ function Teachers() {
         }
 
         setGetWait(false);
+    }
+
+    const filteringTeachers = async () => {
+        let result = await Fetch(host + `/admin/users?account_role=teacher&page=${page + 1}&search=${search}${majorId && `&major_id=${majorId}`}${teacherSpecializations && `&specialization_id=${teacherSpecializations}`}${academicDegree && `&academic_degree_id=${academicDegree}`}`, 'GET', null);
+
+        if (result.status === 200) {
+            setTotalPages(result.data.data.last_page);
+            setTeachersCounts(result.data.data.total);
+            setTeachers(result.data.data.data);
+            setCurrentPage(page);
+            closeFilter();
+        }
+
+        setFilterWait(false);
+    }
+
+    const teacherDetails = async (id) => {
+        setTeacher(teachers.filter((teacher) => teacher.id == id)[0]);
+
+        openDetails();
     }
 
     useEffect(() => {
@@ -89,7 +144,7 @@ function Teachers() {
                                     <Box sx={{ backgroundColor: theme.palette.background.paper }} className="bg-white rounded-xl">
                                         <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2">
                                             <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">المدرسون</Typography>
-                                            <Button variant="contained" className="">
+                                            <Button variant="contained" onClick={openAdd} className="">
                                                 <AddIcon />
                                                 إضافة مدرس جديد
                                             </Button>
@@ -98,7 +153,7 @@ function Teachers() {
                                             <TableContainer component={Paper} dir="rtl">
                                                 <Box className="min-h-12 py-2 px-2 flex justify-between items-center max-sm:flex-col">
                                                     <Box className="w-full flex items-center">
-                                                        <FilterAltOutlinedIcon className="cursor-pointer" fontSize="large" />
+                                                        <FilterAltOutlinedIcon onClick={openFilter} className="cursor-pointer" fontSize="large" />
                                                         <Box className="w-2/4 relative mr-3 max-sm:w-full">
                                                             <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder="البحث باسم المدرس أو البريد الإلكتروني" />
                                                             <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" />
@@ -118,19 +173,19 @@ function Teachers() {
                                                             <StyledTableCell align="right">اسم المدرس</StyledTableCell>
                                                             <StyledTableCell align="right">الإختصاص</StyledTableCell>
                                                             <StyledTableCell align="right">التخصص التعليمي</StyledTableCell>
-                                                            <StyledTableCell align="right" className="!text-center">الدرجة العلمية</StyledTableCell>
+                                                            <StyledTableCell align="right" className="">الدرجة العلمية</StyledTableCell>
                                                             <StyledTableCell align="right">البريد الإلكتروني</StyledTableCell>
                                                             <StyledTableCell align="right" className="!text-center">الرقم</StyledTableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
                                                         {teachers.map((teacher, index) => (
-                                                            <StyledTableRow key={index}>
+                                                            <StyledTableRow key={index} onClick={() => teacherDetails(teacher.id)} className="hover:bg-gray-400 duration-100 cursor-pointer">
                                                                 <StyledTableCell align="right" component="th" scope="row">{teacher.first_name + ' ' + teacher.last_name}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="">{language == 'en' ? teacher.major?.name_en : teacher.major?.name_ar}</StyledTableCell>
                                                                 <StyledTableCell align="right">{teacher.major?.level}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="text-center">{language == 'en' ? teacher.academic_degree?.name_en : teacher.academic_degree?.name_ar}</StyledTableCell>
-                                                                <StyledTableCell align="right" className="!text-center">{teacher.email}</StyledTableCell>
+                                                                <StyledTableCell align="right" className="">{teacher.email}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="!text-center" dir="ltr">{teacher.phone_code + teacher.phone}</StyledTableCell>
                                                             </StyledTableRow>
                                                         ))}
@@ -150,12 +205,15 @@ function Teachers() {
                                     </Box>
                             }
                         </Box>
-                        {/* <Box id="add" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center flex max-sm:left-0">
-                            <AddTeacher onClickClose={closeFilter} />
-                        </Box> */}
-                        {/* <Box id="details" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 flex justify-center items-center max-sm:left-0">
-                                <StudentDetails onClickClose={closeFilter} />
-                            </Box> */}
+                        <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 flex justify-center items-center max-sm:left-0">
+                            <TeachersFilter onClickClose={closeFilter} onClickConfirm={filteringTeachers} onClickReset={resetFilter} setAcademicDegree={setAcademicDegree} filterWait={filterWait} setFilterWait={setFilterWait} setMajorId={setMajorId} setTeacherSpecializations={setTeacherSpecializations} academicDegreeValue={academicDegreeValue} setAcademicDegreeValue={setAcademicDegreeValue} majorsValue={majorsValue} setMajorsValue={setMajorsValue} teacherSpecializationsValue={teacherSpecializationsValue} setTeacherSpecializationsValue={setTeacherSpecializationsValue} />
+                        </Box>
+                        <Box id="add" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+                            <AddTeacher onClickClose={closeAdd} />
+                        </Box>
+                        <Box id="details" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+                            <TeacherDetails teacher={teacher} onClickClose={closeDetails} />
+                        </Box>
                         <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
                     </Box>
             }

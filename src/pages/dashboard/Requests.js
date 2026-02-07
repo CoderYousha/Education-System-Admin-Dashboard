@@ -85,14 +85,7 @@ function Requests() {
         setFrom('2026-01-01');
         setTo('2026-01-01');
         setTeacherId('');
-        setSearch('');
-    }
-
-    const checkInputs = () => {
-        console.log('status: ' + status);
-        console.log('from: ' + from);
-        console.log('to: ' + to);
-        console.log('teacher_id: ' + teacherId);
+        setCourseName('');
     }
 
     const getCoursesRequests = async () => {

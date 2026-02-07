@@ -28,7 +28,6 @@ function RequestFilter({ onClickClose, onClickConfirm, onClickReset, onClickStat
 
     const loadOptions = async (search, loadedOptions, { page }) => {
         const response = await Fetch(host + `/admin/users?account_role=teacher`);
-        // const json = await response.json();
         return {
             options: response.data.data.data.map((item) => ({
                 value: item.id, label: item.first_name + item.last_name,
