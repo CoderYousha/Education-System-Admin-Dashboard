@@ -18,6 +18,7 @@ import { useDialog } from "../../hooks/UseDialog";
 function Students() {
     const host = `${process.env.REACT_APP_LOCAL_HOST}`;
     const language = localStorage.getItem('language') || 'ar';
+    const theme = useTheme();
     const { wait } = useContext(AuthContext);
     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
     const { getWait, setGetWait, sendWait, setSendWait, filterWait, setFilterWait } = useWaits();
@@ -31,12 +32,12 @@ function Students() {
     const { description, open, setDialog, setOpen, title } = useDialog();
     const [student, setStudent] = useState('');
     const [majorId, setMajorId] = useState('');
-    const [value, setValue] = useState({value: '', label: 'الكل'});
+    const [value, setValue] = useState({ value: '', label: 'الكل' });
     const [fromCount, setFromCount] = useState(1);
     const [toCount, setToCount] = useState(5);
     const [fromDate, setFromDate] = useState('2026-01-01');
     const [toDate, setToDate] = useState('2026-01-01');
-    const theme = useTheme();
+    const [order, setOrder] = useState('');
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
         [`&.${tableCellClasses.head}`]: {
@@ -72,7 +73,7 @@ function Students() {
     }
 
     const resetFilter = () => {
-        setValue({value: '', label: 'الكل'});
+        setValue({ value: '', label: 'الكل' });
         setMajorId('');
         setFromDate('2026-01-01');
         setToDate('2026-01-01');
@@ -91,6 +92,16 @@ function Students() {
         }
 
         setGetWait(false);
+    }
+
+    const orderingAndSearchStudents = async () => {
+        let result = await Fetch(host + `/admin/users?account_role=student&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}`, 'GET', null);
+
+        if (result.status === 200) {
+            setTotalPages(result.data.data.last_page);
+            setStudents(result.data.data.data);
+            setCurrentPage(page);
+        }
     }
 
     const studentDetails = async (id) => {
@@ -128,7 +139,11 @@ function Students() {
 
     useEffect(() => {
         getStudents();
-    }, [page, search]);
+    }, [page]);
+
+    useEffect(() => {
+        orderingAndSearchStudents();
+    }, [order, search]);
 
     return (
         <>
@@ -161,9 +176,10 @@ function Students() {
                                                         </Box>
                                                     </Box>
                                                     <Box className="flex w-2/4 items-center max-sm:w-full max-sm:mt-2 max-sm:justify-between">
-                                                        <select style={{ backgroundColor: theme.palette.background.default }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
-                                                            <option>اسم الثلاثي</option>
-                                                            <option>البريد الإلكتروني</option>
+                                                        <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.default }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
+                                                            <option value="">التاريخ</option>
+                                                            <option value="first_name">اسم الطالب</option>
+                                                            <option value="email">البريد الإلكتروني</option>
                                                         </select>
                                                         <Typography variant="body1" className="!text-gray-500">إجمالي الطلاب: {studentsCount}</Typography>
                                                     </Box>

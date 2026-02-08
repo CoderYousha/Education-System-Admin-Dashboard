@@ -9,6 +9,7 @@ import StudentsRoutes from './routes/StudentsRoutes';
 import TeachersRoutes from './routes/TeachersRoutes';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
+import CoursesRoutes from './routes/CoursesRoutes';
 
 function App() {
   const theme = useTheme();
@@ -34,22 +35,11 @@ function App() {
                   <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
                 )
               }
-              {/* </Route> */}
-              {/* {
-                DashboardRoutes().map((route, index) => 
-                  <Route key={index} path={route.path} element={<AuthProvider>{route.element}</AuthProvider>} />
+              {
+                CoursesRoutes().map((route, index) => 
+                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
                 )
               }
-              {
-                StudentsRoutes().map((route, index) => 
-                  <Route key={index} path={route.path} element={<AuthProvider>{route.element}</AuthProvider>} />
-                )
-              }
-              {
-                TeachersRoutes().map((route, index) => 
-                  <Route key={index} path={route.path} element={<AuthProvider>{route.element}</AuthProvider>} />
-                )
-              } */}
             </Routes>
         </BrowserRouter>
       </div>

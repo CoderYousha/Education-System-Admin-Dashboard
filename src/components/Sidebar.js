@@ -49,7 +49,7 @@ function Sidebar () {
                'link': '../ads',
           },
           {
-               'title': 'المالية والمحفظة',
+               'title': 'المالية',
                'icon': <AccountBalanceWalletOutlinedIcon fontSize="medium" className="mr-2 max-sm:mx-auto" />,
                'link': '../wallet',
           },

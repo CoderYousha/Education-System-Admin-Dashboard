@@ -6,7 +6,7 @@ async function Fetch (link, method, data=null){
           headers: {
                'Authorization': `Bearer ${localStorage.getItem('token')}`,
                'Accept': 'application/json',
-               'Content-Type': 'application/json'
+               // 'Content-Type': 'application/json'
           },
           body: data
      });

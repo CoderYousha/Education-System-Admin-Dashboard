@@ -31,9 +31,10 @@ function Teachers() {
     const [majorId, setMajorId] = useState('');
     const [teacherSpecializations, setTeacherSpecializations] = useState('');
     const [academicDegree, setAcademicDegree] = useState('');
-    const [majorsValue, setMajorsValue] = useState({value: '', label: 'الكل'});
-    const [teacherSpecializationsValue, setTeacherSpecializationsValue] = useState({value: '', label: 'الكل'});
-    const [academicDegreeValue, setAcademicDegreeValue] = useState({value: '', label: 'الكل'});
+    const [majorsValue, setMajorsValue] = useState({ value: '', label: 'الكل' });
+    const [teacherSpecializationsValue, setTeacherSpecializationsValue] = useState({ value: '', label: 'الكل' });
+    const [academicDegreeValue, setAcademicDegreeValue] = useState({ value: '', label: 'الكل' });
+    const [order, setOrder] = useState('');
 
     const theme = useTheme();
 
@@ -79,9 +80,9 @@ function Teachers() {
     }
 
     const resetFilter = async () => {
-        setAcademicDegreeValue({value: '', label: 'الكل'});
-        setTeacherSpecializationsValue({value: '', label: 'الكل'});
-        setMajorsValue({value: '', label: 'الكل'});
+        setAcademicDegreeValue({ value: '', label: 'الكل' });
+        setTeacherSpecializationsValue({ value: '', label: 'الكل' });
+        setMajorsValue({ value: '', label: 'الكل' });
         setMajorId('');
         setTeacherSpecializations('');
         setAcademicDegree('');
@@ -99,6 +100,16 @@ function Teachers() {
         }
 
         setGetWait(false);
+    }
+
+    const orderingAndSearchTeachers = async () => {
+        let result = await Fetch(host + `/admin/users?account_role=teacher&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}`, 'GET', null);
+
+        if (result.status === 200) {
+            setTotalPages(result.data.data.last_page);
+            setTeachers(result.data.data.data);
+            setCurrentPage(page);
+        }
     }
 
     const filteringTeachers = async () => {
@@ -123,7 +134,11 @@ function Teachers() {
 
     useEffect(() => {
         getTeachers();
-    }, [page, search]);
+    }, [page]);
+
+    useEffect(() => {
+        orderingAndSearchTeachers();
+    }, [order, search]);
 
     return (
         <>
@@ -160,9 +175,10 @@ function Teachers() {
                                                         </Box>
                                                     </Box>
                                                     <Box className="flex w-2/4 items-center max-sm:mt-2 max-sm:w-full max-sm:justify-between">
-                                                        <select style={{ backgroundColor: theme.palette.background.default }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
-                                                            <option>اسم المدرس</option>
-                                                            <option>البريد الإلكتروني</option>
+                                                        <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.default }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
+                                                            <option value=''>التاريخ</option>
+                                                            <option value='first_name'>اسم المدرس</option>
+                                                            <option value="email">البريد الإلكتروني</option>
                                                         </select>
                                                         <Typography variant="body1" className="!text-gray-500">إجمالي المدرسين: {teachersCounts}</Typography>
                                                     </Box>
@@ -182,8 +198,8 @@ function Teachers() {
                                                         {teachers.map((teacher, index) => (
                                                             <StyledTableRow key={index} onClick={() => teacherDetails(teacher.id)} className="hover:bg-gray-400 duration-100 cursor-pointer">
                                                                 <StyledTableCell align="right" component="th" scope="row">{teacher.first_name + ' ' + teacher.last_name}</StyledTableCell>
-                                                                <StyledTableCell align="right" className="">{language == 'en' ? teacher.major?.name_en : teacher.major?.name_ar}</StyledTableCell>
-                                                                <StyledTableCell align="right">{teacher.major?.level}</StyledTableCell>
+                                                                <StyledTableCell align="right" className="">{language == 'en' ? teacher.specialization?.name_en : teacher.specialization?.name_ar}</StyledTableCell>
+                                                                <StyledTableCell align="right">{teacher.major?.level == 'university' ? 'تعليم جامعي' : 'تعليم مدرسي'}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="text-center">{language == 'en' ? teacher.academic_degree?.name_en : teacher.academic_degree?.name_ar}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="">{teacher.email}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="!text-center" dir="ltr">{teacher.phone_code + teacher.phone}</StyledTableCell>
@@ -205,11 +221,11 @@ function Teachers() {
                                     </Box>
                             }
                         </Box>
-                        <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 flex justify-center items-center max-sm:left-0">
+                        <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <TeachersFilter onClickClose={closeFilter} onClickConfirm={filteringTeachers} onClickReset={resetFilter} setAcademicDegree={setAcademicDegree} filterWait={filterWait} setFilterWait={setFilterWait} setMajorId={setMajorId} setTeacherSpecializations={setTeacherSpecializations} academicDegreeValue={academicDegreeValue} setAcademicDegreeValue={setAcademicDegreeValue} majorsValue={majorsValue} setMajorsValue={setMajorsValue} teacherSpecializationsValue={teacherSpecializationsValue} setTeacherSpecializationsValue={setTeacherSpecializationsValue} />
                         </Box>
                         <Box id="add" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
-                            <AddTeacher onClickClose={closeAdd} />
+                            <AddTeacher setTeachers={setTeachers} onClickClose={closeAdd} setSnackBar={setSnackBar} />
                         </Box>
                         <Box id="details" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <TeacherDetails teacher={teacher} onClickClose={closeDetails} />
