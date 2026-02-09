@@ -11,6 +11,7 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import CourseDetails from "../../popup/CourseDetails";
+import CoursesFilter from "../../popup/CoursesFilter";
 
 function Courses() {
     const host = `${process.env.REACT_APP_LOCAL_HOST}`;
@@ -26,6 +27,14 @@ function Courses() {
     const [search, setSearch] = useState('');
     const [course, setCourse] = useState('');
     const [order, setOrder] = useState('');
+    const [category, setCategory] = useState('');
+    const [categoriesValue, setCategoriesValue] = useState('');
+    const [path, setPath] = useState('');
+    const [pathsValue, setPathsValue] = useState('');
+    const [fromCount, setFromCount] = useState('');
+    const [toCount, setToCount] = useState('');
+    const [fromDate, setFromDate] = useState('');
+    const [toDate, setToDate] = useState('');
 
     const theme = useTheme();
 
@@ -62,9 +71,20 @@ function Courses() {
         document.getElementById('filter').style.display = 'none';
     }
 
+    const resetFilter =() => {
+        setCategory('');
+        setPath('');
+        setFromCount('');
+        setToCount('');
+        setFromDate('');
+        setToDate('');
+        setCategoriesValue('');
+        setPathsValue('');
+    }
+
     const getCourses = async () => {
         setGetWait(true);
-        let result = await Fetch(host + `/courses?status[]=accepted&page=${page + 1}&search=${search}`, 'GET', null);
+        let result = await Fetch(host + `/courses?status[]=accepted&page=${page + 1}&search=${search}&${order}${category && `&category_id=${category}`}${path && `&path_id=${path}`}${fromCount && `&files_number[from]=${fromCount}`}${category && `&files_number[to]=${toCount}`}${fromDate && `&from=${fromDate}`}${toDate && `&to=${toDate}`}`, 'GET', null);
 
         if (result.status === 200) {
             setTotalPages(result.data.pagination.last_page);
@@ -85,13 +105,25 @@ function Courses() {
     }
 
     const orderingAndSearchCourses = async () => {
-        let result = await Fetch(host + `/courses?page=${page + 1}&status[]=accepted&search=${search}&${order}`, 'GET', null);
+        let result = await Fetch(host + `/courses?page=${page + 1}&status[]=accepted&search=${search}&${order}${category && `&category_id=${category}`}${path && `&path_id=${path}`}${fromCount && `&files_number[from]=${fromCount}`}${category && `&files_number[to]=${toCount}`}${fromDate && `&from=${fromDate}`}${toDate && `&to=${toDate}`}`, 'GET', null);
 
         if (result.status === 200) {
             setTotalPages(result.data.pagination.last_page);
             setCourses(result.data.data);
             setCurrentPage(page);
         }
+    }
+
+    const filteringCourses = async () => {
+        let result = await Fetch(host + `/courses?status[]=accepted&page=${page + 1}&search=${search}&${order}${category && `&category_id=${category}`}${path && `&path_id=${path}`}${fromCount && `&files_number[from]=${fromCount}`}${category && `&files_number[to]=${toCount}`}${fromDate && `&from=${fromDate}`}${toDate && `&to=${toDate}`}`, 'GET', null);
+
+        if (result.status == 200) {
+            setTotalPages(result.data.pagination.last_page);
+            setCourses(result.data.data);
+            closeFilter();
+        }
+
+        setFilterWait(false);
     }
 
     useEffect(() => {
@@ -194,6 +226,13 @@ function Courses() {
                         <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
                         <Box id="details" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center hidden max-sm:left-0">
                             <CourseDetails onClickClose={closeDetails} data={course} />
+                        </Box>
+                        <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+                            <CoursesFilter onClickClose={closeFilter} onClickConfirm={filteringCourses} onClickReset={resetFilter}
+                                categoriesValue={categoriesValue} fromCount={fromCount}toCount={toCount} fromDate={fromDate} 
+                                toDate={toDate} pathsValue={pathsValue} filterWait={filterWait}setCategoriesValue={setCategoriesValue} 
+                                setPathsValue={setPathsValue} setToDate={setToDate}setCategory={setCategory} setPath={setPath} 
+                                setFromCount={setFromCount} setFromDate={setFromDate} setToCount={setToCount} setFilterWait={setFilterWait} />
                         </Box>
                     </Box>
             }

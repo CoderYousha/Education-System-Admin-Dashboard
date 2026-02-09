@@ -1,0 +1,110 @@
+import { Box, Button, CircularProgress, Divider, TextField, Typography, useTheme } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+import Fetch from "../services/Fetch";
+import { AsyncPaginate } from "react-select-async-paginate";
+import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+
+function CoursesFilter({ onClickClose, onClickConfirm, onClickReset, categoriesValue, setCategoriesValue, setCategory, pathsValue, setPathsValue, setPath, fromCount, setFromCount, toCount, setToCount, fromDate, setFromDate, toDate, setToDate, filterWait, setFilterWait }) {
+    const language = localStorage.getItem('language');
+    const theme = useTheme();
+
+    const loadCategories = async (search, loadedOptions, { page }) => {
+        const host = `${process.env.REACT_APP_LOCAL_HOST}`;
+        const response = await Fetch(host + `/categories`);
+        const optionsFromApi = response.data.data.data.map((item) => ({
+            value: item.id, label: language == 'en' ? item.name_en : item.name_ar,
+        }));
+        return {
+            options: [{ value: '', label: 'الكل' }, ...optionsFromApi],
+
+            hasMore: response.data.data.page * response.data.data.perPage < response.data.data.total, additional: { page: page + 1, },
+        };
+    }
+
+    const loadPaths = async (search, loadedOptions, { page }) => {
+        const host = `${process.env.REACT_APP_LOCAL_HOST}`;
+        const response = await Fetch(host + `/paths`);
+
+        const optionsFromApi = response.data.data.map((item) => ({
+            value: item.id, label: language == 'en' ? item.name_en : item.name_ar,
+        }));
+        return {
+            options: [{ value: '', label: 'الكل' }, ...optionsFromApi],
+
+            hasMore: response.data.data.page * response.data.data.perPage < response.data.data.total, additional: { page: page + 1, },
+        };
+    }
+
+    return (
+        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="shadow-lg w-3/5 h-fit rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative" dir="rtl">
+            <Typography variant="h5" className="!font-semibold max-sm:!text-xl">تصفية الدورات</Typography>
+            <CloseIcon onClick={onClickClose} className="text-gray-700 cursor-pointer absolute top-5 left-5" fontSize="large"></CloseIcon>
+            <Divider className="!my-5" />
+            <Box className=""></Box>
+            <Typography variant="body1">الفئة</Typography>
+            <AsyncPaginate
+                value={categoriesValue}
+                loadOptions={loadCategories}
+                onChange={(option) => { setCategoriesValue(option); setCategory(option.value) }}
+                additional={{
+                    page: 1
+                }}
+                className="mt-2 !bg-gray-200"
+                placeholder="الفئة"
+                styles={{
+                    option: (provided, state) => ({
+                        ...provided,
+                        color: 'black'
+                    }),
+                }}
+                isSearchable={false}
+            />
+            <Typography variant="body1" className="!mt-5">المسار التعليمي</Typography>
+            <AsyncPaginate
+                value={pathsValue}
+                loadOptions={loadPaths}
+                onChange={(option) => { setPathsValue(option); setPath(option.value) }}
+                additional={{
+                    page: 1
+                }}
+                className="mt-2 !bg-gray-200"
+                placeholder="المسار التعليمي"
+                styles={{
+                    option: (provided, state) => ({
+                        ...provided,
+                        color: 'black'
+                    }),
+                }}
+                isSearchable={false}
+            />
+            <Typography variant="body1" className="!mt-5">عدد ملفات الدورة</Typography>
+            <Box className="mt-2 flex justify-between">
+                <TextField value={fromCount} onChange={(e) => setFromCount(e.target.value)} type="number" className="w-5/12" label="من"></TextField>
+                <TextField value={toCount} onChange={(e) => setToCount(e.target.value)} type="number" className="w-5/12" label="إلى"></TextField>
+            </Box>
+            <Typography variant="body1" className="!mt-5">تاريخ النشر</Typography>
+            <Box className="mt-2 flex justify-between">
+                <TextField sx={{ '& input::-webkit-datetime-edit': { color: 'transparent' }, '& input:focus::-webkit-datetime-edit': { color: 'inherit' } }} value={fromDate} onChange={(e) => setFromDate(e.target.value)} type="date" className="w-5/12" label="من تاريخ"></TextField>
+                <TextField sx={{ '& input::-webkit-datetime-edit': { color: 'transparent' }, '& input:focus::-webkit-datetime-edit': { color: 'inherit' } }} defaultValue="2026-12-30"  value={toDate} onChange={(e) => setToDate(e.target.value)} type="date" className="w-5/12" label="إلى تاريخ"></TextField>
+            </Box>
+            <Box className="w-full flex justify-between mt-10 max-sm:flex-col">
+                <Button variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold max-sm:w-full" onClick={onClickReset}>إعادة التعيين</Button>
+                <Button variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5" onClick={() => { setFilterWait(true); onClickConfirm(); }}>
+                    <Box sx={{ color: theme.palette.mode == 'dark' ? 'white' : 'black' }}>
+                        {
+                            filterWait ?
+                                <CircularProgress size={20} className="" color="white" />
+                                :
+                                <Box sx={{ color: theme.palette.mode == 'dark' ? 'white' : 'black' }}>
+                                    تطبيق الفلترة
+                                    <FilterAltOutlinedIcon />
+                                </Box>
+                        }
+                    </Box>
+                </Button>
+            </Box>
+        </Box>
+    );
+}
+
+export default CoursesFilter;

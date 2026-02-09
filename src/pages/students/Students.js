@@ -35,8 +35,8 @@ function Students() {
     const [value, setValue] = useState({ value: '', label: 'الكل' });
     const [fromCount, setFromCount] = useState(1);
     const [toCount, setToCount] = useState(5);
-    const [fromDate, setFromDate] = useState('2026-01-01');
-    const [toDate, setToDate] = useState('2026-01-01');
+    const [fromDate, setFromDate] = useState('');
+    const [toDate, setToDate] = useState('');
     const [order, setOrder] = useState('');
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -75,14 +75,14 @@ function Students() {
     const resetFilter = () => {
         setValue({ value: '', label: 'الكل' });
         setMajorId('');
-        setFromDate('2026-01-01');
-        setToDate('2026-01-01');
+        setFromDate('');
+        setToDate('');
         setFromCount(1);
         setToCount(5);
     }
 
     const getStudents = async () => {
-        let result = await Fetch(host + `/admin/users?account_role=student&page=${page + 1}&search=${search}`, 'GET', null);
+        let result = await Fetch(host + `/admin/users?account_role=student&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}${fromCount && `&enrolled_courses[from]=${fromCount}`}${toCount && `&enrolled_courses[to]=${toCount}`}${fromDate && `&from=${fromDate}`}${toDate && `&to=${toDate}`}${majorId && `&major_id=${majorId}`}`, 'GET', null);
 
         if (result.status === 200) {
             setTotalPages(result.data.data.last_page);
@@ -95,7 +95,7 @@ function Students() {
     }
 
     const orderingAndSearchStudents = async () => {
-        let result = await Fetch(host + `/admin/users?account_role=student&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}`, 'GET', null);
+        let result = await Fetch(host + `/admin/users?account_role=student&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}${fromCount && `&enrolled_courses[from]=${fromCount}`}${toCount && `&enrolled_courses[to]=${toCount}`}${fromDate && `&from=${fromDate}`}${toDate && `&to=${toDate}`}${majorId && `&major_id=${majorId}`}`, 'GET', null);
 
         if (result.status === 200) {
             setTotalPages(result.data.data.last_page);
@@ -111,7 +111,7 @@ function Students() {
     }
 
     const filteringStudents = async () => {
-        let result = await Fetch(host + `/admin/users?account_role=student&page=${page + 1}&search=${search}${fromCount && `&enrolled_courses[from]=${fromCount}`}${toCount && `&enrolled_courses[to]=${toCount}`}${fromDate && `&from=${fromDate}`}${toDate && `&to=${toDate}`}${majorId && `&major_id=${majorId}`}`, 'GET', null);
+        let result = await Fetch(host + `/admin/users?account_role=student&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}${fromCount && `&enrolled_courses[from]=${fromCount}`}${toCount && `&enrolled_courses[to]=${toCount}`}${fromDate && `&from=${fromDate}`}${toDate && `&to=${toDate}`}${majorId && `&major_id=${majorId}`}`, 'GET', null);
         if (result.status === 200) {
             setTotalPages(result.data.data.last_page);
             setStudentsCount(result.data.data.total);

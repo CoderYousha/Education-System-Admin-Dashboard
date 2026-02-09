@@ -5,8 +5,6 @@ import { useWaits } from "../../hooks/UseWait";
 import { Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, Typography, useTheme } from "@mui/material";
 import styled from "styled-components";
 import Fetch from "../../services/Fetch";
-import Sidebar from "../../components/Sidebar";
-import Header from "../../components/Header";
 import RequestDetails from "../../popup/RequestDetails";
 import SnackbarAlert from "../../components/SnackBar";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
@@ -32,8 +30,8 @@ function Requests() {
     const [search, setSearch] = useState('');
     const [courseName, setCourseName] = useState('');
     const [status, setStatus] = useState(['pending', 'accepted', 'rejected']);
-    const [from, setFrom] = useState('2026-01-01');
-    const [to, setTo] = useState('2026-01-01');
+    const [from, setFrom] = useState('');
+    const [to, setTo] = useState('');
     const [value, setValue] = useState(null);
     const [teacherId, setTeacherId] = useState('');
     const [order, setOrder] = useState('');
@@ -82,16 +80,15 @@ function Requests() {
     const resetFilter = () => {
         setValue();
         setStatus(['pending', 'accepted', 'rejected']);
-        setFrom('2026-01-01');
-        setTo('2026-01-01');
+        setFrom('');
+        setTo('');
         setTeacherId('');
         setCourseName('');
     }
 
     const getCoursesRequests = async () => {
-        setGetWait(true);
-
-        let result = await Fetch(host + `/courses?page=${page + 1}`, 'GET', null);
+        const queryStatus = status.map(s => `status[]=${s}`).join("&");
+        let result = await Fetch(host + `/courses?page=${page + 1}&${order}&search=${search}&${queryStatus}${from && to && `&from=${from}&to=${to}`}${teacherId && `&teacher_id=${teacherId}`}${courseName && `&search=${courseName}`}`, 'GET', null);
 
         if (result.status === 200) {
             setTotalPages(result.data.pagination.last_page);
@@ -103,22 +100,22 @@ function Requests() {
         setGetWait(false);
     }
 
-    const orderingAndSearchCoursesRequests = async () => {
-        let result = await Fetch(host + `/courses?page=${page + 1}&search=${search}&${order}`, 'GET', null);
+    const orderingRequests = async () => {
+        const queryStatus = status.map(s => `status[]=${s}`).join("&");
+        let result = await Fetch(host + `/courses?page=${page + 1}&search=${search}&${order}&${queryStatus}${from && to && `&from=${from}&to=${to}`}${teacherId && `&teacher_id=${teacherId}`}${courseName && `&search=${courseName}`}`, 'GET', null);
 
         if (result.status === 200) {
             setTotalPages(result.data.pagination.last_page);
             setRequestCounts(result.data.pagination.total);
             setCoursesRequests(result.data.data);
             setCurrentPage(page);
-            resetFilter();
         }
     }
 
     const requestsFiltering = async () => {
 
         const queryStatus = status.map(s => `status[]=${s}`).join("&");
-        let result = await Fetch(host + `/courses?page=${page + 1}&${queryStatus}${from && to && `&from=${from}&to=${to}`}${teacherId && `&teacher_id=${teacherId}`}${courseName && `&search=${courseName}`}`, 'GET', null);
+        let result = await Fetch(host + `/courses?page=${page + 1}&${order}&search=${search}&${queryStatus}${from && to && `&from=${from}&to=${to}`}${teacherId && `&teacher_id=${teacherId}`}${courseName && `&search=${courseName}`}`, 'GET', null);
 
         if (result.status === 200) {
             setTotalPages(result.data.pagination.last_page);
@@ -152,11 +149,11 @@ function Requests() {
 
     useEffect(() => {
         getCoursesRequests();
-    }, [page]);
+    }, [page, search]);
 
     useEffect(() => {
-        orderingAndSearchCoursesRequests();
-    }, [order, search]);
+        orderingRequests();
+    }, [order]);
 
     return (
         <>

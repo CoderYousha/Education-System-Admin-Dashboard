@@ -90,7 +90,7 @@ function Teachers() {
 
     const getTeachers = async () => {
         setGetWait(true);
-        let result = await Fetch(host + `/admin/users?account_role=teacher&page=${page + 1}&search=${search}`, 'GET', null);
+        let result = await Fetch(host + `/admin/users?account_role=teacher&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}${majorId && `&major_id=${majorId}`}${teacherSpecializations && `&specialization_id=${teacherSpecializations}`}${academicDegree && `&academic_degree_id=${academicDegree}`}`, 'GET', null);
 
         if (result.status === 200) {
             setTotalPages(result.data.data.last_page);
@@ -103,7 +103,7 @@ function Teachers() {
     }
 
     const orderingAndSearchTeachers = async () => {
-        let result = await Fetch(host + `/admin/users?account_role=teacher&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}`, 'GET', null);
+        let result = await Fetch(host + `/admin/users?account_role=teacher&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}${majorId && `&major_id=${majorId}`}${teacherSpecializations && `&specialization_id=${teacherSpecializations}`}${academicDegree && `&academic_degree_id=${academicDegree}`}`, 'GET', null);
 
         if (result.status === 200) {
             setTotalPages(result.data.data.last_page);
@@ -113,7 +113,7 @@ function Teachers() {
     }
 
     const filteringTeachers = async () => {
-        let result = await Fetch(host + `/admin/users?account_role=teacher&page=${page + 1}&search=${search}${majorId && `&major_id=${majorId}`}${teacherSpecializations && `&specialization_id=${teacherSpecializations}`}${academicDegree && `&academic_degree_id=${academicDegree}`}`, 'GET', null);
+        let result = await Fetch(host + `/admin/users?account_role=teacher&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}${majorId && `&major_id=${majorId}`}${teacherSpecializations && `&specialization_id=${teacherSpecializations}`}${academicDegree && `&academic_degree_id=${academicDegree}`}`, 'GET', null);
 
         if (result.status === 200) {
             setTotalPages(result.data.data.last_page);

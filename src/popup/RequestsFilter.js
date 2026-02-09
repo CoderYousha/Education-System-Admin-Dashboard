@@ -111,12 +111,12 @@ function RequestFilter({ onClickClose, onClickConfirm, onClickReset, onClickStat
             </Box>
             <Box className="w-full flex justify-between mt-10 max-sm:flex-col">
                 <Button onClick={onClickReset} variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold max-sm:w-full">إعادة التعيين</Button>
-                <Button variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5" onClick={() => { setFilterWait(true); onClickConfirm();}}>
+                <Button sx={{ color: theme.palette.mode == 'dark' ?  'white' : 'black'}} variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5" onClick={() => { setFilterWait(true); onClickConfirm();}}>
                     {
                         filterWait ?
                             <CircularProgress size={20} className="" color="white" />
                             :
-                            <Box sx={{ color: theme.palette.mode == 'dark' ?  'white' : 'black'}}>
+                            <Box>
                                 تطبيق الفلترة
                                 <FilterAltOutlinedIcon />
                             </Box>

@@ -1,6 +1,4 @@
 import { Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
-import Sidebar from "../../components/Sidebar";
-import Header from "../../components/Header";
 import PieChartWithCenterLabel from "../../components/PieCenterLabel";
 import SimpleAreaChart from "../../components/SimpleAreaChart";
 import styled from "styled-components";
@@ -20,6 +18,7 @@ import Arrow from "../../images/icons/arrow.png";
 import { useTheme } from '@mui/material/styles';
 import RequestDetails from "../../popup/RequestDetails";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
      const host = `${process.env.REACT_APP_LOCAL_HOST}`;
@@ -32,10 +31,11 @@ function Dashboard() {
      const visibleRequests = coursesRequests.slice(0, 4);
      const [courseId, setCourseId] = useState(null);
      const [operation, setOperation] = useState(null);
-     const [fromDate, setFromDate] = useState('');
-     const [toDate, setToDate] = useState('');
+     const [fromDate, setFromDate] = useState('2026-01-01');
+     const [toDate, setToDate] = useState('2026-01-01');
      const [request, setRequest] = useState('');
      const theme = useTheme();
+     const navigate = useNavigate();
 
      const StyledTableCell = styled(TableCell)(({ theme }) => ({
           [`&.${tableCellClasses.head}`]: {
@@ -245,8 +245,8 @@ function Dashboard() {
                                                             <SimpleAreaChart monthlyChart={dashboard.monthly_chart} from={fromDate} to={toDate} values={dashboard.monthly_chart.map(chart => chart.total)} months={dashboard.monthly_chart.map(chart => chart.month)} />
                                                        </Box>
                                                        <Box className="mb-2 float-left flex justify-around w-full">
-                                                            <TextField value="2026-01-01" onChange={(e) => setToDate(e.target.value)} type="date" label="To" className="z-0" />
-                                                            <TextField value="2026-01-01" onChange={(e) => setFromDate(e.target.value)} type="date" label="From" className="z-0" />
+                                                            <TextField value={toDate} onChange={(e) => setToDate(e.target.value)} type="date" label="To" className="z-0" />
+                                                            <TextField value={fromDate} onChange={(e) => setFromDate(e.target.value)} type="date" label="From" className="z-0" />
                                                        </Box>
                                                   </Box>
                                              </Box>
@@ -254,7 +254,7 @@ function Dashboard() {
                                                   <Box sx={{ backgroundColor: theme.palette.background.default }} className="bg-white mr-2 rounded-xl">
                                                        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2">
                                                             <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">طلبات الموافقة المعلقة</Typography>
-                                                            <Typography variant="body1" className="cursor-pointer max-sm:!text-sm">عرض جميع الطلبات <ArrowBackIosNewIcon /></Typography>
+                                                            <Typography onClick={() => navigate('/accept-requests')} variant="body1" className="cursor-pointer max-sm:!text-sm">عرض جميع الطلبات <ArrowBackIosNewIcon /></Typography>
                                                        </Box>
                                                        <Box>
                                                             <TableContainer component={Paper} dir="rtl">
