@@ -126,15 +126,15 @@ function AddTeacher({ onClickClose, value, setValue, setSnackBar, setTeachers })
     }
 
     return (
-        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="shadow-lg w-3/5 h-fit rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative" dir="rtl">
+        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="shadow-lg w-3/5 h-fit rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative max-sm:overflow-y-scroll max-sm:h-screen" dir="rtl">
             <Typography variant="h5" className="!font-semibold max-sm:!text-xl">إضافة مدرس جديد</Typography>
-            <CloseIcon onClick={onClickClose} className="text-gray-700 cursor-pointer absolute top-5 left-5" fontSize="large"></CloseIcon>
+            <CloseIcon onClick={() => {resetInputs(); onClickClose();}} className="text-gray-700 cursor-pointer absolute top-5 left-5" fontSize="large"></CloseIcon>
             <Divider className="!my-5" />
             <Box className=""></Box>
-            <Box className="grid grid-cols-2 w-full gap-x-2 gap-y-5 mt-5">
+            <Box className="grid grid-cols-2 w-full gap-x-2 gap-y-5 mt-5 max-sm:grid-cols-1 max-sm:gap-x-0">
                 <TextField value={firstName} onChange={(e) => setFirstName(e.target.value)} variant="outlined" className="w-full" label="الاسم الأول" />
                 <TextField value={lastName} onChange={(e) => setLastName(e.target.value)} variant="outlined" className="w-full" label="الاسم الأخير" />
-                <Box className="col-span-2">
+                <Box className="col-span-2 max-sm:col-span-1">
                     <Typography variant="body1">الاختصاص</Typography>
                     <AsyncPaginate
                         value={teacherSpecializationsValue}
@@ -194,17 +194,17 @@ function AddTeacher({ onClickClose, value, setValue, setSnackBar, setTeachers })
                         isSearchable={false}
                     />
                 </Box>
-                <TextField value={experienceYears} onChange={(e) => setExperienceYears(e.target.value)} variant="outlined" className="w-full" label="سنوات الخبرة" />
+                <TextField type="number" value={experienceYears} onChange={(e) => setExperienceYears(e.target.value)} variant="outlined" className="w-full" label="سنوات الخبرة" />
                 <TextField value={birthdate} onChange={(e) => setBirthDate(e.target.value)} variant="outlined" type="date" defaultValue="2025-01-01" className="w-full" label="تاريخ الميلاد" />
                 <TextField value={email} onChange={(e) => setEmail(e.target.value)} variant="outlined" className="w-full" label="البريد الإلكتروني" />
-                <Box dir="ltr" className="w-full h-full">
+                <Box dir="ltr" className="w-full h-full max-sm:h-12">
                     <PhoneInput country={'us'} containerStyle={{ width: "100%" }} buttonStyle={{ background: theme.palette.mode == 'dark' ? 'none' : '' }} inputStyle={{ width: '100%', height: "100%", color: theme.palette.mode == 'dark' ? 'white' : 'black', background: 'none' }} onChange={handleChange} />
                 </Box>
                 <TextField value={password} onChange={(e) => setPassword(e.target.value)} variant="outlined" type="password" className="w-full" label="كلمة المرور" />
                 <TextField value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} variant="outlined" type="password" className="w-full" label="تأكيد كلمة المرور" />
             </Box>
-            <Box className="flex justify-between mt-5 w-full">
-                <Button variant="contained" className="w-5/12 !text-white !font-bold" onClick={addTeacher}>
+            <Box className="flex justify-between mt-5 w-full max-sm:flex-col max-sm:items-center">
+                <Button variant="contained" className="w-5/12 !text-white !font-bold max-sm:w-full" onClick={addTeacher}>
                     {
                         sendWait ?
                             <CircularProgress size={20} className="" color="white" />
@@ -215,7 +215,7 @@ function AddTeacher({ onClickClose, value, setValue, setSnackBar, setTeachers })
                             </>
                     }
                 </Button>
-                <Button variant="contained" className="w-5/12 !bg-gray-400 !text-gray-700 !font-bold">إلغاء</Button>
+                <Button onClick={() => {resetInputs(); onClickClose();}} variant="contained" className="w-5/12 !bg-gray-400 !text-gray-700 !font-bold max-sm:w-full !mt-2">إلغاء</Button>
             </Box>
         </Box>
     );
