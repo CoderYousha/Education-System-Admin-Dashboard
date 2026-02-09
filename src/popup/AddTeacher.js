@@ -39,7 +39,7 @@ function AddTeacher({ onClickClose, value, setValue, setSnackBar, setTeachers })
         const response = await Fetch(host + `/academic-degrees`);
         return {
             options: response.data.data.data.map((item) => ({
-                value: item.id, label: language == 'en' ? item.name_en : item.name_ar,
+                value: item.id, label: language === 'en' ? item.name_en : item.name_ar,
             })),
 
             hasMore: response.data.data.page * response.data.data.perPage < response.data.data.total, additional: { page: page + 1, },
@@ -51,7 +51,7 @@ function AddTeacher({ onClickClose, value, setValue, setSnackBar, setTeachers })
         const response = await Fetch(host + `/teacher-specializations`);
 
         const optionsFromApi = response.data.data.data.map((item) => ({
-            value: item.id, label: language == 'en' ? item.name_en : item.name_ar,
+            value: item.id, label: language === 'en' ? item.name_en : item.name_ar,
         }));
         return {
             options: [...optionsFromApi],
@@ -113,12 +113,12 @@ function AddTeacher({ onClickClose, value, setValue, setSnackBar, setTeachers })
 
         let result = await Fetch(host + `/admin/users/store`, 'POST', formData);
 
-        if (result.status == 200) {
+        if (result.status === 200) {
             setTeachers((prevTeachers) => [result.data.data.user, ...prevTeachers]);
             resetInputs();
             setSnackBar('success', 'تمت الإضافة بنجاح');
             onClickClose();
-        } else if (result.status == 422) {
+        } else if (result.status === 422) {
             setSnackBar('error', result.data.errors[0]);
         }
 
@@ -198,7 +198,7 @@ function AddTeacher({ onClickClose, value, setValue, setSnackBar, setTeachers })
                 <TextField value={birthdate} onChange={(e) => setBirthDate(e.target.value)} variant="outlined" type="date" defaultValue="2025-01-01" className="w-full" label="تاريخ الميلاد" />
                 <TextField value={email} onChange={(e) => setEmail(e.target.value)} variant="outlined" className="w-full" label="البريد الإلكتروني" />
                 <Box dir="ltr" className="w-full h-full max-sm:h-12">
-                    <PhoneInput country={'us'} containerStyle={{ width: "100%" }} buttonStyle={{ background: theme.palette.mode == 'dark' ? 'none' : '' }} inputStyle={{ width: '100%', height: "100%", color: theme.palette.mode == 'dark' ? 'white' : 'black', background: 'none' }} onChange={handleChange} />
+                    <PhoneInput country={'us'} containerStyle={{ width: "100%" }} buttonStyle={{ background: theme.palette.mode === 'dark' ? 'none' : '' }} inputStyle={{ width: '100%', height: "100%", color: theme.palette.mode === 'dark' ? 'white' : 'black', background: 'none' }} onChange={handleChange} />
                 </Box>
                 <TextField value={password} onChange={(e) => setPassword(e.target.value)} variant="outlined" type="password" className="w-full" label="كلمة المرور" />
                 <TextField value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} variant="outlined" type="password" className="w-full" label="تأكيد كلمة المرور" />

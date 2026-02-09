@@ -10,23 +10,25 @@ import GrayVideoImage from '../images/icons/gray_video.png';
 import CalendarImage from '../images/icons/calendar.png';
 import ViewImage from '../images/icons/view.png';
 
-function RequestDetails({request, onClickClose, onClickReject, onClickAccept}) {
+function RequestDetails({ request, onClickClose, onClickReject, onClickAccept }) {
     const language = localStorage.getItem('language');
     const contents = request.contents?.filter((content) => content.content_type === 'CourseFile');
     const theme = useTheme();
 
-    const getVideoSize = async (url) => { 
-        try { const response = await fetch(url, { method: "HEAD" });
-            const size = response.headers.get("Content-Length"); 
-            if (!size) return null; 
-            const sizeInMB = (size / (1024 * 1024)).toFixed(2); alert(sizeInMB); return sizeInMB; 
-        } catch (error) { 
+    const getVideoSize = async (url) => {
+        try {
+            const response = await fetch(url, { method: "HEAD" });
+            const size = response.headers.get("Content-Length");
+            if (!size) return null;
+            const sizeInMB = (size / (1024 * 1024)).toFixed(2); alert(sizeInMB); return sizeInMB;
+        } catch (error) {
             console.error("Error fetching video size:", error);
-            return null; 
-        } };
+            return null;
+        }
+    };
 
     return (
-        <Box sx={{backgroundColor: theme.palette.background.paper}} className="w-4/5 h-screen bg-white rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative" dir="rtl">
+        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="w-4/5 h-screen bg-white rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative" dir="rtl">
             <Typography variant="h5" className="!font-semibold max-sm:!text-xl">تفاصيل الطلب</Typography>
             <Typography variant="h6" className="text-gray-400 !mt-3 max-sm:!text-lg">مراجعة ملفات الدورة المقدمة من المعلم</Typography>
             <CloseIcon onClick={onClickClose} className="text-gray-700 cursor-pointer absolute top-5 left-5" fontSize="large"></CloseIcon>
@@ -42,7 +44,7 @@ function RequestDetails({request, onClickClose, onClickReject, onClickAccept}) {
                     </Box>
                     <Box className="mt-4 mr-2 float-right">
                         <Typography variant="body1" className="text-gray-400">اسم الدورة</Typography>
-                        <Typography variant="h6" className="!mt-4 !font-semibold">{language == 'en' ? request.name_en : request.name_ar}</Typography>
+                        <Typography variant="h6" className="!mt-4 !font-semibold">{language === 'en' ? request.name_en : request.name_ar}</Typography>
                     </Box>
                 </Box>
                 <Box className="h-28 shadow-lg rounded-xl overflow-hidden">
@@ -85,7 +87,7 @@ function RequestDetails({request, onClickClose, onClickReject, onClickAccept}) {
                             <img src={PlayImage} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
                         </Box>
                         <Box className="h-full py-4 px-5 flex flex-col justify-between max-sm:py-1">
-                            <Typography variant="body1" className="!font-semibold">{language == 'en'? content.content.name_en : content.content.name_ar}</Typography>
+                            <Typography variant="body1" className="!font-semibold">{language === 'en' ? content.content.name_en : content.content.name_ar}</Typography>
                             <Box className="flex justify-between text-gray-400 max-sm:flex-col">
                                 <Box className="flex items-center">
                                     <img src={GrayVideoImage} className="ml-1" />
@@ -105,8 +107,8 @@ function RequestDetails({request, onClickClose, onClickReject, onClickAccept}) {
                 )
             }
             <Box className="w-11/12 mx-auto mt-5 flex justify-between max-sm:flex-col max-sm:items-center">
-                <Button onClick={() => {onClickAccept(request.id, 'accepted'); onClickClose()}} className="w-5/12 h-10 !font-bold mx-2 !text-green-600 !bg-green-300 hover:!bg-green-600 hover:!text-white max-sm:w-10/12">قبول</Button>
-                <Button onClick={() => {onClickReject(request.id, 'rejected'); onClickClose()}} className="w-5/12 h-10 !bg-red-300 !text-red-600 !font-bold hover:!bg-red-600 hover:!text-white max-sm:!mt-2 max-sm:w-10/12">رفض</Button>
+                <Button onClick={() => { onClickAccept(request.id, 'accepted'); onClickClose() }} className="w-5/12 h-10 !font-bold mx-2 !text-green-600 !bg-green-300 hover:!bg-green-600 hover:!text-white max-sm:w-10/12">قبول</Button>
+                <Button onClick={() => { onClickReject(request.id, 'rejected'); onClickClose() }} className="w-5/12 h-10 !bg-red-300 !text-red-600 !font-bold hover:!bg-red-600 hover:!text-white max-sm:!mt-2 max-sm:w-10/12">رفض</Button>
             </Box>
         </Box>
     );

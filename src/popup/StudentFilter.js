@@ -4,16 +4,25 @@ import { AsyncPaginate } from "react-select-async-paginate";
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import Fetch from "../services/Fetch";
 
-function StudentFilter({ onClickClose, onClickConfirm, onClickReset, value, setValue, majorId, setMajorId, fromCount, setFromCount, toCount, setToCount, fromDate, setFromDate, toDate, setToDate, filterWait, setFilterWait }) {
+function StudentFilter({ onClickClose, onClickConfirm, value, setValue, setMajorId, fromCount, setFromCount, toCount, setToCount, fromDate, setFromDate, toDate, setToDate, filterWait, setFilterWait }) {
     const language = localStorage.getItem('language');
     const theme = useTheme();
+
+    const resetFilter = () => {
+        setValue({ value: '', label: 'الكل' });
+        setMajorId('');
+        setFromDate('');
+        setToDate('');
+        setFromCount('');
+        setToCount('');
+    }
 
     const loadMajors = async (search, loadedOptions, { page }) => {
         const host = `${process.env.REACT_APP_LOCAL_HOST}`;
         const response = await Fetch(host + `/majors`);
         const optionsFromApi = response.data.data.map((item) => ({ value: item.id, label: language === 'en' ? item.name_en : item.name_ar, }));
         return {
-            options: [{value: '', label: 'الكل'} , ...optionsFromApi],
+            options: [{ value: '', label: 'الكل' }, ...optionsFromApi],
 
             hasMore: response.data.data.page * response.data.data.perPage < response.data.data.total, additional: { page: page + 1, },
         };
@@ -69,14 +78,14 @@ function StudentFilter({ onClickClose, onClickConfirm, onClickReset, value, setV
                 </Box>
             </Box>
             <Box className="w-full flex justify-between mt-10 max-sm:flex-col">
-                <Button variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold max-sm:w-full" onClick={onClickReset}>إعادة التعيين</Button>
+                <Button variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold max-sm:w-full" onClick={resetFilter}>إعادة التعيين</Button>
                 <Button variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5" onClick={() => { setFilterWait(true); onClickConfirm(); }}>
-                    <Box sx={{ color: theme.palette.mode == 'dark' ? 'white' : 'black' }} >
+                    <Box sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }} >
                         {
                             filterWait ?
                                 <CircularProgress size={20} className="" color="white" />
                                 :
-                                <Box sx={{ color: theme.palette.mode == 'dark' ? 'white' : 'black' }}>
+                                <Box sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>
                                     تطبيق الفلترة
                                     <FilterAltOutlinedIcon />
                                 </Box>

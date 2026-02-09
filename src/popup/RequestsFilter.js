@@ -5,19 +5,28 @@ import CheckIcon from '@mui/icons-material/Check';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import { AsyncPaginate } from "react-select-async-paginate";
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Fetch from "../services/Fetch";
 
-function RequestFilter({ onClickClose, onClickConfirm, onClickReset, onClickStatus, status, from, setFrom, to, setTo, teacherId, value, setValue, setTeacherId, courseName, setCourseName, filterWait, setFilterWait }) {
+function RequestFilter({ onClickClose, onClickConfirm, onClickStatus, status, setStatus, from, setFrom, to, setTo, teacherId, value, setValue, setTeacherId, courseName, setCourseName, filterWait, setFilterWait }) {
     const host = `${process.env.REACT_APP_LOCAL_HOST}`;
     const theme = useTheme();
+
+    const resetFilter = () => {
+        setValue('');
+        setStatus(['pending', 'accepted', 'rejected']);
+        setFrom('');
+        setTo('');
+        setTeacherId('');
+        setCourseName('');
+    }
 
     useEffect(() => {
         const selected = async () => {
             if (teacherId) {
                 let result = await Fetch(host + `/admin/users/${teacherId}/show`, 'GET');
 
-                if (result.status == 200) {
+                if (result.status === 200) {
                     setValue({ value: result.data.id, label: result.data.first_name + result.data.last_name });
                 }
             }
@@ -85,11 +94,11 @@ function RequestFilter({ onClickClose, onClickConfirm, onClickReset, onClickStat
             <Box className="flex justify-between mt-5 max-sm:flex-col">
                 <Box className="w-2/5 max-sm:w-full">
                     <Typography variant="body2" className="!font-semibold text-gray-400">من</Typography>
-                    <input onChange={(e) => setFrom(e.target.value)} type="date" className="text-black mt-2 w-full rounded-lg h-10 bg-gray-200 px-2" value={from ? from : "2025-07-12"} />
+                    <input onChange={(e) => setFrom(e.target.value)} type="date" className="text-black mt-2 w-full rounded-lg h-10 bg-gray-200 px-2" value={from} />
                 </Box>
                 <Box className="w-2/5 max-sm:w-full">
                     <Typography variant="body2" className="!font-semibold text-gray-400">إلى</Typography>
-                    <input onChange={(e) => setTo(e.target.value)} type="date" className="text-black mt-2 w-full rounded-lg h-10 bg-gray-200 px-2" value={to ? to : "2025-07-12"} />
+                    <input onChange={(e) => setTo(e.target.value)} type="date" className="text-black mt-2 w-full rounded-lg h-10 bg-gray-200 px-2" value={to} />
                 </Box>
             </Box>
             <Typography variant="body1" className="!font-semibold text-gray-400 !mt-5">اسم المدرس</Typography>
@@ -110,8 +119,8 @@ function RequestFilter({ onClickClose, onClickConfirm, onClickReset, onClickStat
                 <input value={courseName} onChange={(e) => setCourseName(e.target.value)} className="text-black mt-2 w-full h-10 rounded-lg border bg-gray-200 indent-3 outline-none" placeholder="أدخل اسم الدورة" />
             </Box>
             <Box className="w-full flex justify-between mt-10 max-sm:flex-col">
-                <Button onClick={onClickReset} variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold max-sm:w-full">إعادة التعيين</Button>
-                <Button sx={{ color: theme.palette.mode == 'dark' ?  'white' : 'black'}} variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5" onClick={() => { setFilterWait(true); onClickConfirm();}}>
+                <Button onClick={resetFilter} variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold max-sm:w-full">إعادة التعيين</Button>
+                <Button sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }} variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5" onClick={() => { setFilterWait(true); onClickConfirm(); }}>
                     {
                         filterWait ?
                             <CircularProgress size={20} className="" color="white" />

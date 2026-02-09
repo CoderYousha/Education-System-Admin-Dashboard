@@ -1,7 +1,6 @@
-import { Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Paper, Table, TableBody, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import PieChartWithCenterLabel from "../../components/PieCenterLabel";
 import SimpleAreaChart from "../../components/SimpleAreaChart";
-import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 import { useWaits } from "../../hooks/UseWait";
@@ -19,13 +18,17 @@ import { useTheme } from '@mui/material/styles';
 import RequestDetails from "../../popup/RequestDetails";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useNavigate } from "react-router-dom";
+import { useTableStyles } from "../../hooks/UseTableStyles";
+import { usePopups } from "../../hooks/UsePopups";
+import { useConstants } from "../../hooks/UseConstants";
 
 function Dashboard() {
-     const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-     const language = localStorage.getItem('language') || 'ar';
+     const { host, language } = useConstants();
      const { wait } = useContext(AuthContext);
      const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
      const { getWait, setGetWait, sendWait, setSendWait } = useWaits();
+     const { StyledTableCell, StyledTableRow } = useTableStyles();
+     const { setPopup } = usePopups();
      const [coursesRequests, setCoursesRequests] = useState([]);
      const [dashboard, setDashboard] = useState('');
      const visibleRequests = coursesRequests.slice(0, 4);
@@ -36,22 +39,6 @@ function Dashboard() {
      const [request, setRequest] = useState('');
      const theme = useTheme();
      const navigate = useNavigate();
-
-     const StyledTableCell = styled(TableCell)(({ theme }) => ({
-          [`&.${tableCellClasses.head}`]: {
-          },
-          [`&.${tableCellClasses.body}`]: {
-               fontSize: 14,
-          },
-     }));
-
-     const StyledTableRow = styled(TableRow)(({ theme }) => ({
-          '&:nth-of-type(odd)': {
-          },
-          '&:last-child td, &:last-child th': {
-               border: 0,
-          },
-     }));
 
      const getCoursesRequests = async () => {
           let result = await Fetch(host + '/courses?not_active=1', 'GET', null);
@@ -65,13 +52,14 @@ function Dashboard() {
           setCourseId(courseId);
           setOperation(status);
           setSendWait(true);
-          let result = await Fetch(host + `/admin/courses/${courseId}/change-status`, 'POST', JSON.stringify({ 'new_status': status }));
+          const formData = new FormData();
+          formData.append('new_status', status);
+          let result = await Fetch(host + `/admin/courses/${courseId}/change-status`, 'POST', formData);
           if (result.status === 200) {
                getCoursesRequests();
                setSnackBar('success', status === 'accepted' ? 'تم التفعيل بنجاح' : 'تم الرفض بنجاح');
                setCourseId(null);
           }
-
           setSendWait(false);
      }
 
@@ -84,14 +72,8 @@ function Dashboard() {
      }
 
      const getCourseDetails = async (id) => {
-          setRequest(coursesRequests.find((item) => item.id == id));
-          console.log(coursesRequests.find((item) => item.id == id));
-          document.getElementById('popup').style.display = 'block';
-
-     }
-
-     const closePopup = () => {
-          document.getElementById('popup').style.display = 'none';
+          setRequest(coursesRequests.find((item) => item.id === id));
+          setPopup('details', 'flex');
      }
 
      useEffect(() => {
@@ -106,7 +88,6 @@ function Dashboard() {
 
      useEffect(() => {
           getDashboard();
-          console.log(dashboard.monthly_chart);
      }, [fromDate, toDate]);
 
      return (
@@ -235,7 +216,7 @@ function Dashboard() {
                                                   <Box sx={{ backgroundColor: theme.palette.background.paper }} className="bg-white rounded-xl mt-3 mx-2 max-sm:mx-auto" dir="rtl">
                                                        <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">توزيع الدورات</Typography>
                                                        <Typography variant="h6" className="px-3 text-gray-400 max-sm:!text-sm">حسب الفئات الرئيسية</Typography>
-                                                       <PieChartWithCenterLabel values={dashboard.categories.map(category => category.percent)} labels={dashboard.categories.map(category => language == 'en' ? category.name_en : category.name_ar)} counts={dashboard.categories.map(category => category.count)} />
+                                                       <PieChartWithCenterLabel values={dashboard.categories.map(category => category.percent)} labels={dashboard.categories.map(category => language === 'en' ? category.name_en : category.name_ar)} counts={dashboard.categories.map(category => category.count)} />
                                                   </Box>
                                                   <Box sx={{ backgroundColor: theme.palette.background.paper }} className="bg-white rounded-xl mt-3 mr-2 relative max-sm:mx-auto" dir="rtl">
                                                        <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">نمط المنصة</Typography>
@@ -302,8 +283,8 @@ function Dashboard() {
                                                        </Box>
                                                   </Box>
                                              </Box>
-                                             <Box id="popup" className="w-screen h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden max-sm:left-0">
-                                                  <RequestDetails onClickClose={closePopup} onClickAccept={changeCourseStatus} onClickReject={changeCourseStatus} request={request} />
+                                             <Box id="details" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center hidden max-sm:left-0">
+                                                  <RequestDetails onClickClose={() => setPopup('details', 'none')} onClickAccept={changeCourseStatus} onClickReject={changeCourseStatus} request={request} />
                                              </Box>
                                              <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
                                         </>

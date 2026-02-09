@@ -2,8 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 import useSnackBar from "../../hooks/UseSnackBar";
 import { useWaits } from "../../hooks/UseWait";
-import { Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow, Typography, useTheme } from "@mui/material";
-import styled from "styled-components";
+import { Box, Button, CircularProgress, Paper, Table, TableBody, TableContainer, TableHead, TableRow, Typography, useTheme } from "@mui/material";
 import Fetch from "../../services/Fetch";
 import RequestDetails from "../../popup/RequestDetails";
 import SnackbarAlert from "../../components/SnackBar";
@@ -12,13 +11,19 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import RequestFilter from "../../popup/RequestsFilter";
+import { useConstants } from "../../hooks/UseConstants";
+import { useTableStyles } from "../../hooks/UseTableStyles";
+import { usePopups } from "../../hooks/UsePopups";
+import { useRequestsFilter } from "../../filter/UseRequestsFilter";
 
 function Requests() {
-    const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-    const language = localStorage.getItem('language') || 'ar';
+    const {host, language} = useConstants();
     const { wait } = useContext(AuthContext);
     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
     const { getWait, setGetWait, sendWait, setSendWait, filterWait, setFilterWait } = useWaits();
+    const {status, setStatus, from, setFrom, to, setTo, value, setValue, teacherId, setTeacherId} = useRequestsFilter();
+    const { StyledTableCell, StyledTableRow } = useTableStyles();
+    const { setPopup } = usePopups();
     const [request, setRequest] = useState('');
     const [coursesRequests, setCoursesRequests] = useState([]);
     const [courseId, setCourseId] = useState(null);
@@ -29,61 +34,18 @@ function Requests() {
     const [requestCounts, setRequestCounts] = useState('');
     const [search, setSearch] = useState('');
     const [courseName, setCourseName] = useState('');
-    const [status, setStatus] = useState(['pending', 'accepted', 'rejected']);
-    const [from, setFrom] = useState('');
-    const [to, setTo] = useState('');
-    const [value, setValue] = useState(null);
-    const [teacherId, setTeacherId] = useState('');
     const [order, setOrder] = useState('');
     const theme = useTheme();
-
-    const StyledTableCell = styled(TableCell)(({ theme }) => ({
-        [`&.${tableCellClasses.head}`]: {
-            backgroundColor: '#cccccc'
-        },
-        [`&.${tableCellClasses.body}`]: {
-            fontSize: 14,
-        },
-    }));
-
-    const StyledTableRow = styled(TableRow)(({ theme }) => ({
-        '&:nth-of-type(odd)': {
-        },
-        '&:last-child td, &:last-child th': {
-            border: 0,
-        },
-    }));
-
-    const closePopup = () => {
-        document.getElementById('popup').style.display = 'none';
-    }
-
-    const openFilter = async () => {
-        document.getElementById('filter').style.display = 'flex';
-    }
-
-    const closeFilter = () => {
-        document.getElementById('filter').style.display = 'none';
-    }
 
     const setFilterStatus = (s) => {
         setStatus((prevStatus) => {
             if (prevStatus.includes(s)) {
-                return prevStatus.filter((state) => s != state)
+                return prevStatus.filter((state) => s !== state)
             } else {
                 return [...prevStatus, s]
             }
         }
         )
-    }
-
-    const resetFilter = () => {
-        setValue();
-        setStatus(['pending', 'accepted', 'rejected']);
-        setFrom('');
-        setTo('');
-        setTeacherId('');
-        setCourseName('');
     }
 
     const getCoursesRequests = async () => {
@@ -100,18 +62,6 @@ function Requests() {
         setGetWait(false);
     }
 
-    const orderingRequests = async () => {
-        const queryStatus = status.map(s => `status[]=${s}`).join("&");
-        let result = await Fetch(host + `/courses?page=${page + 1}&search=${search}&${order}&${queryStatus}${from && to && `&from=${from}&to=${to}`}${teacherId && `&teacher_id=${teacherId}`}${courseName && `&search=${courseName}`}`, 'GET', null);
-
-        if (result.status === 200) {
-            setTotalPages(result.data.pagination.last_page);
-            setRequestCounts(result.data.pagination.total);
-            setCoursesRequests(result.data.data);
-            setCurrentPage(page);
-        }
-    }
-
     const requestsFiltering = async () => {
 
         const queryStatus = status.map(s => `status[]=${s}`).join("&");
@@ -122,23 +72,24 @@ function Requests() {
             setRequestCounts(result.data.pagination.total);
             setCoursesRequests(result.data.data);
             setCurrentPage(page);
-            closeFilter();
+            setPopup('filter', 'none');
         }
 
         setFilterWait(false);
     }
 
     const getCourseDetails = async (id) => {
-        setRequest(coursesRequests.find((item) => item.id == id));
-        console.log(coursesRequests.find((item) => item.id == id));
-        document.getElementById('popup').style.display = 'flex';
+        setRequest(coursesRequests.find((item) => item.id === id));
+        setPopup('details', 'flex');
     }
 
     const changeCourseStatus = async (courseId, status) => {
         setCourseId(courseId);
         setOperation(status);
         setSendWait(true);
-        let result = await Fetch(host + `/admin/courses/${courseId}/change-status`, 'POST', JSON.stringify({ 'new_status': status }));
+        const formData = new FormData();
+        formData.append('new_status', status);
+        let result = await Fetch(host + `/admin/courses/${courseId}/change-status`, 'POST', formData);
         if (result.status === 200) {
             getCoursesRequests();
             setSnackBar('success', status === 'accepted' ? 'تم التفعيل بنجاح' : 'تم الرفض بنجاح');
@@ -149,11 +100,7 @@ function Requests() {
 
     useEffect(() => {
         getCoursesRequests();
-    }, [page, search]);
-
-    useEffect(() => {
-        orderingRequests();
-    }, [order]);
+    }, [page, search, order]);
 
     return (
         <>
@@ -179,7 +126,7 @@ function Requests() {
                                             <TableContainer component={Paper} dir="rtl">
                                                 <Box className="min-h-12 py-2 px-2 flex justify-between items-center max-sm:flex-col">
                                                     <Box className="w-full flex items-center">
-                                                        <FilterAltOutlinedIcon className="cursor-pointer" onClick={() => openFilter()} fontSize="large" />
+                                                        <FilterAltOutlinedIcon className="cursor-pointer" onClick={() => setPopup('filter', 'flex')} fontSize="large" />
                                                         <Box className="w-2/4 relative mr-3 max-sm:w-full">
                                                             <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-8/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder="البحث باسم الدورة أو المدرس" />
                                                             <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" />
@@ -188,7 +135,7 @@ function Requests() {
                                                     <Box className="flex w-2/4 items-center max-sm:w-full max-sm:mt-2 max-sm:justify-between">
                                                         <select style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setOrder(e.target.value)} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
                                                             <option value=''>التاريخ</option>
-                                                            <option value={language == 'en' ? 'order_by=name_en&direction=asc' : 'order_by=name_ar&direction=asc'}>اسم الدورة</option>
+                                                            <option value={language === 'en' ? 'order_by=name_en&direction=asc' : 'order_by=name_ar&direction=asc'}>اسم الدورة</option>
                                                             <option value='order_by=teacher.name&direction=asc'>اسم الأستاذ</option>
                                                         </select>
                                                         <Typography variant="body1" className="!text-gray-500">إجمالي الطلبات: {requestCounts}</Typography>
@@ -235,11 +182,11 @@ function Requests() {
                                                     </TableBody>
                                                 </Table>
                                                 <Box className="flex justify-center items-center" dir="rtl">
-                                                    <Button disabled={page + 1 == totalPages} className="cursor-pointer" onClick={() => setPage(currentPage + 1)}>
+                                                    <Button disabled={page + 1 === totalPages} className="cursor-pointer" onClick={() => setPage(currentPage + 1)}>
                                                         <NavigateNextIcon fontSize="large" />
                                                     </Button>
                                                     <Typography variant="body1" className="!text-xl" dir='ltr'>{currentPage + 1} / {totalPages}</Typography>
-                                                    <Button disabled={page + 1 == 1} className="cursor-pointer" onClick={() => setPage(currentPage - 1)}>
+                                                    <Button disabled={page + 1 === 1} className="cursor-pointer" onClick={() => setPage(currentPage - 1)}>
                                                         <NavigateBeforeIcon fontSize="large" />
                                                     </Button>
                                                 </Box>
@@ -248,11 +195,11 @@ function Requests() {
                                     </Box>
                         }
                         </Box>
-                        <Box id="popup" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center hidden max-sm:left-0">
-                            <RequestDetails onClickClose={closePopup} onClickAccept={changeCourseStatus} onClickReject={changeCourseStatus} request={request} />
+                        <Box id="details" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center hidden max-sm:left-0">
+                            <RequestDetails onClickClose={() => setPopup('details', 'none')} onClickAccept={changeCourseStatus} onClickReject={changeCourseStatus} request={request} />
                         </Box>
                         <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center hidden max-sm:left-0">
-                            <RequestFilter filterWait={filterWait} setFilterWait={setFilterWait} courseName={courseName} setCourseName={setCourseName} value={value} setValue={setValue} setFrom={setFrom} setTo={setTo} from={from} to={to} status={status} setTeacherId={setTeacherId} onClickClose={closeFilter} onClickReset={resetFilter} onClickStatus={setFilterStatus} onClickConfirm={requestsFiltering} />
+                            <RequestFilter filterWait={filterWait} setFilterWait={setFilterWait} courseName={courseName} setCourseName={setCourseName} value={value} setValue={setValue} setFrom={setFrom} setTo={setTo} from={from} to={to} status={status} setStatus={setStatus} setTeacherId={setTeacherId} onClickClose={() => setPopup('filter', 'none')} onClickStatus={setFilterStatus} onClickConfirm={requestsFiltering} />
                         </Box>
                         <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
                     </Box>

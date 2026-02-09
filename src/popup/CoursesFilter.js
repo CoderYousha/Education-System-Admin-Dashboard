@@ -4,15 +4,26 @@ import Fetch from "../services/Fetch";
 import { AsyncPaginate } from "react-select-async-paginate";
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 
-function CoursesFilter({ onClickClose, onClickConfirm, onClickReset, categoriesValue, setCategoriesValue, setCategory, pathsValue, setPathsValue, setPath, fromCount, setFromCount, toCount, setToCount, fromDate, setFromDate, toDate, setToDate, filterWait, setFilterWait }) {
+function CoursesFilter({ onClickClose, onClickConfirm, categoriesValue, setCategoriesValue, setCategory, pathsValue, setPathsValue, setPath, fromCount, setFromCount, toCount, setToCount, fromDate, setFromDate, toDate, setToDate, filterWait, setFilterWait }) {
     const language = localStorage.getItem('language');
     const theme = useTheme();
+
+    const resetFilter = () => {
+        setCategory('');
+        setPath('');
+        setFromCount('');
+        setToCount('');
+        setFromDate('');
+        setToDate('');
+        setCategoriesValue('');
+        setPathsValue('');
+    }
 
     const loadCategories = async (search, loadedOptions, { page }) => {
         const host = `${process.env.REACT_APP_LOCAL_HOST}`;
         const response = await Fetch(host + `/categories`);
         const optionsFromApi = response.data.data.data.map((item) => ({
-            value: item.id, label: language == 'en' ? item.name_en : item.name_ar,
+            value: item.id, label: language === 'en' ? item.name_en : item.name_ar,
         }));
         return {
             options: [{ value: '', label: 'الكل' }, ...optionsFromApi],
@@ -26,7 +37,7 @@ function CoursesFilter({ onClickClose, onClickConfirm, onClickReset, categoriesV
         const response = await Fetch(host + `/paths`);
 
         const optionsFromApi = response.data.data.map((item) => ({
-            value: item.id, label: language == 'en' ? item.name_en : item.name_ar,
+            value: item.id, label: language === 'en' ? item.name_en : item.name_ar,
         }));
         return {
             options: [{ value: '', label: 'الكل' }, ...optionsFromApi],
@@ -70,7 +81,7 @@ function CoursesFilter({ onClickClose, onClickConfirm, onClickReset, categoriesV
                 className="mt-2 !bg-gray-200"
                 placeholder="المسار التعليمي"
                 styles={{
-                    option: (provided, state) => ({
+                    option: (provided) => ({
                         ...provided,
                         color: 'black'
                     }),
@@ -85,17 +96,17 @@ function CoursesFilter({ onClickClose, onClickConfirm, onClickReset, categoriesV
             <Typography variant="body1" className="!mt-5">تاريخ النشر</Typography>
             <Box className="mt-2 flex justify-between">
                 <TextField sx={{ '& input::-webkit-datetime-edit': { color: 'transparent' }, '& input:focus::-webkit-datetime-edit': { color: 'inherit' } }} value={fromDate} onChange={(e) => setFromDate(e.target.value)} type="date" className="w-5/12" label="من تاريخ"></TextField>
-                <TextField sx={{ '& input::-webkit-datetime-edit': { color: 'transparent' }, '& input:focus::-webkit-datetime-edit': { color: 'inherit' } }} defaultValue="2026-12-30"  value={toDate} onChange={(e) => setToDate(e.target.value)} type="date" className="w-5/12" label="إلى تاريخ"></TextField>
+                <TextField sx={{ '& input::-webkit-datetime-edit': { color: 'transparent' }, '& input:focus::-webkit-datetime-edit': { color: 'inherit' } }} defaultValue="2026-12-30" value={toDate} onChange={(e) => setToDate(e.target.value)} type="date" className="w-5/12" label="إلى تاريخ"></TextField>
             </Box>
             <Box className="w-full flex justify-between mt-10 max-sm:flex-col">
-                <Button variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold max-sm:w-full" onClick={onClickReset}>إعادة التعيين</Button>
+                <Button variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold max-sm:w-full" onClick={resetFilter}>إعادة التعيين</Button>
                 <Button variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5" onClick={() => { setFilterWait(true); onClickConfirm(); }}>
-                    <Box sx={{ color: theme.palette.mode == 'dark' ? 'white' : 'black' }}>
+                    <Box sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>
                         {
                             filterWait ?
                                 <CircularProgress size={20} className="" color="white" />
                                 :
-                                <Box sx={{ color: theme.palette.mode == 'dark' ? 'white' : 'black' }}>
+                                <Box sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>
                                     تطبيق الفلترة
                                     <FilterAltOutlinedIcon />
                                 </Box>

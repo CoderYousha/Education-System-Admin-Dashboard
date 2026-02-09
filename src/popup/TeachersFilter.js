@@ -4,15 +4,24 @@ import Fetch from "../services/Fetch";
 import { AsyncPaginate } from "react-select-async-paginate";
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 
-function TeachersFilter({ onClickClose, onClickConfirm, onClickReset, majorsValue, academicDegreeValue, setAcademicDegreeValue, setMajorsValue, setMajorId, setAcademicDegree, setTeacherSpecializations, teacherSpecializationsValue,setTeacherSpecializationsValue, filterWait, setFilterWait }) {
+function TeachersFilter({ onClickClose, onClickConfirm, majorsValue, academicDegreeValue, setAcademicDegreeValue, setMajorsValue, setMajorId, setAcademicDegree, setTeacherSpecializations, teacherSpecializationsValue, setTeacherSpecializationsValue, filterWait, setFilterWait }) {
     const language = localStorage.getItem('language');
     const theme = useTheme();
+
+    const resetFilter = async () => {
+        setAcademicDegreeValue({ value: '', label: 'الكل' });
+        setTeacherSpecializationsValue({ value: '', label: 'الكل' });
+        setMajorsValue({ value: '', label: 'الكل' });
+        setMajorId('');
+        setTeacherSpecializations('');
+        setAcademicDegree('');
+    }
 
     const loadMajors = async (search, loadedOptions, { page }) => {
         const host = `${process.env.REACT_APP_LOCAL_HOST}`;
         const response = await Fetch(host + `/majors`);
         const optionsFromApi = response.data.data.map((item) => ({
-            value: item.id, label: language == 'en' ? item.name_en : item.name_ar,
+            value: item.id, label: language === 'en' ? item.name_en : item.name_ar,
         }));
         return {
             options: [{ value: '', label: 'الكل' }, ...optionsFromApi],
@@ -26,7 +35,7 @@ function TeachersFilter({ onClickClose, onClickConfirm, onClickReset, majorsValu
         const response = await Fetch(host + `/academic-degrees`);
 
         const optionsFromApi = response.data.data.data.map((item) => ({
-            value: item.id, label: language == 'en' ? item.name_en : item.name_ar,
+            value: item.id, label: language === 'en' ? item.name_en : item.name_ar,
         }));
         return {
             options: [{ value: '', label: 'الكل' }, ...optionsFromApi],
@@ -40,7 +49,7 @@ function TeachersFilter({ onClickClose, onClickConfirm, onClickReset, majorsValu
         const response = await Fetch(host + `/teacher-specializations`);
 
         const optionsFromApi = response.data.data.data.map((item) => ({
-            value: item.id, label: language == 'en' ? item.name_en : item.name_ar,
+            value: item.id, label: language === 'en' ? item.name_en : item.name_ar,
         }));
         return {
             options: [{ value: '', label: 'الكل' }, ...optionsFromApi],
@@ -110,14 +119,14 @@ function TeachersFilter({ onClickClose, onClickConfirm, onClickReset, majorsValu
                 isSearchable={false}
             />
             <Box className="w-full flex justify-between mt-10 max-sm:flex-col">
-                <Button variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold max-sm:w-full" onClick={onClickReset}>إعادة التعيين</Button>
+                <Button variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold max-sm:w-full" onClick={resetFilter}>إعادة التعيين</Button>
                 <Button variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5" onClick={() => { setFilterWait(true); onClickConfirm(); }}>
-                    <Box sx={{ color: theme.palette.mode == 'dark' ? 'white' : 'black' }}>
+                    <Box sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>
                         {
                             filterWait ?
                                 <CircularProgress size={20} className="" color="white" />
                                 :
-                                <Box sx={{ color: theme.palette.mode == 'dark' ? 'white' : 'black' }}>
+                                <Box sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>
                                     تطبيق الفلترة
                                     <FilterAltOutlinedIcon />
                                 </Box>

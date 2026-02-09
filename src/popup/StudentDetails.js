@@ -18,11 +18,11 @@ function StudentDetails({ onClickClose, student }) {
             <Box className="w-20 h-20 bg-gray-200 rounded-full mx-auto mb-5 flex justify-center items-center text-gray-500 text-2xl font-bold">{student.first_name?.charAt(0) + '' + student.last_name?.charAt(0)}</Box>
             <TextField variant="outlined" label="اسم الطالب" className="w-full" value={student.first_name + ' ' + student.last_name} />
             <Box className="grid grid-cols-2 w-full gap-x-2 gap-y-5 mt-5 max-sm:grid-cols-1">
-                <TextField variant="outlined" className="w-full" label="التخصص التعليمي" value={student.major?.level == 'school' ? 'التعليم المدرسي' : 'التعليم الجامعي'} />
-                <TextField variant="outlined" className="w-full" label={student.major?.level == 'school' ? 'المرحلة التعليمية' : 'الكلية'} />
+                <TextField variant="outlined" className="w-full" label="التخصص التعليمي" value={student.major?.level === 'school' ? 'التعليم المدرسي' : 'التعليم الجامعي'} />
+                <TextField variant="outlined" className="w-full" label={student.major?.level === 'school' ? 'المرحلة التعليمية' : 'الكلية'} />
                 {
-                    student.major?.level == 'school' &&
-                    <TextField variant="outlined" className="w-full" label="الصف" value={language == 'en' ? student.major?.name_en : student.major?.name_ar}/>
+                    student.major?.level === 'school' &&
+                    <TextField variant="outlined" className="w-full" label="الصف" value={language === 'en' ? student.major?.name_en : student.major?.name_ar}/>
                 }
                 <TextField variant="outlined" className="w-full" label="العمر" value={age} />
                 <TextField variant="outlined" className="w-full" label="البريد الإلكتروني" value={student.email} />

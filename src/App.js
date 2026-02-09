@@ -18,8 +18,6 @@ function App() {
       <div className="App" style={{backgroundColor: theme.palette.background.default}}>
         <BrowserRouter>
             <Routes>
-              {/* <Route element={<AuthProvider><Header /> <Sidebar /></AuthProvider>}> */}
-
               {
                 DashboardRoutes().map((route, index) => 
                   <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
