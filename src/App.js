@@ -10,6 +10,7 @@ import TeachersRoutes from './routes/TeachersRoutes';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import CoursesRoutes from './routes/CoursesRoutes';
+import AdsRoutes from './routes/AdsRoutes';
 
 function App() {
   const theme = useTheme();
@@ -35,6 +36,11 @@ function App() {
               }
               {
                 CoursesRoutes().map((route, index) => 
+                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+                )
+              }
+              {
+                AdsRoutes().map((route, index) => 
                   <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
                 )
               }

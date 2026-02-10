@@ -10,7 +10,7 @@ import { buildAddTeacherFormData } from "../helper/AddTeacherFormData";
 import { useWaits } from "../hooks/UseWait";
 import { useState } from "react";
 
-function AddTeacher({ onClickClose, value, setValue, setSnackBar, setTeachers }) {
+function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
     const host = `${process.env.REACT_APP_LOCAL_HOST}`;
     const language = localStorage.getItem('language');
     const { sendWait, setSendWait } = useWaits();
@@ -215,7 +215,7 @@ function AddTeacher({ onClickClose, value, setValue, setSnackBar, setTeachers })
                             </>
                     }
                 </Button>
-                <Button onClick={() => {resetInputs(); onClickClose();}} variant="contained" className="w-5/12 !bg-gray-400 !text-gray-700 !font-bold max-sm:w-full !mt-2">إلغاء</Button>
+                <Button onClick={() => {resetInputs(); onClickClose();}} variant="contained" className="w-5/12 !bg-gray-400 !text-gray-700 !font-bold max-sm:w-full max-sm:!mt-2">إلغاء</Button>
             </Box>
         </Box>
     );
