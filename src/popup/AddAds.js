@@ -11,12 +11,13 @@ import { useConstants } from "../hooks/UseConstants";
 import { buildAddAdsFormData } from "../helper/AddAdsFormData";
 import { useEffect, useState } from "react";
 
-function AddAds({ onClickClose, setSnackbar }) {
+function AddAds({ onClickClose, setSnackbar, getBanners }) {
     const { language, host } = useConstants();
     const theme = useTheme();
     const { sendWait, setSendWait } = useWaits();
     const { nameEn, setNameEn, nameAr, setNameAr, category, setCategory, categoryId, setCategoryId, image, setImage, isActive, setIsActive, activeFrom, setActiveFrom, activeUntil, setActiveUntil, descriptionEn, setDescriptionEn, descriptionAr, setDescriptionAr } = useAddAds();
     const [categoryValue, setCategoryValue] = useState();
+    
     const resetInputs = () => {
         setNameAr('');
         setNameEn('');
@@ -69,6 +70,7 @@ function AddAds({ onClickClose, setSnackbar }) {
 
         if (result.status === 200) {
             setSnackbar('success', 'تم إضافة الإعلان بنجاح');
+            await getBanners();
             resetInputs();
             onClickClose();
         } else if (result.status === 422) {

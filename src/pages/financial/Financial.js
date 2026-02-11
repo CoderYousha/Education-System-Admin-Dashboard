@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useConstants } from "../../hooks/UseConstants";
 import AuthContext from "../../context/AuthContext";
 import { Box, Button, CircularProgress, Paper, Table, TableBody, TableContainer, TableHead, TableRow, TextField, Typography, useTheme } from "@mui/material";
@@ -14,13 +14,21 @@ import WarningImage from "../../images/icons/warning.png";
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import { useTableStyles } from "../../hooks/UseTableStyles";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-
+import DeleteDialog from "../../popup/DeleteDialog";
+import { usePopups } from "../../hooks/UsePopups";
+import CircleIcon from '@mui/icons-material/Circle';
+import { useNavigate } from "react-router-dom";
+import { useWaits } from "../../hooks/UseWait";
 
 function Financial() {
     const { host, language } = useConstants();
     const { wait } = useContext(AuthContext);
     const { StyledTableCell, StyledTableRow } = useTableStyles();
+    const { setPopup } = usePopups();
+    const [systemProfits, setSystemProfits] = useState('');
+    const [teacherProfits, setTeacherProfits] = useState('');
     const theme = useTheme();
+    const navigate = useNavigate();
 
     return (
         <>
@@ -91,8 +99,8 @@ function Financial() {
                                     <Typography variant="h6" fontWeight="800" className="!mr-2">إعدادات توزيع الإيرادات</Typography>
                                     <img src={SettingsImage} className="" />
                                 </Box>
-                                <TextField variant="outlined" label="نسبة عمولة المنصة (%)" dir="rtl" className="w-full !my-5" />
-                                <TextField variant="outlined" label="نسبة أرباح المدرس المستحقة (%)" dir="rtl" className="w-full !my-5" />
+                                <TextField type="number" variant="outlined" label="نسبة عمولة المنصة (%)" dir="rtl" className="w-full !my-5" onChange={(e) => { setSystemProfits(e.target.value); setTeacherProfits(100 - e.target.value); }} />
+                                <TextField variant="outlined" label="نسبة أرباح المدرس المستحقة (%)" dir="rtl" className="w-full !my-5" value={teacherProfits} aria-readonly />
                                 <Box className="w-full rounded-lg bg-blue-100 border border-blue-400 py-2 px-2 flex items-center mt-10" dir="rtl">
                                     <img src={WarningImage} className="" />
                                     <Typography variant="body1" className="text-blue-600 !mr-5">يتم احتساب حصة المدرس تلقائيا بناء على خصم عمولة المنصة من المبلغ الكلي لكل عملية بيع</Typography>
@@ -102,10 +110,10 @@ function Financial() {
                             <Box className="w-2/3 ml-2 mt-10 flex-grow mr-5">
                                 <Box sx={{ backgroundColor: theme.palette.background.default }} className="bg-white mr-2 rounded-xl">
                                     <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2 py-4 rounded-t-xl" dir="rtl">
-                                        <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">طلبات الموافقة المعلقة</Typography>
-                                        <Typography variant="body1" className="cursor-pointer max-sm:!text-sm text-blue-600">عرض جميع الطلبات <ArrowBackIosNewIcon /></Typography>
+                                        <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">طلبات سجل الأرباح</Typography>
+                                        <Typography variant="body1" className="cursor-pointer max-sm:!text-sm text-blue-600" onClick={() => navigate('withdrawal-requests')}>عرض جميع الطلبات <ArrowBackIosNewIcon /></Typography>
                                     </Box>
-                                    <TableContainer sx={{borderRadius: '0'}} className="!rounded-b-xl" component={Paper} dir="rtl">
+                                    <TableContainer sx={{ borderRadius: '0' }} className="!rounded-b-xl" component={Paper} dir="rtl">
                                         <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                             <TableHead className="bg-gray-200">
                                                 <TableRow sx={{ backgroundColor: theme.palette.background.paper }} className="!rounded-none">
@@ -183,6 +191,80 @@ function Financial() {
                                     </TableContainer>
                                 </Box>
                             </Box>
+                        </Box>
+                        <Box className="w-4/5 mt-5">
+                            <Box sx={{ backgroundColor: theme.palette.background.default }} className="bg-white mx-2 rounded-xl">
+                                <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2 py-4 rounded-t-xl" dir="rtl">
+                                    <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">سجل العمليات المالية</Typography>
+                                    <Typography variant="body1" className="cursor-pointer max-sm:!text-sm text-blue-600" onClick={() => navigate('financial-operations')}>عرض جميع الطلبات <ArrowBackIosNewIcon /></Typography>
+                                </Box>
+                                <TableContainer sx={{ borderRadius: '0' }} className="!rounded-b-xl" component={Paper} dir="rtl">
+                                    <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
+                                        <TableHead className="bg-gray-200">
+                                            <TableRow sx={{ backgroundColor: theme.palette.background.paper }} className="!rounded-none">
+                                                <StyledTableCell align="right">رقم العملية</StyledTableCell>
+                                                <StyledTableCell align="right">نوع العملية</StyledTableCell>
+                                                <StyledTableCell align="right">تفاصيل العملية</StyledTableCell>
+                                                <StyledTableCell align="right">اسم المستخدم</StyledTableCell>
+                                                <StyledTableCell align="right">المبلغ</StyledTableCell>
+                                                <StyledTableCell align="right">عمولة المنصة</StyledTableCell>
+                                                <StyledTableCell align="right">أرباح المدرس</StyledTableCell>
+                                                <StyledTableCell align="right">الحالة</StyledTableCell>
+                                                <StyledTableCell align="right">تاريخ العملية</StyledTableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            <StyledTableRow className="h-20">
+                                                <StyledTableCell align="right" className="">TR-1045</StyledTableCell>
+                                                <StyledTableCell align="right" component="th" scope="row">شراء دورة</StyledTableCell>
+                                                <StyledTableCell align="right">أساسيات البرمجة</StyledTableCell>
+                                                <StyledTableCell align="right"> <CircleIcon className="!text-sm !text-purple-900" />  أحمد عبد الله المفلح</StyledTableCell>
+                                                <StyledTableCell align="right">120$</StyledTableCell>
+                                                <StyledTableCell align="right" className="!font-bold !text-blue-500">30%</StyledTableCell>
+                                                <StyledTableCell align="right" className="!font-bold">90$</StyledTableCell>
+                                                <StyledTableCell align="right"><Box className="text-center py-1 rounded-lg font-bold bg-green-300 text-green-700">مكتملة</Box></StyledTableCell>
+                                                <StyledTableCell align="right">2025-07-12</StyledTableCell>
+                                            </StyledTableRow>
+                                            <StyledTableRow className="h-20">
+                                                <StyledTableCell align="right" className="">TR-1045</StyledTableCell>
+                                                <StyledTableCell align="right" component="th" scope="row">شراء دورة</StyledTableCell>
+                                                <StyledTableCell align="right">أساسيات البرمجة</StyledTableCell>
+                                                <StyledTableCell align="right"> <CircleIcon className="!text-sm !text-purple-900" />  أحمد عبد الله المفلح</StyledTableCell>
+                                                <StyledTableCell align="right">120$</StyledTableCell>
+                                                <StyledTableCell align="right" className="!font-bold !text-blue-500">30%</StyledTableCell>
+                                                <StyledTableCell align="right" className="!font-bold">90$</StyledTableCell>
+                                                <StyledTableCell align="right"><Box className="text-center py-1 rounded-lg font-bold bg-green-300 text-green-700">مكتملة</Box></StyledTableCell>
+                                                <StyledTableCell align="right">2025-07-12</StyledTableCell>
+                                            </StyledTableRow>
+                                            <StyledTableRow className="h-20">
+                                                <StyledTableCell align="right" className="">TR-1045</StyledTableCell>
+                                                <StyledTableCell align="right" component="th" scope="row">شراء دورة</StyledTableCell>
+                                                <StyledTableCell align="right">أساسيات البرمجة</StyledTableCell>
+                                                <StyledTableCell align="right"> <CircleIcon className="!text-sm !text-purple-900" /> أحمد عبد الله المفلح</StyledTableCell>
+                                                <StyledTableCell align="right">120$</StyledTableCell>
+                                                <StyledTableCell align="right" className="!font-bold !text-blue-500">30%</StyledTableCell>
+                                                <StyledTableCell align="right" className="!font-bold">90$</StyledTableCell>
+                                                <StyledTableCell align="right"><Box className="text-center py-1 rounded-lg font-bold bg-green-300 text-green-700">مكتملة</Box></StyledTableCell>
+                                                <StyledTableCell align="right">2025-07-12</StyledTableCell>
+                                            </StyledTableRow>
+                                            <StyledTableRow className="h-20">
+                                                <StyledTableCell align="right" className="">TR-1045</StyledTableCell>
+                                                <StyledTableCell align="right" component="th" scope="row">شراء دورة</StyledTableCell>
+                                                <StyledTableCell align="right">أساسيات البرمجة</StyledTableCell>
+                                                <StyledTableCell align="right"> <CircleIcon className="!text-sm !text-purple-900" /> أحمد عبد الله المفلح</StyledTableCell>
+                                                <StyledTableCell align="right">120$</StyledTableCell>
+                                                <StyledTableCell align="right" className="!font-bold !text-blue-500">30%</StyledTableCell>
+                                                <StyledTableCell align="right" className="!font-bold">90$</StyledTableCell>
+                                                <StyledTableCell align="right"><Box className="text-center py-1 rounded-lg font-bold bg-green-300 text-green-700">مكتملة</Box></StyledTableCell>
+                                                <StyledTableCell align="right">2025-07-12</StyledTableCell>
+                                            </StyledTableRow>
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </Box>
+                        </Box>
+                        <Box id="delete" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+                            <DeleteDialog onClickCancel={() => setPopup('delete', 'none')} title="تأكيد رفض طلب السحب" subtitle="أنت على وشك رفض طلب سحب الأرباح لهذا المدرس، يرجى التأكد من صحة القرار قبل المتابعة." hasInput={true} placeholder="اكتب سبب الرفض هنا..." warning="سيتم إشعار المدرس بسبب الرفض فور التأكيد" label="سبب الرفض" />
                         </Box>
                     </Box>
             }

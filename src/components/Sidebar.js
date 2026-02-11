@@ -12,6 +12,7 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
+import LogoImage from "../images/logo/logo.png";
 
 function Sidebar () {
      const theme = useTheme();
@@ -73,9 +74,12 @@ function Sidebar () {
      return (
           <>
                {
-                    !wait &&
-                    <Box sx={{backgroundColor: theme.palette.background.paper}} className="bg-white w-1/5 h-screen fixed right-0 top-0 shadow-sm shadow-neutral-400 max-sm:w-1/6 overflow-y-scroll none-view-scroll z-50">
-                         <Box className="bg-red-700 w-4/5 mx-auto mt-5 text-white font-bold text-center py-3">LOGO HERE</Box>
+                    !wait && //sx={{backgroundColor: theme.palette.background.paper}}
+                    <Box sx={{backgroundImage: theme.palette.mode === 'dark' ? theme.palette.background.paper : 'linear-gradient(to bottom, #0D358C, #040E26)'}} className="text-white w-1/5 h-screen fixed right-0 top-0 shadow-sm shadow-neutral-400 max-sm:w-1/6 overflow-y-scroll none-view-scroll z-50">
+                         {/* <Box className="bg-red-700 w-4/5 mx-auto mt-5 text-white font-bold text-center py-3">LOGO HERE</Box> */}
+                         <Box className="w-4/5 mx-auto mt-5 text-white font-bold text-center py-3">
+                              <img src={LogoImage} className="w-full" />
+                         </Box>
                          <Box className="mt-10 cursor-pointer">
                               {
                                    items.map( (item, index) => 
