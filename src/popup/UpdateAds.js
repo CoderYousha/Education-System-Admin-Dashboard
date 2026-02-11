@@ -1,8 +1,9 @@
-import { Box, Button, Divider, TextField, Typography, useTheme } from "@mui/material";
+import { Box, Button, Divider, MenuItem, Select, TextField, Typography, useTheme } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import { AsyncPaginate } from "react-select-async-paginate";
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import { useConstants } from "../hooks/UseConstants";
+import CircleIcon from '@mui/icons-material/Circle';
 
 function UpdateAds({ onClickClose }) {
     const { language } = useConstants();
@@ -61,11 +62,17 @@ function UpdateAds({ onClickClose }) {
             <TextField variant="outlined" label="محتوى الإعلان" className="w-full" value={"استفد من الخصم على دورة أساسيات البرمجة"} />
             <Box className="mt-7">
                 <Typography variant="body2" className="!font-semibold text-gray-400">الحالة</Typography>
-                <select className="text-black mt-2 w-full rounded-lg h-10 bg-gray-200 px-2 outline-none">
-                    <option>نشط</option>
-                    <option>متوقف</option>
-                    <option>منهي</option>
-                </select>
+                <Select variant="standard" value="active" onClick={(e) => e.stopPropagation()} className="w-full !rounded-xl !border-none" sx={{ '& .MuiOutlinedInput-notchedOutline': { border: 'none', }, '&:hover .MuiOutlinedInput-notchedOutline': { border: 'none', }, '&.Mui-focused .MuiOutlinedInput-notchedOutline': { border: 'none', }, }}>
+                    <MenuItem dir="rtl" value="active" selected={true}>
+                        <CircleIcon className="text-green-700" fontSize="small" /> نشط
+                    </MenuItem>
+                    <MenuItem dir="rtl" value="paused">
+                        <CircleIcon className="text-gray-700" fontSize="small" /> متوقف
+                    </MenuItem>
+                    <MenuItem dir="rtl" value="ended">
+                        <CircleIcon className="text-red-700" fontSize="small" /> منهي
+                    </MenuItem>
+                </Select>
             </Box>
             <Box className="flex justify-between mt-5 w-full max-sm:flex-col max-sm:items-center">
                 <Button variant="contained" className="w-5/12 !text-white !font-bold max-sm:w-full"><SaveOutlinedIcon className="mx-2" /> حفظ</Button>

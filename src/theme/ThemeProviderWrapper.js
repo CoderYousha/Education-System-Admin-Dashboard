@@ -19,7 +19,7 @@ export default function ThemeProviderWrapper({ children }) {
 
   const theme = useMemo( () => createTheme({ 
     palette: { mode, 
-      background: { default: mode === "dark" ? "#121212" : "#ffffff", paper: mode === "dark" ? "#1e1e1e" : "#f5f5f5", }, }, typography: { fontFamily: "Cairo, Arial, sans-serif", }, }), [mode] );
+      background: { paper: mode === "dark" ? "#121212" : "#ffffff", default: mode === "dark" ? "#1e1e1e" : "#f5f5f5", }, }, typography: { fontFamily: "Cairo, Arial, sans-serif", }, }), [mode] );
 
   return (
     <ColorModeContext.Provider value={colorMode}>

@@ -51,7 +51,7 @@ function Sidebar () {
           {
                'title': 'المالية',
                'icon': <AccountBalanceWalletOutlinedIcon fontSize="medium" className="mr-2 max-sm:mx-auto" />,
-               'link': '../wallet',
+               'link': '../financial',
           },
           {
                'title': 'التقارير',

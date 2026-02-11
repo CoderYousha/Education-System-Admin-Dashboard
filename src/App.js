@@ -11,6 +11,7 @@ import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import CoursesRoutes from './routes/CoursesRoutes';
 import AdsRoutes from './routes/AdsRoutes';
+import FinancialRoutes from './routes/FinancialRoutes';
 
 function App() {
   const theme = useTheme();
@@ -41,6 +42,11 @@ function App() {
               }
               {
                 AdsRoutes().map((route, index) => 
+                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+                )
+              }
+              {
+                FinancialRoutes().map((route, index) => 
                   <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
                 )
               }
