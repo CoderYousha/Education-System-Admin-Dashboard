@@ -22,15 +22,15 @@ function AdsFilter({ onClickClose, onClickConfirm, filterWait, setFilterWait, st
             <Typography variant="body1">الحالة</Typography>
             <select className="w-full my-5 rounded-lg text-black bg-gray-200 py-1" value={status} onChange={(e) => setStatus(e.target.value)}>
                 <option className="">الكل</option>
-                <option className="active">نشط</option>
-                <option className="stop">متوقف</option>
-                <option className="end">منتهي</option>
+                <option className="">نشط</option>
+                <option className="">متوقف</option>
+                <option className="">منتهي</option>
             </select>
             <Typography variant="body1">نوع الإعلان</Typography>
             <select className="w-full my-5 rounded-lg text-black bg-gray-200 py-1" value={category} onChange={(e) => setCategory(e.target.value)}>
                 <option className="">الكل</option>
-                <option className="courses">دورة</option>
-                <option className="paths">مسار</option>
+                <option className="">دورة</option>
+                <option className="">مسار</option>
             </select>
             <Box className="flex justify-between mt-5 max-sm:flex-col">
                 <Box className="w-2/5 max-sm:w-full">
