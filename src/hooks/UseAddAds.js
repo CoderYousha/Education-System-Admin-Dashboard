@@ -3,7 +3,7 @@ import { useState } from "react";
 export function useAddAds () {
     const [nameEn, setNameEn] = useState('');
     const [nameAr, setNameAr] = useState('');
-    const [category, setCategory] = useState('courses');
+    const [category, setCategory] = useState('course');
     const [categoryId, setCategoryId] = useState('');
     const [image, setImage] = useState('');
     const [isActive, setIsActive] = useState('');

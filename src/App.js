@@ -17,50 +17,49 @@ import ReportsRoutes from './routes/ReportsRoutes';
 function App() {
   const theme = useTheme();
   return (
-      <main>
-      <div className="App" style={{backgroundColor: theme.palette.background.default}}>
+    <main>
+      <div className="App" style={{ backgroundColor: theme.palette.background.default }}>
         <BrowserRouter>
-            <Routes>
-              {
-                DashboardRoutes().map((route, index) => 
-                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
-                )
-              }
-              {
-                StudentsRoutes().map((route, index) => 
-                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
-                )
-              }
-              {
-                TeachersRoutes().map((route, index) => 
-                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
-                )
-              }
-              {
-                CoursesRoutes().map((route, index) => 
-                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
-                )
-              }
-              {
-                AdsRoutes().map((route, index) => 
-                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
-                )
-              }
-              {
-                FinancialRoutes().map((route, index) => 
-                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
-                )
-              }
-              {
-                ReportsRoutes().map((route, index) => 
-                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
-                )
-              }
-            </Routes>
+          <Routes>
+            {
+              DashboardRoutes().map((route, index) =>
+                <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+              )
+            }
+            {
+              StudentsRoutes().map((route, index) =>
+                <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+              )
+            }
+            {
+              TeachersRoutes().map((route, index) =>
+                <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+              )
+            }
+            {
+              CoursesRoutes().map((route, index) =>
+                <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+              )
+            }
+            {
+              AdsRoutes().map((route, index) =>
+                <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+              )
+            }
+            {
+              FinancialRoutes().map((route, index) =>
+                <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+              )
+            }
+            {
+              ReportsRoutes().map((route, index) =>
+                <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+              )
+            }
+          </Routes>
         </BrowserRouter>
       </div>
-
-      </main>
+    </main>
   );
 }
 

@@ -21,7 +21,7 @@ function AddAds({ onClickClose, setSnackbar, getBanners }) {
     const resetInputs = () => {
         setNameAr('');
         setNameEn('');
-        setCategory('courses');
+        setCategory('course');
         setCategoryId('');
         setCategoryValue('');
         setIsActive('1');
@@ -91,8 +91,8 @@ function AddAds({ onClickClose, setSnackbar, getBanners }) {
                 <Box className="">
                     <Typography variant="body1" className="!font-semibold text-gray-400">نوع الإعلان</Typography>
                     <select className="w-full h-10 rounded-xl text-gray-500 bg-gray-200 mt-2 outline-none border border-gray-300" onChange={(e) => setCategory(e.target.value)} value={category}>
-                        <option value="courses">الدورات</option>
-                        <option value="paths">المسارات</option>
+                        <option value="course">الدورات</option>
+                        <option value="path">المسارات</option>
                     </select>
                 </Box>
                 <Box className="">
@@ -106,7 +106,7 @@ function AddAds({ onClickClose, setSnackbar, getBanners }) {
                             category: category
                         }}
                         onChange={(option) => { setCategoryValue(option); setCategoryId(option.value) }}
-                        className="mt-2"
+                        className="mt-2 z-50"
                         placeholder="الفئة/الدورة"
                         styles={{
                             option: (provided) => ({

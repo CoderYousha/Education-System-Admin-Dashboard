@@ -41,7 +41,7 @@ function Ads() {
     const theme = useTheme();
 
     const getBanners = async () => {
-        let result = await Fetch(host + `/banners?page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}`, 'GET', null);
+        let result = await Fetch(host + `/banners?status=${status}&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}${category && `&category=${category}`}${activeFrom && `&active_from=${activeFrom}`}${activeUntil && `&active_until=${activeUntil}`}`, 'GET', null);
 
         if (result.status === 200) {
             setTotalPages(result.data.data.last_page);
@@ -54,19 +54,19 @@ function Ads() {
         setGetWait(false);
     }
 
-    // const filteringBanners = async () => {
-    //     let result = await Fetch(host + `/admin/users?account_role=teacher&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}${majorId && `&major_id=${majorId}`}${teacherSpecializations && `&specialization_id=${teacherSpecializations}`}${academicDegree && `&academic_degree_id=${academicDegree}`}`, 'GET', null);
+    const filteringBanners = async () => {
+        let result = await Fetch(host + `/banners?status=${status}&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}${category && `&category=${category}`}${activeFrom && `&active_from=${activeFrom}`}${activeUntil && `&active_until=${activeUntil}`}`, 'GET', null);
 
-    //     if (result.status === 200) {
-    //         setTotalPages(result.data.data.last_page);
-    //         setBannersCounts(result.data.data.total);
-    //         setBanners(result.data.data.data);
-    //         setCurrentPage(page);
-    //         setPopup('filter', 'none');
-    //     }
+        if (result.status === 200) {
+            setTotalPages(result.data.data.last_page);
+            setBannersCounts(result.data.data.total);
+            setBanners(result.data.data.data);
+            setCurrentPage(page);
+            setPopup('filter', 'none');
+        }
 
-    //     setFilterWait(false);
-    // }
+        setFilterWait(false);
+    }
 
     const updateBanner = (id) => {
         setBanner(banners.filter((banner) => banner.id === id)[0]);
@@ -128,7 +128,7 @@ function Ads() {
                                                         </Box>
                                                     </Box>
                                                     <Box className="flex w-2/4 items-center max-sm:mt-2 max-sm:w-full max-sm:justify-between">
-                                                        <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.paper }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
+                                                        <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.select }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
                                                             <option value=''>التاريخ</option>
                                                             <option value='first_name'>عنوان الإعلان</option>
                                                         </select>
@@ -149,14 +149,14 @@ function Ads() {
                                                     </TableHead>
                                                     <TableBody>
                                                         {banners.map((banner, index) => (
-                                                            <StyledTableRow key={index} className="hover:bg-gray-400 duration-100 cursor-pointer">
+                                                            <StyledTableRow key={index} className="hover:bg-gray-400 duration-100 cursor-pointer" onClick={() => bannerDetails(banner.id)}>
                                                                 <StyledTableCell align="right" component="th" scope="row">{language === 'en' ? banner.name_en : banner.name_ar}</StyledTableCell>
-                                                                <StyledTableCell align="right" className="">{banner.category === 'courses' ? 'دورة' : 'مسار'}</StyledTableCell>
-                                                                <StyledTableCell align="right">أساسيات البرمجة</StyledTableCell>
+                                                                <StyledTableCell align="right" className="">{banner.category === 'course' ? 'دورة' : 'مسار'}</StyledTableCell>
+                                                                <StyledTableCell align="right">{language === 'en' ? banner.related_data?.name_en : banner.related_data?.name_ar}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="text-center">{banner.active_from}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="">{banner.active_until}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="!text-center" dir="ltr">
-                                                                    <Select disabled={true} value={banner.is_active && new Date() <= new Date(banner.active_until) ? "1" : banner.is_active === 0 ? "0" : "ended"} variant="standard" defaultValue="active" onClick={(e) => e.stopPropagation()} className="!border-0" sx={{ border: 'none' }}>
+                                                                    <Select disabled={true} value={banner.is_active && new Date() < new Date(banner.active_from) ? "not_started" : banner.is_active && new Date() <= new Date(banner.active_until) ? "1" : !banner.is_active ? "0" : "ended"} variant="standard" defaultValue="active" onClick={(e) => e.stopPropagation()} className="!border-0" sx={{ border: 'none' }}>
                                                                         <MenuItem value="1">
                                                                             <CircleIcon className="text-green-700" fontSize="small" /> نشط
                                                                         </MenuItem>
@@ -166,11 +166,14 @@ function Ads() {
                                                                         <MenuItem value="ended">
                                                                             <CircleIcon className="text-red-700" fontSize="small" /> منهي
                                                                         </MenuItem>
+                                                                        <MenuItem value="not_started">
+                                                                            <CircleIcon className="text-orange-500" fontSize="small" /> لم يبدأ بعد
+                                                                        </MenuItem>
                                                                     </Select>
                                                                 </StyledTableCell>
                                                                 <StyledTableCell align="right" className="!flex justify-around items-center">
-                                                                    <Button variant="contained" className="!bg-red-300 !font-bold !text-red-700" onClick={() => {setBannerId(banner.id); setPopup('delete', 'flex');}}>حذف</Button>
-                                                                    <Button variant="contained" className="!bg-green-300 !font-bold !text-green-800" onClick={() => updateBanner(banner.id)}>تعديل</Button>
+                                                                    <Button variant="contained" className="!bg-red-300 !font-bold !text-red-700" onClick={(e) => {e.stopPropagation(); setBannerId(banner.id); setPopup('delete', 'flex');}}>حذف</Button>
+                                                                    <Button variant="contained" className="!bg-green-300 !font-bold !text-green-800" onClick={(e) => {e.stopPropagation(); updateBanner(banner.id);}}>تعديل</Button>
                                                                 </StyledTableCell>
                                                             </StyledTableRow>
                                                         ))}
@@ -191,7 +194,7 @@ function Ads() {
                             }
                         </Box>
                         <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
-                            <AdsFilter onClickClose={() => setPopup('filter', 'none')} status={status} setStatus={setStatus} category={category} setCategory={setCategory} activeFrom={activeFrom} setActiveFrom={setActiveFrom} activeUntil={activeUntil} setActiveUntil={setActiveUntil} filterWait={filterWait} setFilterWait={setFilterWait} />
+                            <AdsFilter onClickClose={() => setPopup('filter', 'none')} onClickConfirm={filteringBanners} status={status} setStatus={setStatus} category={category} setCategory={setCategory} activeFrom={activeFrom} setActiveFrom={setActiveFrom} activeUntil={activeUntil} setActiveUntil={setActiveUntil} filterWait={filterWait} setFilterWait={setFilterWait} />
                         </Box>
                         <Box id="add" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <AddAds onClickClose={() => setPopup('add', 'none')} setSnackbar={setSnackBar} getBanners={getBanners} />
@@ -203,7 +206,7 @@ function Ads() {
                             <DeleteDialog onClickConfirm={deleteBanner} onClickCancel={() => setPopup('delete', 'none')} title="تأكيد حذف الإعلان" subtitle="سيتم حذف هذا الإعلان نهائيا ولن يظهر للطلاب مرة أخرى، لا يمكن التراجع عن هذا الإجراء" />
                         </Box>
                         <Box id="details" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
-                            <AdsDetails onClickClose={() => setPopup('details', 'none')} />
+                            <AdsDetails onClickClose={() => setPopup('details', 'none')} setSnackBar={setSnackBar} setBanners={setBanners} banner={banner} onClickUpdate={updateBanner}/>
                         </Box>
                         <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
                     </Box>

@@ -21,16 +21,17 @@ function AdsFilter({ onClickClose, onClickConfirm, filterWait, setFilterWait, st
             <Divider className="!my-5" />
             <Typography variant="body1">الحالة</Typography>
             <select className="w-full my-5 rounded-lg text-black bg-gray-200 py-1" value={status} onChange={(e) => setStatus(e.target.value)}>
-                <option className="">الكل</option>
-                <option className="">نشط</option>
-                <option className="">متوقف</option>
-                <option className="">منتهي</option>
+                <option value="">الكل</option>
+                <option value="active">نشط</option>
+                <option value="not_active">متوقف</option>
+                <option value="ended">منهي</option>
+                <option value="not_started">لم يبدأ بعد</option>
             </select>
             <Typography variant="body1">نوع الإعلان</Typography>
             <select className="w-full my-5 rounded-lg text-black bg-gray-200 py-1" value={category} onChange={(e) => setCategory(e.target.value)}>
-                <option className="">الكل</option>
-                <option className="">دورة</option>
-                <option className="">مسار</option>
+                <option value="">الكل</option>
+                <option value="course">دورة</option>
+                <option value="path">مسار</option>
             </select>
             <Box className="flex justify-between mt-5 max-sm:flex-col">
                 <Box className="w-2/5 max-sm:w-full">
@@ -44,7 +45,7 @@ function AdsFilter({ onClickClose, onClickConfirm, filterWait, setFilterWait, st
             </Box>
             <Box className="w-full flex justify-between mt-10 max-sm:flex-col">
                 <Button onClick={resetFilter} variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold max-sm:w-full">إعادة التعيين</Button>
-                <Button sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }} variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5" onClick={() => { setFilterWait(true); onClickConfirm(); }}>
+                <Button sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }} variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5" onClick={async () => { setFilterWait(true); onClickConfirm(); }}>
                     {
                         filterWait ?
                             <CircularProgress size={20} className="" color="white" />

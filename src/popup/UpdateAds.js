@@ -41,7 +41,7 @@ function UpdateAds({ onClickClose, setSnackbar, banner, setBanner, getBanners })
         setDescriptionEn(banner.description_en);
         setActiveFrom(banner.active_from);
         setActiveUntil(banner.active_until);
-        setIsActive(banner.is_active === "1" ? 1 : 0);
+        setIsActive(banner.is_active? 1 : 0);
     }
 
     const getCategoryDetails = async () => {
@@ -103,8 +103,8 @@ function UpdateAds({ onClickClose, setSnackbar, banner, setBanner, getBanners })
                 <Box className="">
                     <Typography variant="body1" className="!font-semibold text-gray-400">نوع الإعلان</Typography>
                     <select className="w-full h-10 rounded-xl text-gray-500 bg-gray-200 mt-2 outline-none border border-gray-300" onChange={(e) => setCategory(e.target.value)} value={category}>
-                        <option value="courses">الدورات</option>
-                        <option value="paths">المسارات</option>
+                        <option value="course">الدورات</option>
+                        <option value="path">المسارات</option>
                     </select>
                 </Box>
                 <Box className="">
@@ -118,7 +118,7 @@ function UpdateAds({ onClickClose, setSnackbar, banner, setBanner, getBanners })
                             category: category
                         }}
                         onChange={(option) => { setCategoryValue(option); setCategoryId(option.value) }}
-                        className="mt-2"
+                        className="mt-2 z-50"
                         placeholder="الفئة/الدورة"
                         styles={{
                             option: (provided) => ({
