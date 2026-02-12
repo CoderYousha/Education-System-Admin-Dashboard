@@ -100,51 +100,52 @@ function Reports() {
                                 </Box>
                             </Box>
                         </Box>
-                        <Box dir="rtl" sx={{ backgroundColor: theme.palette.background.paper }} className="w-4/5 mt-10 rounded-xl flex items-center justify-around py-3 shadow-lg">
-                            <Box className="w-1/5 max-sm:w-full">
-                                <Typography variant="body2" className="!font-semibold text-gray-400">من تاريخ</Typography>
-                                <input type="date" className="text-black mt-2 w-full rounded-lg h-10 bg-gray-200 px-2 outline-none" />
-                            </Box>
-                            <Box className="w-1/5 max-sm:w-full">
-                                <Typography variant="body2" className="!font-semibold text-gray-400">إلى تاريخ</Typography>
-                                <input type="date" className="text-black mt-2 w-full rounded-lg h-10 bg-gray-200 px-2 outline-none" />
-                            </Box>
-                            <Box className="w-1/5 max-sm:w-full">
-                                <Typography variant="body2" className="!font-semibold text-gray-400">نوع التقرير</Typography>
-                                <select className="w-full mt-2 rounded-lg text-black bg-gray-200 py-1">
-                                    <option className="">الكل</option>
-                                    <option className="">تقرير الطلاب</option>
-                                    <option className="">تقرير المدرسين</option>
-                                    <option className="">تقرير المبيعات</option>
-                                </select>
-                            </Box>
-                            <Box className="w-1/5 max-sm:w-full">
-                                <br />
-                                <Button sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }} variant="contained" className="h-10 max-sm:w-full max-sm:!mt-5 !text-white mt-2">
-                                    {
-                                        filterWait ?
-                                            <CircularProgress size={20} className="" color="white" />
-                                            :
-                                            <Box>
-                                                تطبيق الفلترة
-                                                <FilterAltOutlinedIcon />
-                                            </Box>
-                                    }
-                                </Button>
+                        <Box className="px-2">
+                            <Box dir="rtl" sx={{ backgroundColor: theme.palette.background.paper }} className="w-4/5 mt-10 rounded-xl flex items-center justify-around py-3 shadow-lg">
+                                <Box className="w-1/5 max-sm:w-full">
+                                    <Typography variant="body2" className="!font-semibold text-gray-400">من تاريخ</Typography>
+                                    <input type="date" className="text-black mt-2 w-full rounded-lg h-10 bg-gray-200 px-2 outline-none" />
+                                </Box>
+                                <Box className="w-1/5 max-sm:w-full">
+                                    <Typography variant="body2" className="!font-semibold text-gray-400">إلى تاريخ</Typography>
+                                    <input type="date" className="text-black mt-2 w-full rounded-lg h-10 bg-gray-200 px-2 outline-none" />
+                                </Box>
+                                <Box className="w-1/5 max-sm:w-full">
+                                    <Typography variant="body2" className="!font-semibold text-gray-400">نوع التقرير</Typography>
+                                    <select className="w-full mt-2 rounded-lg text-black bg-gray-200 py-1">
+                                        <option className="">الكل</option>
+                                        <option className="">تقرير الطلاب</option>
+                                        <option className="">تقرير المدرسين</option>
+                                        <option className="">تقرير المبيعات</option>
+                                    </select>
+                                </Box>
+                                <Box className="w-1/5 max-sm:w-full">
+                                    <br />
+                                    <Button sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }} variant="contained" className="h-10 max-sm:w-full max-sm:!mt-5 !text-white mt-2">
+                                        {
+                                            filterWait ?
+                                                <CircularProgress size={20} className="" color="white" />
+                                                :
+                                                <Box>
+                                                    تطبيق الفلترة
+                                                    <FilterAltOutlinedIcon />
+                                                </Box>
+                                        }
+                                    </Button>
+                                </Box>
                             </Box>
                         </Box>
-                        <Box className="w-4/5 h-fit">
+                        <Box className="w-4/5 h-fit px-2 flow-root">
                             <Box sx={{ backgroundColor: theme.palette.background.paper }} className="w-4/12 my-5 rounded-xl float-left" dir="rtl">
                                 <Typography variant="h6" className="!pt-2 !mr-4">توزيع العمليات حسب النوع</Typography>
                                 <PieChartWithCenterLabel />
                             </Box>
-                            <Box sx={{ backgroundColor: theme.palette.background.paper }} className="w-8/12 my-5 rounded-xl float-left pb-9" dir="rtl">
+                            <Box sx={{ backgroundColor: theme.palette.background.paper }} className="w-7/12 my-5 rounded-xl float-right pb-9" dir="rtl">
                                 <Typography variant="h6" className="!pt-2 !mr-4">توزيع العمليات حسب النوع</Typography>
                                 <StackedBarChart />
                             </Box>
                         </Box>
-                        <br />
-                        <Box className="w-4/5 mt-20">
+                        <Box className="w-4/5 mt-10">
                             <Box sx={{ backgroundColor: theme.palette.background.default }} className="bg-white mx-2 rounded-xl">
                                 <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2 py-4 rounded-t-xl" dir="rtl">
                                     <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">مركز التقارير</Typography>

@@ -231,14 +231,14 @@ function Dashboard() {
                                                        </Box>
                                                   </Box>
                                              </Box>
-                                             <Box className="w-4/5 rounded-xl mx-2 px-2" dir="rtl">
-                                                  <Box sx={{ backgroundColor: theme.palette.background.default }} className="bg-white mr-2 rounded-xl">
+                                             <Box className="w-4/5 rounded-lg mx-2 px-2" dir="rtl">
+                                                  <Box sx={{ backgroundColor: theme.palette.background.default }} className="mr-2 !rounded-lg overflow-hidden">
                                                        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2">
                                                             <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">طلبات الموافقة المعلقة</Typography>
                                                             <Typography onClick={() => navigate('/accept-requests')} variant="body1" className="cursor-pointer max-sm:!text-sm">عرض جميع الطلبات <ArrowBackIosNewIcon /></Typography>
                                                        </Box>
                                                        <Box>
-                                                            <TableContainer component={Paper} dir="rtl">
+                                                            <TableContainer className="!rounded-none" component={Paper} dir="rtl">
                                                                  <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                                       <TableHead className="bg-gray-200">
                                                                            <TableRow sx={{ backgroundColor: theme.palette.background.paper }}>

@@ -109,7 +109,7 @@ function Ads() {
                                         <CircularProgress size={70} />
                                     </Box>
                                     :
-                                    <Box sx={{ backgroundColor: theme.palette.background.paper }} className="bg-white rounded-xl">
+                                    <Box sx={{ backgroundColor: theme.palette.background.paper }} className="bg-white rounded-xl px-2">
                                         <Box sx={{ backgroundColor: theme.palette.background.default }} className="flex justify-between items-center px-2">
                                             <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">الإعلانات</Typography>
                                             <Button variant="contained" onClick={() => setPopup('add', 'flex')} className="">
@@ -130,7 +130,7 @@ function Ads() {
                                                     <Box className="flex w-2/4 items-center max-sm:mt-2 max-sm:w-full max-sm:justify-between">
                                                         <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.select }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
                                                             <option value=''>التاريخ</option>
-                                                            <option value='first_name'>عنوان الإعلان</option>
+                                                            <option value={language === 'en' ? 'name_en' : 'name_ar'}>عنوان الإعلان</option>
                                                         </select>
                                                         <Typography variant="body1" className="!text-gray-500">إجمالي الإعلانات: {bannersCounts}</Typography>
                                                     </Box>
@@ -156,7 +156,7 @@ function Ads() {
                                                                 <StyledTableCell align="right" className="text-center">{banner.active_from}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="">{banner.active_until}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="!text-center" dir="ltr">
-                                                                    <Select disabled={true} value={banner.is_active && new Date() < new Date(banner.active_from) ? "not_started" : banner.is_active && new Date() <= new Date(banner.active_until) ? "1" : !banner.is_active ? "0" : "ended"} variant="standard" defaultValue="active" onClick={(e) => e.stopPropagation()} className="!border-0" sx={{ border: 'none' }}>
+                                                                    <Select disabled={true} value={ new Date() < new Date(banner.active_from) ? "not_started" : banner.is_active && new Date() <= new Date(banner.active_until) ? "1" : !banner.is_active ? "0" : "ended"} variant="standard" defaultValue="active" onClick={(e) => e.stopPropagation()} className="!border-0" sx={{ border: 'none' }}>
                                                                         <MenuItem value="1">
                                                                             <CircleIcon className="text-green-700" fontSize="small" /> نشط
                                                                         </MenuItem>

@@ -133,7 +133,7 @@ function Header() {
                                    Logout
                               </MenuItem>
                          </Menu>
-                         <Box sx={{ backgroundColor: theme.palette.background.paper }} id="notification-box" className="w-1/3 min-h-20 bg-white z-50 shadow-md rounded-lg absolute top-15 left-44 max-sm:w-8/12 max-sm:left-10 max-sm:top-16 hidden" dir="rtl">
+                         <Box sx={{ backgroundColor: theme.palette.background.default }} id="notification-box" className="w-1/3 min-h-20 bg-white z-50 shadow-md rounded-lg absolute top-15 left-44 max-sm:w-8/12 max-sm:left-10 max-sm:top-16 hidden" dir="rtl">
                               <Box className="flex justify-between items-center px-5 py-3">
                                    <Typography variant="h6" className="font-bold max-sm:!text-sm">الإشعارات</Typography>
                                    <Typography variant="body2" className="font-bold text-blue-800 cursor-pointer max-sm:!text-sm">تحديد الكل كمقروءة</Typography>

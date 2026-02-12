@@ -18,7 +18,7 @@ export default function StackedBarChart() {
     <Box sx={{ width: '100%', height: 300 }}>
       <BarChart
         series={[
-          { data: pData, label: 'pv', id: 'pvId', stack: 'total' },
+          { data: pData },
         ]}
         xAxis={[{ data: xLabels, height: 28 }]}
         yAxis={[{ width: 50 }]}

@@ -104,7 +104,7 @@ function Students() {
                                         <CircularProgress size={70} />
                                     </Box>
                                     :
-                                    <Box className="rounded-xl">
+                                    <Box className="rounded-xl px-2">
                                         <Box sx={{ backgroundColor: theme.palette.background.default }} className="flex justify-between items-center px-2">
                                             <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">الطلاب</Typography>
                                         </Box>
@@ -119,7 +119,7 @@ function Students() {
                                                         </Box>
                                                     </Box>
                                                     <Box className="flex w-2/4 items-center max-sm:w-full max-sm:mt-2 max-sm:justify-between">
-                                                        <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.paper }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
+                                                        <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.select }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
                                                             <option value="">التاريخ</option>
                                                             <option value="first_name">اسم الطالب</option>
                                                             <option value="email">البريد الإلكتروني</option>

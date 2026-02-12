@@ -35,7 +35,7 @@ function ProfitWithdrawalRequests() {
                     </Box>
                     :
                     <Box sx={{ backgroundColor: theme.palette.background.default }}>
-                        <Box className="w-4/5 rounded-xl relative" dir="rtl">
+                        <Box className="w-4/5 rounded-xl relative px-2" dir="rtl">
                             <Box className="rounded-xl">
                                 <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2">
                                     <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">طلبات سحب الأرباح</Typography>

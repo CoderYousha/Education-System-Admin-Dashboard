@@ -118,11 +118,11 @@ function Requests() {
                                         <CircularProgress size={70} />
                                     </Box>
                                     :
-                                    <Box className="rounded-xl">
+                                    <Box className="rounded-xl px-2">
                                         <Box sx={{ backgroundColor: theme.palette.background.default }} className="flex justify-between items-center px-2">
                                             <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">طلبات الموافقة</Typography>
                                         </Box>
-                                        <Box>
+                                        <Box className="">
                                             <TableContainer component={Paper} dir="rtl">
                                                 <Box className="min-h-12 py-2 px-2 flex justify-between items-center max-sm:flex-col">
                                                     <Box className="w-full flex items-center">
@@ -133,7 +133,7 @@ function Requests() {
                                                         </Box>
                                                     </Box>
                                                     <Box className="flex w-2/4 items-center max-sm:w-full max-sm:mt-2 max-sm:justify-between">
-                                                        <select style={{ backgroundColor: theme.palette.background.paper }} onChange={(e) => setOrder(e.target.value)} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
+                                                        <select style={{ backgroundColor: theme.palette.background.select }} onChange={(e) => setOrder(e.target.value)} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
                                                             <option value=''>التاريخ</option>
                                                             <option value={language === 'en' ? 'order_by=name_en&direction=asc' : 'order_by=name_ar&direction=asc'}>اسم الدورة</option>
                                                             <option value='order_by=teacher.name&direction=asc'>اسم الأستاذ</option>

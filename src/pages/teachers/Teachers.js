@@ -89,7 +89,7 @@ function Teachers() {
                                         <CircularProgress size={70} />
                                     </Box>
                                     :
-                                    <Box sx={{ backgroundColor: theme.palette.background.paper }} className="bg-white rounded-xl">
+                                    <Box sx={{ backgroundColor: theme.palette.background.paper }} className="bg-white rounded-xl px-2">
                                         <Box sx={{ backgroundColor: theme.palette.background.default }} className="flex justify-between items-center px-2">
                                             <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">المدرسون</Typography>
                                             <Button variant="contained" onClick={() => setPopup('add', 'flex')} className="">
@@ -98,7 +98,7 @@ function Teachers() {
                                             </Button>
                                         </Box>
                                         <Box>
-                                            <TableContainer component={Paper} dir="rtl">
+                                            <TableContainer className="" component={Paper} dir="rtl">
                                                 <Box className="min-h-12 py-2 px-2 flex justify-between items-center max-sm:flex-col">
                                                     <Box className="w-full flex items-center">
                                                         <FilterAltOutlinedIcon onClick={() => setPopup('filter', 'flex')} className="cursor-pointer" fontSize="large" />
@@ -108,7 +108,7 @@ function Teachers() {
                                                         </Box>
                                                     </Box>
                                                     <Box className="flex w-2/4 items-center max-sm:mt-2 max-sm:w-full max-sm:justify-between">
-                                                        <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.paper }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
+                                                        <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.select }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
                                                             <option value=''>التاريخ</option>
                                                             <option value='first_name'>اسم المدرس</option>
                                                             <option value="email">البريد الإلكتروني</option>
