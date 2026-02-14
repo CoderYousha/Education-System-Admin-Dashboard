@@ -157,7 +157,7 @@ function UpdateAds({ onClickClose, setSnackbar, banner, setBanner, getBanners })
                 <input type="file" accept="image/*" className="w-full h-full opacity-0 absolute cursor-pointer" onChange={(e) => setImage(e.target.files[0])} />
             </Box>
             <Box className="flex justify-between mt-5 w-full max-sm:flex-col max-sm:items-center">
-                <Button onClick={updateAds} variant="contained" className="w-5/12 !text-white !font-bold max-sm:w-full">
+                <Button onClick={updateAds} variant="contained" className="w-5/12 !text-white !font-bold hover:!bg-blue-400 duration-300 max-sm:w-full">
                     {
                         sendWait ?
                             <CircularProgress size={20} className="" color="white" />
@@ -168,7 +168,7 @@ function UpdateAds({ onClickClose, setSnackbar, banner, setBanner, getBanners })
                             </>
                     }
                 </Button>
-                <Button onClick={() => { onClickClose(); }} variant="contained" className="w-5/12 !bg-gray-400 !text-gray-700 !font-bold max-sm:w-full max-sm:!mt-2">إلغاء</Button>
+                <Button onClick={() => { onClickClose(); }} variant="contained" className="w-5/12 !bg-gray-400 !text-gray-700 !font-bold hover:!bg-gray-200 duration-300 max-sm:w-full max-sm:!mt-2">إلغاء</Button>
             </Box>
         </Box>
     );

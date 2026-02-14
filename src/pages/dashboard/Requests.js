@@ -17,11 +17,11 @@ import { usePopups } from "../../hooks/UsePopups";
 import { useRequestsFilter } from "../../filter/UseRequestsFilter";
 
 function Requests() {
-    const {host, language} = useConstants();
+    const { host, language } = useConstants();
     const { wait } = useContext(AuthContext);
     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
     const { getWait, setGetWait, sendWait, setSendWait, filterWait, setFilterWait } = useWaits();
-    const {status, setStatus, from, setFrom, to, setTo, value, setValue, teacherId, setTeacherId} = useRequestsFilter();
+    const { status, setStatus, from, setFrom, to, setTo, value, setValue, teacherId, setTeacherId } = useRequestsFilter();
     const { StyledTableCell, StyledTableRow } = useTableStyles();
     const { setPopup } = usePopups();
     const [request, setRequest] = useState('');
@@ -55,7 +55,12 @@ function Requests() {
         if (result.status === 200) {
             setTotalPages(result.data.pagination.last_page);
             setRequestCounts(result.data.pagination.total);
-            setCoursesRequests(result.data.data);
+            const sorted = result.data.data.sort((a, b) =>
+                a.status === 'pending' ? -1 :
+                    b.status === 'pending' ? 1 : 0
+            );
+            setCoursesRequests(sorted);
+            // setCoursesRequests(result.data.data);
             setCurrentPage(page);
         }
 
@@ -144,16 +149,18 @@ function Requests() {
                                                 <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                     <TableHead className="bg-gray-200">
                                                         <TableRow sx={{ backgroundColor: theme.palette.background.paper }}>
+                                                            <StyledTableCell align="right">رقم الطلب</StyledTableCell>
                                                             <StyledTableCell align="right">اسم الدورة</StyledTableCell>
                                                             <StyledTableCell align="right">اسم المدرس</StyledTableCell>
                                                             <StyledTableCell align="right">تاريخ الطلب</StyledTableCell>
-                                                            <StyledTableCell align="right">الحالة</StyledTableCell>
+                                                            <StyledTableCell align="right">حالة الطلب</StyledTableCell>
                                                             <StyledTableCell align="right">الإجراءات</StyledTableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
                                                         {coursesRequests.map((request, index) => (
                                                             <StyledTableRow key={index}>
+                                                                <StyledTableCell align="right" component="th" scope="row" className="cursor-pointer" onClick={() => { request.status !== 'rejected' && request.status !== 'accepted' && getCourseDetails(request.id) }}>{request.id}</StyledTableCell>
                                                                 <StyledTableCell align="right" component="th" scope="row">
                                                                     {language === 'en' ? request.name_en : request.name_ar}
                                                                 </StyledTableCell>
@@ -161,7 +168,7 @@ function Requests() {
                                                                 <StyledTableCell align="right">{request.created_at.split(" ")[0]}</StyledTableCell>
                                                                 <StyledTableCell align="right"><Box className="text-center py-1 rounded-lg font-bold" sx={{ backgroundColor: request.status === 'accepted' ? "#CCFFCC" : request.status === 'rejected' ? "#FF9999" : "#FCF0CF", color: request.status === 'accepted' ? "green" : request.status === 'rejected' ? "red" : "orange" }}>{request.status === 'accepted' ? 'تمت الموافقة' : request.status === 'rejected' ? 'تم الرفض' : 'بانتظار الموافقة'}</Box></StyledTableCell>
                                                                 <StyledTableCell align="right" className="!flex justify-between">
-                                                                    <Button onClick={() => getCourseDetails(request.id)} disabled={request.status === 'rejected' || request.status === 'accepted'} className="h-8 !bg-gray-200 !text-gray-700">عرض التفاصيل</Button>
+                                                                    {/* <Button onClick={() => getCourseDetails(request.id)} disabled={request.status === 'rejected' || request.status === 'accepted'} className="h-8 !bg-gray-200 !text-gray-700">عرض التفاصيل</Button> */}
                                                                     <Button disabled={request.status === 'rejected' || request.status === 'accepted'} onClick={() => changeCourseStatus(request.id, 'rejected')} variant="contained" sx={{ backgroundColor: request.status === 'rejected' || request.status === 'accepted' ? '#F2F2F2 !important' : '', color: request.status === 'rejected' || request.status === 'accepted' ? '#666666 !important' : '' }} className="mr-2 h-8 !bg-red-300 !text-red-600 !font-bold hover:!bg-red-600 hover:!text-white">
                                                                         {sendWait && courseId === request.id && operation === 'rejected' ?
                                                                             <CircularProgress size={20} className="" color="white" />
@@ -193,7 +200,7 @@ function Requests() {
                                             </TableContainer>
                                         </Box>
                                     </Box>
-                        }
+                            }
                         </Box>
                         <Box id="details" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center hidden max-sm:left-0">
                             <RequestDetails onClickClose={() => setPopup('details', 'none')} onClickAccept={changeCourseStatus} onClickReject={changeCourseStatus} request={request} />

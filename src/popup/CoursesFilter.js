@@ -99,14 +99,14 @@ function CoursesFilter({ onClickClose, onClickConfirm, categoriesValue, setCateg
                 <TextField sx={{ '& input::-webkit-datetime-edit': { color: 'transparent' }, '& input:focus::-webkit-datetime-edit': { color: 'inherit' } }} defaultValue="2026-12-30" value={toDate} onChange={(e) => setToDate(e.target.value)} type="date" className="w-5/12" label="إلى تاريخ"></TextField>
             </Box>
             <Box className="w-full flex justify-between mt-10 max-sm:flex-col">
-                <Button variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold max-sm:w-full" onClick={resetFilter}>إعادة التعيين</Button>
-                <Button variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5" onClick={() => { setFilterWait(true); onClickConfirm(); }}>
-                    <Box sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>
+                <Button variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold hover:!bg-gray-200 duration-300 max-sm:w-full" onClick={resetFilter}>إعادة التعيين</Button>
+                <Button variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5 !text-white hover:bg-blue-400 duration-300" onClick={() => { setFilterWait(true); onClickConfirm(); }}>
+                    <Box>
                         {
                             filterWait ?
                                 <CircularProgress size={20} className="" color="white" />
                                 :
-                                <Box sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>
+                                <Box>
                                     تطبيق الفلترة
                                     <FilterAltOutlinedIcon />
                                 </Box>

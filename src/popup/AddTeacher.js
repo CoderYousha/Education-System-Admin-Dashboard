@@ -204,7 +204,7 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
                 <TextField value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} variant="outlined" type="password" className="w-full" label="تأكيد كلمة المرور" />
             </Box>
             <Box className="flex justify-between mt-5 w-full max-sm:flex-col max-sm:items-center">
-                <Button variant="contained" className="w-5/12 !text-white !font-bold max-sm:w-full" onClick={addTeacher}>
+                <Button variant="contained" className="w-5/12 !text-white !font-bold hover:!bg-blue-400 duration-300 max-sm:w-full" onClick={addTeacher}>
                     {
                         sendWait ?
                             <CircularProgress size={20} className="" color="white" />
@@ -215,7 +215,7 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
                             </>
                     }
                 </Button>
-                <Button onClick={() => {resetInputs(); onClickClose();}} variant="contained" className="w-5/12 !bg-gray-400 !text-gray-700 !font-bold max-sm:w-full max-sm:!mt-2">إلغاء</Button>
+                <Button onClick={() => {resetInputs(); onClickClose();}} variant="contained" className="w-5/12 !bg-gray-400 !text-gray-700 !font-bold hover:!bg-gray-200 duration-300 max-sm:w-full max-sm:!mt-2">إلغاء</Button>
             </Box>
         </Box>
     );

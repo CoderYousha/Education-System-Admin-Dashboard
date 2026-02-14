@@ -20,12 +20,15 @@ function DeleteDialog({ onClickConfirm, onClickCancel, title, subtitle, hasInput
                 hasInput &&
                 <TextField dir="rtl" multiline rows={4} placeholder={placeholder} className="w-full" variant="outlined" label={label} />
             }
-            <Box className="flex my-2 flex-row-reverse">
-                <img src={GratWarningImage} />
-                <Typography variant="body2" className="!mr-1 text-gray-600">{warning}</Typography>
-            </Box>
+            {
+                warning &&
+                    <Box className="flex my-2 flex-row-reverse">
+                        <img src={GratWarningImage} />
+                        <Typography variant="body2" className="!mr-1 text-gray-600">{warning}</Typography>
+                    </Box>
+            }
             <Box className="flex justify-between mt-5">
-                <Button onClick={async () => { setSendWait(true); await onClickConfirm(); setSendWait(false); onClickCancel(); }} variant="contained" className="w-2/5 !bg-red-300 !text-red-700 !font-bold">
+                <Button onClick={async () => { setSendWait(true); await onClickConfirm(); setSendWait(false); onClickCancel(); }} variant="contained" className="w-2/5 !bg-red-300 !text-red-700 hover:!bg-red-500 hover:!text-white duration-300 !font-bold">
                     {
                         sendWait ?
                             <CircularProgress size={20} className="" color="white" />
@@ -33,7 +36,7 @@ function DeleteDialog({ onClickConfirm, onClickCancel, title, subtitle, hasInput
                             "حذف"
                     }
                 </Button>
-                <Button variant="contained" className="w-2/5 !bg-gray-300 !text-gray-700 !font-bold" onClick={onClickCancel}>إلغاء</Button>
+                <Button variant="contained" className="w-2/5 !bg-gray-300 !text-gray-700 !font-bold hover:!bg-gray-200 duration-300" onClick={onClickCancel}>إلغاء</Button>
             </Box>
         </Box>
     );

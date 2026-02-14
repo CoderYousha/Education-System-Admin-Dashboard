@@ -59,17 +59,6 @@ function Sidebar () {
                'icon': <AssessmentOutlinedIcon fontSize="medium" className="mr-2 max-sm:mx-auto" />,
                'link': '../reports',
           },
-          {
-               'title': 'الإعدادات',
-               'icon': <SettingsOutlinedIcon fontSize="medium" className="mr-2 max-sm:mx-auto" />,
-               'link': '../settings',
-          },
-          {
-               'title': 'تسجيل الخروج',
-               'icon': <LogoutOutlinedIcon color="error" fontSize="medium" className="mr-2 max-sm:mx-auto" />,
-               'link': '../logout',
-               'color': 'red'
-          },
      ];
      return (
           <>

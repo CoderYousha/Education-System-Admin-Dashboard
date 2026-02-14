@@ -13,6 +13,7 @@ import CoursesRoutes from './routes/CoursesRoutes';
 import AdsRoutes from './routes/AdsRoutes';
 import FinancialRoutes from './routes/FinancialRoutes';
 import ReportsRoutes from './routes/ReportsRoutes';
+import AccountRoutes from './routes/AccountRoutes';
 
 function App() {
   const theme = useTheme();
@@ -54,6 +55,11 @@ function App() {
             {
               ReportsRoutes().map((route, index) =>
                 <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+              )
+            }
+            {
+              AccountRoutes().map((route, index) =>
+                <Route key={index} path={route.path} element={<AuthProvider><Header isFullWidth={true}/>{route.element}</AuthProvider>} />
               )
             }
           </Routes>

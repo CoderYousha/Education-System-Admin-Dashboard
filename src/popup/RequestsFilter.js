@@ -119,8 +119,8 @@ function RequestFilter({ onClickClose, onClickConfirm, onClickStatus, status, se
                 <input value={courseName} onChange={(e) => setCourseName(e.target.value)} className="text-black mt-2 w-full h-10 rounded-lg border bg-gray-200 indent-3 outline-none" placeholder="أدخل اسم الدورة" />
             </Box>
             <Box className="w-full flex justify-between mt-10 max-sm:flex-col">
-                <Button onClick={resetFilter} variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold max-sm:w-full">إعادة التعيين</Button>
-                <Button sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }} variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5" onClick={() => { setFilterWait(true); onClickConfirm(); }}>
+                <Button onClick={resetFilter} variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold hover:!bg-gray-200 duration-300 max-sm:w-full">إعادة التعيين</Button>
+                <Button variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5 !text-white hover:bg-blue-400 duration-300" onClick={() => { setFilterWait(true); onClickConfirm(); }}>
                     {
                         filterWait ?
                             <CircularProgress size={20} className="" color="white" />

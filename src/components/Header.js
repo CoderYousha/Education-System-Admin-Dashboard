@@ -3,21 +3,23 @@ import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthContext";
-import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import NotificationImage from '../images/icons/notification.png';
-import VideoImage from '../images/icons/video.png';
-import MoneyImage from '../images/icons/money2.png';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { ColorModeContext } from "../theme/ThemeProviderWrapper";
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import SunnyIcon from '@mui/icons-material/Sunny';
 import PersonImage from '../images/tests/person.png';
+import CourseNotificationImage from "../images/icons/course-notification.png";
+import PathNotificationImage from "../images/icons/path-notification.png";
+import UpdateNotificationImage from "../images/icons/update-notification.png";
+import { useNavigate } from "react-router-dom";
 
-function Header() {
+function Header({isFullWidth = false}) {
      const { wait, profile } = useContext(AuthContext);
      const theme = useTheme();
      const colorMode = useContext(ColorModeContext);
+     const navigate = useNavigate();
 
      const [anchorEl, setAnchorEl] = useState(null);
      const open = Boolean(anchorEl);
@@ -49,7 +51,7 @@ function Header() {
                {
                     !wait &&
                     <React.Fragment>
-                         <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2 py-3 w-4/5 bg-white max-sm:w-5/6 max-sm:justify-start" dir="rtl">
+                         <Box sx={{ backgroundColor: theme.palette.background.paper, width: isFullWidth && '100% !important' }} className="flex justify-between items-center px-2 py-3 !w-4/5 bg-white max-sm:w-5/6 max-sm:justify-start" dir="rtl">
                               <Typography variant="h4" className="font-bold pr-5 max-sm:!text-lg max-sm:!ml-3">لوحة تحكم المسؤول</Typography>
                               <Box className="flex items-center w-1/5">
                                    <NotificationsNoneOutlinedIcon onClick={() => openNotification()} src={NotificationImage} alt="notification" className="w-6 h-6 cursor-pointer max-sm:ml-3" />
@@ -61,9 +63,9 @@ function Header() {
                                    }
                                    <Box className="flex items-center w-4/5 cursor-pointer" onClick={handleClick}>
                                         {
-                                             !profile.image ?
+                                             profile.image ?
                                                   <Box className="w-10 h-10 text-white rounded-full flex justify-center items-center">
-                                                       <img src={PersonImage} className="w-full h-full rounded-full"/>
+                                                       <img src={profile.image} className="w-full h-full rounded-full"/>
                                                   </Box>
                                                   :
                                                   <Box className="w-10 h-10 text-white rounded-full bg-blue-700 flex justify-center items-center">
@@ -113,24 +115,19 @@ function Header() {
                               }}
                               transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                               anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                              dir="rtl"
                          >
-                              <MenuItem onClick={handleClose}>
+                              <MenuItem onClick={() => {navigate('/profile'); handleClose();}}>
                                    <ListItemIcon>
                                         <PermIdentityIcon fontSize="small" />
                                    </ListItemIcon>
-                                   Profile
-                              </MenuItem>
-                              <MenuItem onClick={handleClose}>
-                                   <ListItemIcon>
-                                        <Settings fontSize="small" />
-                                   </ListItemIcon>
-                                   Settings
+                                   الملف الشخصي
                               </MenuItem>
                               <MenuItem className="!text-red-500" onClick={handleClose}>
                                    <ListItemIcon className="!text-red-500">
                                         <Logout fontSize="small" />
                                    </ListItemIcon>
-                                   Logout
+                                   تسجيل الخروج
                               </MenuItem>
                          </Menu>
                          <Box sx={{ backgroundColor: theme.palette.background.default }} id="notification-box" className="w-1/3 min-h-20 bg-white z-50 shadow-md rounded-lg absolute top-15 left-44 max-sm:w-8/12 max-sm:left-10 max-sm:top-16 hidden" dir="rtl">
@@ -139,56 +136,56 @@ function Header() {
                                    <Typography variant="body2" className="font-bold text-blue-800 cursor-pointer max-sm:!text-sm">تحديد الكل كمقروءة</Typography>
                               </Box>
                               <Box className="flex items-center py-2">
-                                   <img src={VideoImage} className="w-5 h-5 mx-5 mb-3 max-sm:w-4 max-sm:h-4" />
+                                   <img src={CourseNotificationImage} className="mx-5 mb-3 max-sm:w-4 max-sm:h-4" />
                                    <Box className="">
                                         <Box className="flex">
                                              <Typography variant="body1" className="!ml-1 text-cyan-600 !font-bold max-sm:!text-sm"> د. أحمد الخطيب </Typography>
-                                             <Typography variant="body1" className="mr-1 max-sm:!text-sm">أضاف ملف جديد للموافقة</Typography>
+                                             <Typography variant="body1" className="mr-1 max-sm:!text-sm">أضاف دورة "أساسيات البرمجة"</Typography>
                                         </Box>
                                         <Typography variant="body2" className="text-gray-400 mx-5 mb-3">12/7/2025 13:07 p</Typography>
                                    </Box>
                               </Box>
                               <Box className="flex items-center py-2">
-                                   <img src={MoneyImage} className="w-5 h-5 mx-5 mb-3 max-sm:w-4 max-sm:h-4" />
+                                   <img src={PathNotificationImage} className="mx-5 mb-3 max-sm:w-4 max-sm:h-4" />
                                    <Box className="">
                                         <Box className="flex">
                                              <Typography variant="body1" className="!ml-1 text-cyan-600 !font-bold max-sm:!text-sm"> د. أحمد الخطيب </Typography>
-                                             <Typography variant="body1" className="mr-1 max-sm:!text-sm">أضاف ملف جديد للموافقة</Typography>
+                                             <Typography variant="body1" className="mr-1 max-sm:!text-sm">أضاف مسار جديد "الويب"</Typography>
                                         </Box>
                                         <Typography variant="body2" className="text-gray-400 mx-5 mb-3">12/7/2025 13:07 p</Typography>
                                    </Box>
                               </Box>
                               <Box className="flex items-center py-2">
-                                   <img src={VideoImage} className="w-5 h-5 mx-5 mb-3 max-sm:w-4 max-sm:h-4" />
+                                   <img src={UpdateNotificationImage} className="mx-5 mb-3 max-sm:w-4 max-sm:h-4" />
                                    <Box className="">
                                         <Box className="flex">
                                              <Typography variant="body1" className="!ml-1 text-cyan-600 !font-bold max-sm:!text-sm"> د. أحمد الخطيب </Typography>
-                                             <Typography variant="body1" className="mr-1 max-sm:!text-sm">أضاف ملف جديد للموافقة</Typography>
+                                             <Typography variant="body1" className="mr-1 max-sm:!text-sm">عدل على محتوى دورة "أساسيات البرمجة"</Typography>
                                         </Box>
                                         <Typography variant="body2" className="text-gray-400 mx-5 mb-3">12/7/2025 13:07 p</Typography>
                                    </Box>
                               </Box>
                               <Box className="flex items-center py-2">
-                                   <img src={MoneyImage} className="w-5 h-5 mx-5 mb-3 max-sm:w-4 max-sm:h-4" />
+                                   <img src={CourseNotificationImage} className="mx-5 mb-3 max-sm:w-4 max-sm:h-4" />
                                    <Box className="">
                                         <Box className="flex">
                                              <Typography variant="body1" className="!ml-1 text-cyan-600 !font-bold max-sm:!text-sm"> د. أحمد الخطيب </Typography>
-                                             <Typography variant="body1" className="mr-1 max-sm:!text-sm">أضاف ملف جديد للموافقة</Typography>
+                                             <Typography variant="body1" className="mr-1 max-sm:!text-sm">أضاف دورة "أساسيات البرمجة"</Typography>
                                         </Box>
                                         <Typography variant="body2" className="text-gray-400 mx-5 mb-3">12/7/2025 13:07 p</Typography>
                                    </Box>
                               </Box>
                               <Box className="flex items-center py-2">
-                                   <img src={VideoImage} className="w-5 h-5 mx-5 mb-3 max-sm:w-4 max-sm:h-4" />
+                                   <img src={PathNotificationImage} className="mx-5 mb-3 max-sm:w-4 max-sm:h-4" />
                                    <Box className="">
                                         <Box className="flex">
                                              <Typography variant="body1" className="!ml-1 text-cyan-600 !font-bold max-sm:!text-sm"> د. أحمد الخطيب </Typography>
-                                             <Typography variant="body1" className="mr-1 max-sm:!text-sm">أضاف ملف جديد للموافقة</Typography>
+                                             <Typography variant="body1" className="mr-1 max-sm:!text-sm">أضاف مسار جديد "الويب"</Typography>
                                         </Box>
                                         <Typography variant="body2" className="text-gray-400 mx-5 mb-3">12/7/2025 13:07 p</Typography>
                                    </Box>
                               </Box>
-                              <Box className="text-center text-gray-500 py-2 cursor-pointer max-sm:!text-sm">عرض الكل <ArrowBackIosNewIcon /></Box>
+                              <Box className="text-center text-blue-500 py-2 cursor-pointer max-sm:!text-sm">عرض الكل <ArrowBackIosNewIcon /></Box>
                          </Box>
                     </React.Fragment>
                }

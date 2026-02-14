@@ -78,14 +78,14 @@ function StudentFilter({ onClickClose, onClickConfirm, value, setValue, setMajor
                 </Box>
             </Box>
             <Box className="w-full flex justify-between mt-10 max-sm:flex-col">
-                <Button variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold max-sm:w-full" onClick={resetFilter}>إعادة التعيين</Button>
-                <Button variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5" onClick={() => { setFilterWait(true); onClickConfirm(); }}>
-                    <Box sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }} >
+                <Button variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 hover:!bg-gray-200 duration-300 !font-semibold max-sm:w-full" onClick={resetFilter}>إعادة التعيين</Button>
+                <Button variant="contained" className="w-5/12 h-10 !text-white hover:bg-blue-400 duration-300 max-sm:w-full max-sm:!mt-5" onClick={() => { setFilterWait(true); onClickConfirm(); }}>
+                    <Box>
                         {
                             filterWait ?
                                 <CircularProgress size={20} className="" color="white" />
                                 :
-                                <Box sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>
+                                <Box>
                                     تطبيق الفلترة
                                     <FilterAltOutlinedIcon />
                                 </Box>

@@ -17,13 +17,14 @@ import { useConstants } from "../../hooks/UseConstants";
 import { useTableStyles } from "../../hooks/UseTableStyles";
 import { usePopups } from "../../hooks/UsePopups";
 import { useStudentsFilter } from "../../filter/UseStudentsFilter";
+import DeleteDialog from "../../popup/DeleteDialog";
 
 function Students() {
-    const {host, language} = useConstants();
+    const { host, language } = useConstants();
     const { wait } = useContext(AuthContext);
     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
     const { getWait, setGetWait, sendWait, setSendWait, filterWait, setFilterWait } = useWaits();
-    const {majorId, setMajorId, value, setValue, fromCount, setFromCount, toCount, setToCount, fromDate, setFromDate, toDate, setToDate} = useStudentsFilter();
+    const { majorId, setMajorId, value, setValue, fromCount, setFromCount, toCount, setToCount, fromDate, setFromDate, toDate, setToDate } = useStudentsFilter();
     const { StyledTableCell, StyledTableRow } = useTableStyles();
     const { setPopup } = usePopups();
     const [students, setStudents] = useState([]);
@@ -149,7 +150,7 @@ function Students() {
                                                                 <StyledTableCell align="right" className="!text-center">{student.enrolled_courses_count}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="text-center">{student?.verified_at?.split("T")[0]}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="!text-center">
-                                                                    <Button variant="contained" className="mr-2 h-8 !bg-red-300 !text-red-600 !font-bold hover:!bg-red-600 hover:!text-white" onClick={() => { setStudentId(student.id); setDialog('Delete Student', 'Are you sure you want to delete this student') }}>حذف</Button>
+                                                                    <Button variant="contained" className="mr-2 h-8 !bg-red-300 !text-red-600 !font-bold hover:!bg-red-600 hover:!text-white" onClick={(e) => { e.stopPropagation(); setStudentId(student.id); setPopup('delete', 'flex'); }}>حذف</Button>
                                                                 </StyledTableCell>
                                                             </StyledTableRow>
                                                         ))}
@@ -174,6 +175,9 @@ function Students() {
                         </Box>
                         <Box id="details" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <StudentDetails student={student} onClickClose={() => setPopup('details', 'none')} />
+                        </Box>
+                        <Box id="delete" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+                            <DeleteDialog onClickConfirm={deleteStudent} onClickCancel={() => setPopup('delete', 'none')} title="تأكيد حذف الطالب" subtitle="سيتم حذف هذا الطالب نهائيا ولن يظهر مرة أخرى، لا يمكن التراجع عن هذا الإجراء" />
                         </Box>
                         <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
                         <AlertDialog wait={sendWait} openDialog={open} title={title} description={description} onCancel={() => setOpen(false)} onConfirm={() => deleteStudent()} />

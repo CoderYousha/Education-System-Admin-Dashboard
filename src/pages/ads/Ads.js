@@ -172,8 +172,8 @@ function Ads() {
                                                                     </Select>
                                                                 </StyledTableCell>
                                                                 <StyledTableCell align="right" className="!flex justify-around items-center">
-                                                                    <Button variant="contained" className="!bg-red-300 !font-bold !text-red-700" onClick={(e) => {e.stopPropagation(); setBannerId(banner.id); setPopup('delete', 'flex');}}>حذف</Button>
-                                                                    <Button variant="contained" className="!bg-green-300 !font-bold !text-green-800" onClick={(e) => {e.stopPropagation(); updateBanner(banner.id);}}>تعديل</Button>
+                                                                    <Button variant="contained" className="!bg-red-300 !font-bold !text-red-700 hover:!bg-red-500 hover:!text-white duration-300" onClick={(e) => {e.stopPropagation(); setBannerId(banner.id); setPopup('delete', 'flex');}}>حذف</Button>
+                                                                    <Button variant="contained" className="!bg-green-300 !font-bold !text-green-800 hover:!bg-green-500 hover:!text-white duration-300" onClick={(e) => {e.stopPropagation(); updateBanner(banner.id);}}>تعديل</Button>
                                                                 </StyledTableCell>
                                                             </StyledTableRow>
                                                         ))}

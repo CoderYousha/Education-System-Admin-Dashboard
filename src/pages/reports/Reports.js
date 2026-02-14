@@ -121,7 +121,7 @@ function Reports() {
                                 </Box>
                                 <Box className="w-1/5 max-sm:w-full">
                                     <br />
-                                    <Button sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }} variant="contained" className="h-10 max-sm:w-full max-sm:!mt-5 !text-white mt-2">
+                                    <Button variant="contained" className="h-10 max-sm:w-full max-sm:!mt-5 !text-white mt-2 hover:bg-blue-400 duration-300">
                                         {
                                             filterWait ?
                                                 <CircularProgress size={20} className="" color="white" />
@@ -169,7 +169,7 @@ function Reports() {
                                                 <StyledTableCell align="right">PDF</StyledTableCell>
                                                 <StyledTableCell align="right">2026-01-01</StyledTableCell>
                                                 <StyledTableCell align="right">
-                                                    <Button className="" variant="contained">
+                                                    <Button className="hover:bg-blue-400 duration-300" variant="contained">
                                                         تحميل
                                                         <FileDownloadOutlinedIcon />
                                                     </Button>
@@ -181,7 +181,7 @@ function Reports() {
                                                 <StyledTableCell align="right">Excel</StyledTableCell>
                                                 <StyledTableCell align="right">2026-01-01</StyledTableCell>
                                                 <StyledTableCell align="right">
-                                                    <Button className="" variant="contained">
+                                                    <Button className="hover:bg-blue-400 duration-300" variant="contained">
                                                         تحميل
                                                         <FileDownloadOutlinedIcon />
                                                     </Button>
@@ -193,7 +193,7 @@ function Reports() {
                                                 <StyledTableCell align="right">PDF</StyledTableCell>
                                                 <StyledTableCell align="right">2026-01-01</StyledTableCell>
                                                 <StyledTableCell align="right">
-                                                    <Button className="" variant="contained">
+                                                    <Button className="hover:bg-blue-400 duration-300" variant="contained">
                                                         تحميل
                                                         <FileDownloadOutlinedIcon />
                                                     </Button>

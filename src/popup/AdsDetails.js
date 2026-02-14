@@ -39,8 +39,8 @@ function AdsDetails({ onClickClose, onClickUpdate, banner, setSnackBar, setBanne
             </Box>
             <TextField variant="outlined" label="محتوى الإعلان" className="w-full" value={language === 'en' ? banner.description_en : banner.description_ar} />
             <Box className="flex justify-between my-7 max-sm:flex-col max-sm:items-center">
-                <Button variant="contained" className="w-2/5 !font-bold !bg-green-300 !text-green-700 max-sm:w-full" onClick={() => {onClickUpdate(banner.id); onClickClose();}}>تعديل</Button>
-                <Button variant="contained" className="w-2/5 !font-bold !bg-red-300 !text-red-700 max-sm:w-full max-sm:!mt-2" onClick={deleteBanner}>
+                <Button variant="contained" className="w-2/5 !font-bold !bg-green-300 !text-green-700 hover:!bg-green-400 hover:!text-white duration-300 max-sm:w-full" onClick={() => {onClickUpdate(banner.id); onClickClose();}}>تعديل</Button>
+                <Button variant="contained" className="w-2/5 !font-bold !bg-red-300 !text-red-700 hover:!bg-red-500 hover:!text-white duration-300 max-sm:w-full max-sm:!mt-2" onClick={deleteBanner}>
                     {
                         sendWait ?
                             <CircularProgress size={20} className="" color="white" />
