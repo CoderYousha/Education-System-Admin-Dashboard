@@ -9,15 +9,17 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { ColorModeContext } from "../theme/ThemeProviderWrapper";
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import SunnyIcon from '@mui/icons-material/Sunny';
-import PersonImage from '../images/tests/person.png';
 import CourseNotificationImage from "../images/icons/course-notification.png";
 import PathNotificationImage from "../images/icons/path-notification.png";
 import UpdateNotificationImage from "../images/icons/update-notification.png";
 import { useNavigate } from "react-router-dom";
+import LogoutPopup from "../popup/Logout";
+import { usePopups } from "../hooks/UsePopups";
 
-function Header({isFullWidth = false}) {
+function Header({ isFullWidth = false }) {
      const { wait, profile } = useContext(AuthContext);
      const theme = useTheme();
+     const { setPopup } = usePopups();
      const colorMode = useContext(ColorModeContext);
      const navigate = useNavigate();
 
@@ -65,7 +67,7 @@ function Header({isFullWidth = false}) {
                                         {
                                              profile.image ?
                                                   <Box className="w-10 h-10 text-white rounded-full flex justify-center items-center">
-                                                       <img src={profile.image} className="w-full h-full rounded-full"/>
+                                                       <img src={profile.image} className="w-full h-full rounded-full" />
                                                   </Box>
                                                   :
                                                   <Box className="w-10 h-10 text-white rounded-full bg-blue-700 flex justify-center items-center">
@@ -117,13 +119,13 @@ function Header({isFullWidth = false}) {
                               anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                               dir="rtl"
                          >
-                              <MenuItem onClick={() => {navigate('/profile'); handleClose();}}>
+                              <MenuItem onClick={() => { navigate('/profile'); handleClose(); }}>
                                    <ListItemIcon>
                                         <PermIdentityIcon fontSize="small" />
                                    </ListItemIcon>
                                    الملف الشخصي
                               </MenuItem>
-                              <MenuItem className="!text-red-500" onClick={handleClose}>
+                              <MenuItem className="!text-red-500" onClick={() => {setPopup('logout', 'flex'); handleClose();}}>
                                    <ListItemIcon className="!text-red-500">
                                         <Logout fontSize="small" />
                                    </ListItemIcon>
@@ -186,6 +188,9 @@ function Header({isFullWidth = false}) {
                                    </Box>
                               </Box>
                               <Box className="text-center text-blue-500 py-2 cursor-pointer max-sm:!text-sm">عرض الكل <ArrowBackIosNewIcon /></Box>
+                         </Box>
+                         <Box id="logout" className="w-screen h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0" sx={{zIndex: 1000}}>
+                              <LogoutPopup onClickCancel={() => setPopup('logout', 'none')} />
                          </Box>
                     </React.Fragment>
                }

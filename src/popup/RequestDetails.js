@@ -9,6 +9,7 @@ import PlayImage from '../images/icons/play.png';
 import GrayVideoImage from '../images/icons/gray_video.png';
 import CalendarImage from '../images/icons/calendar.png';
 import ViewImage from '../images/icons/view.png';
+import IdImage from '../images/icons/id.png';
 
 function RequestDetails({ request, onClickClose, onClickReject, onClickAccept }) {
     const language = localStorage.getItem('language');
@@ -38,6 +39,15 @@ function RequestDetails({ request, onClickClose, onClickReject, onClickAccept })
                 <Typography variant="h5" className="!font-semibold !mr-2 max-sm:!text-xl">معلومات الطلب</Typography>
             </Box>
             <Box className="mt-7 grid grid-cols-3 gap-x-3 gap-y-5 max-sm:grid-cols-1">
+                <Box className="h-28 shadow-lg rounded-xl overflow-hidden">
+                    <Box sx={{ backgroundColor: "#E8EEFD" }} className="w-1/4 h-full float-right flex justify-center items-center">
+                        <img src={IdImage} className="" />
+                    </Box>
+                    <Box className="mt-4 mr-2 float-right">
+                        <Typography variant="body1" className="text-gray-400">رقم الطلب</Typography>
+                        <Typography variant="h6" className="!mt-4 !font-semibold">{request.id}</Typography>
+                    </Box>
+                </Box>
                 <Box className="h-28 shadow-lg rounded-xl overflow-hidden">
                     <Box sx={{ backgroundColor: "#E8EEFD" }} className="w-1/4 h-full float-right flex justify-center items-center">
                         <img src={CoursesImage} className="" />

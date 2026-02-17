@@ -14,6 +14,7 @@ import AdsRoutes from './routes/AdsRoutes';
 import FinancialRoutes from './routes/FinancialRoutes';
 import ReportsRoutes from './routes/ReportsRoutes';
 import AccountRoutes from './routes/AccountRoutes';
+import AuthRoutes from './routes/AuthRoutes';
 
 function App() {
   const theme = useTheme();
@@ -22,6 +23,11 @@ function App() {
       <div className="App" style={{ backgroundColor: theme.palette.background.default }}>
         <BrowserRouter>
           <Routes>
+            {
+              AuthRoutes().map((route, index) =>
+                <Route key={index} path={route.path} element={route.element} />
+              )
+            }
             {
               DashboardRoutes().map((route, index) =>
                 <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
@@ -59,7 +65,7 @@ function App() {
             }
             {
               AccountRoutes().map((route, index) =>
-                <Route key={index} path={route.path} element={<AuthProvider><Header isFullWidth={true}/>{route.element}</AuthProvider>} />
+                <Route key={index} path={route.path} element={<AuthProvider><Header isFullWidth={true} />{route.element}</AuthProvider>} />
               )
             }
           </Routes>

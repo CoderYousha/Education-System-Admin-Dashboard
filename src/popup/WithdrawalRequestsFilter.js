@@ -33,7 +33,7 @@ function WithdrawalRequestsFilter({ onClickClose, onClickConfirm, filterWait, se
 
     return (
         <Box sx={{ backgroundColor: theme.palette.background.paper }} className="shadow-lg w-3/5 h-fit rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative" dir="rtl">
-            <Typography variant="h5" className="!font-semibold max-sm:!text-xl">تصفية طلبات سحب الأرباح</Typography>
+            <Typography variant="h5" className="!font-semibold max-sm:!text-xl">تصفية سجل الأرباح</Typography>
             <CloseIcon onClick={() => { onClickClose(); }} className="text-gray-700 cursor-pointer absolute top-5 left-5" fontSize="large" />
             <Divider className="!my-5" />
             <Typography variant="body1" className="!font-semibold text-gray-400 !mt-5">المدرس</Typography>
