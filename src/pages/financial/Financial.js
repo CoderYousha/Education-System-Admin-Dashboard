@@ -38,15 +38,6 @@ function Financial() {
     const theme = useTheme();
     const navigate = useNavigate();
 
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
     const calculatingPercentage = (total, profit) => {
         let value = 100 * profit / total;
 
@@ -212,7 +203,7 @@ function Financial() {
                                                             <TableRow sx={{ backgroundColor: theme.palette.background.paper }} className="!rounded-none">
                                                                 <StyledTableCell align="right">اسم المدرس</StyledTableCell>
                                                                 <StyledTableCell align="right">الرصيد المتاح</StyledTableCell>
-                                                                <StyledTableCell align="right">تاريخ الطلب</StyledTableCell>
+                                                                <StyledTableCell align="right">التاريخ</StyledTableCell>
                                                             </TableRow>
                                                         </TableHead>
                                                         <TableBody>
@@ -275,57 +266,6 @@ function Financial() {
                                     </Box>
                                 </>
                         }
-                        <Menu
-                            anchorEl={anchorEl}
-                            id="account-menu"
-                            open={open}
-                            onClose={handleClose}
-                            onClick={handleClose}
-                            slotProps={{
-                                paper: {
-                                    elevation: 0,
-                                    sx: {
-                                        overflow: 'visible',
-                                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                        mt: 1.5,
-                                        '& .MuiAvatar-root': {
-                                            width: 32,
-                                            height: 32,
-                                            ml: -0.5,
-                                            mr: 1,
-                                        },
-                                        '&::before': {
-                                            content: '""',
-                                            display: 'block',
-                                            position: 'absolute',
-                                            top: 0,
-                                            right: 14,
-                                            width: 10,
-                                            height: 10,
-                                            bgcolor: 'background.paper',
-                                            transform: 'translateY(-50%) rotate(45deg)',
-                                            zIndex: 0,
-                                        },
-                                    },
-                                },
-                            }}
-                            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                            dir="rtl"
-                        >
-                            <MenuItem onClick={() => { navigate('/profile'); handleClose(); }}>
-                                <ListItemIcon>
-                                    {/* <PermIdentityIcon fontSize="small" /> */}
-                                </ListItemIcon>
-                                الملف الشخصي
-                            </MenuItem>
-                            <MenuItem className="!text-red-500" onClick={handleClose}>
-                                <ListItemIcon className="!text-red-500">
-                                    {/* <Logout fontSize="small" /> */}
-                                </ListItemIcon>
-                                تسجيل الخروج
-                            </MenuItem>
-                        </Menu>
                         <Box id="delete" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <DeleteDialog onClickCancel={() => setPopup('delete', 'none')} title="تأكيد رفض طلب السحب" subtitle="أنت على وشك رفض طلب سحب الأرباح لهذا المدرس، يرجى التأكد من صحة القرار قبل المتابعة." hasInput={true} placeholder="اكتب سبب الرفض هنا..." warning="سيتم إشعار المدرس بسبب الرفض فور التأكيد" label="سبب الرفض" />
                         </Box>

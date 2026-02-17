@@ -8,19 +8,17 @@ import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import WithdrawalRequestsFilter from "../../popup/WithdrawalRequestsFilter";
 import { useWaits } from "../../hooks/UseWait";
-import CircleIcon from '@mui/icons-material/Circle';
-import PersonType from '../../images/icons/person-type.png';
-import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import FinancialOperationsFilter from "../../popup/FinancialOperationsFilter";
 import Fetch from "../../services/Fetch";
+import { useFinancialOperationsFilter } from "../../filter/UseFinancialOperationsFilter";
 
 function FinancialOperations() {
     const { language, host } = useConstants();
     const { setPopup } = usePopups();
     const { wait } = useContext(AuthContext);
     const { filterWait, setFilterWait, getWait, setGetWait } = useWaits();
+    const { from, setFrom, to, setTo, courseId, setCourseId, courseValue, setCourseValue, pathId, setPathId, pathValue, setPathValue, teacherId, setTeacherId, teacherValue, setTeacherValue } = useFinancialOperationsFilter();
     const { StyledTableCell, StyledTableRow } = useTableStyles();
     const [page, setPage] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
@@ -38,7 +36,7 @@ function FinancialOperations() {
     }
 
     const getSales = async () => {
-        let result = await Fetch(host + '/reports/sales?is_detailed=1');
+        let result = await Fetch(host + `/reports/sales?is_detailed=1${from  && `&from=${from}`}${to && `&to=${to}`}${courseId && `&course_id=${courseId}`}${pathId && `&path_id=${pathId}`}${teacherId && `&teacher_id=${teacherId}`}`);
 
         if (result.status === 200) {
             setTotalPages(result.data.data.last_page);
@@ -48,6 +46,20 @@ function FinancialOperations() {
         }
 
         setGetWait(false);
+    }
+
+    const filteringSales = async () => {
+        let result = await Fetch(host + `/reports/sales?is_detailed=1${from  && `&from=${from}`}${to && `&to=${to}`}${courseId && `&course_id=${courseId}`}${pathId && `&path_id=${pathId}`}${teacherId && `&teacher_id=${teacherId}`}`);
+
+        if (result.status === 200) {
+            setTotalPages(result.data.data.last_page);
+            setSaleCounts(result.data.data.total);
+            setCurrentPage(page);
+            setSales(result.data.data.data);
+            setPopup('filter', 'none');
+        }
+
+        setFilterWait(false);
     }
 
     useEffect(() => {
@@ -141,7 +153,7 @@ function FinancialOperations() {
                                 </>
                         }
                         <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
-                            <FinancialOperationsFilter onClickClose={() => setPopup('filter', 'none')} filterWait={filterWait} setFilterWait={setFilterWait} />
+                            <FinancialOperationsFilter onClickClose={() => setPopup('filter', 'none')} onClickConfirm={filteringSales} filterWait={filterWait} setFilterWait={setFilterWait} from={from} to={to} courseValue={courseValue} pathValue={pathValue} setCourseId={setCourseId} setCourseValue={setCourseValue} setPathId={setPathId} setFrom={setFrom} setTo={setTo} setPathValue={setPathValue} setTeacherId={setTeacherId} teacherValue={teacherValue} setTeacherValue={setTeacherValue} />
                         </Box>
                     </Box>
             }

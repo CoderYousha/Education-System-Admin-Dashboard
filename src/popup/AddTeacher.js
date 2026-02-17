@@ -36,19 +36,19 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
 
     const loadAcademicDegrees = async (search, loadedOptions, { page }) => {
         const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-        const response = await Fetch(host + `/academic-degrees`);
+        const response = await Fetch(host + `/academic-degrees?page=${page}`);
         return {
             options: response.data.data.data.map((item) => ({
                 value: item.id, label: language === 'en' ? item.name_en : item.name_ar,
             })),
 
-            hasMore: response.data.data.page * response.data.data.perPage < response.data.data.total, additional: { page: page + 1, },
+            hasMore: response.data.data.current_page * response.data.data.per_page < response.data.data.total, additional: { page: page + 1, },
         };
     }
 
     const loadTeacherSpecializations = async (search, loadedOptions, { page }) => {
         const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-        const response = await Fetch(host + `/teacher-specializations`);
+        const response = await Fetch(host + `/teacher-specializations?page=${page}`);
 
         const optionsFromApi = response.data.data.data.map((item) => ({
             value: item.id, label: language === 'en' ? item.name_en : item.name_ar,
@@ -56,18 +56,18 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
         return {
             options: [...optionsFromApi],
 
-            hasMore: response.data.data.page * response.data.data.perPage < response.data.data.total, additional: { page: page + 1, },
+            hasMore: response.data.data.current_page * response.data.data.per_page < response.data.data.total, additional: { page: page + 1, },
         };
     }
 
     const loadMajors = async (search, loadedOptions, { page }) => {
         const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-        const response = await Fetch(host + `/majors`);
+        const response = await Fetch(host + `/majors?page=${page}`);
         const optionsFromApi = response.data.data.map((item) => ({ value: item.id, label: language === 'en' ? item.name_en : item.name_ar, }));
         return {
             options: optionsFromApi,
 
-            hasMore: response.data.data.page * response.data.data.perPage < response.data.data.total, additional: { page: page + 1, },
+            hasMore: response.data.pagination.current_page * response.data.pagination.per_page < response.data.pagination.total, additional: { page: page + 1, },
         };
     }
 

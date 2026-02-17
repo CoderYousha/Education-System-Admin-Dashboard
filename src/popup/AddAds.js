@@ -34,14 +34,14 @@ function AddAds({ onClickClose, setSnackbar, getBanners }) {
 
     const loadCategories = async ({ page, category }) => {
         const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-        const response = await Fetch(host + `/${category === 'courses' ? 'courses?status[]=accepted' : 'paths'}`);
+        const response = await Fetch(host + `/${category === 'courses' ? `courses?page=${page}&status[]=accepted` : `paths?page=${page}`}`);
         const optionsFromApi = response.data.data.map((item) => ({
             value: item.id, label: language === 'en' ? item.name_en : item.name_ar,
         }));
         return {
             options: optionsFromApi,
 
-            hasMore: response.data.data.page * response.data.data.perPage < response.data.data.total, additional: { page: page + 1, category },
+            hasMore: response.data.pagination.current_page * response.data.pagination.per_page < response.data.pagination.total, additional: { page: page + 1, category },
         };
     }
 

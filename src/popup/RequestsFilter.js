@@ -36,13 +36,13 @@ function RequestFilter({ onClickClose, onClickConfirm, onClickStatus, status, se
     }, []);
 
     const loadOptions = async (search, loadedOptions, { page }) => {
-        const response = await Fetch(host + `/admin/users?account_role=teacher`);
+        const response = await Fetch(host + `/admin/users?page=${page}&account_role=teacher`);
         return {
             options: response.data.data.data.map((item) => ({
                 value: item.id, label: item.first_name + item.last_name,
             })),
 
-            hasMore: response.data.data.page * response.data.data.perPage < response.data.data.total, additional: { page: page + 1, },
+            hasMore: response.data.data.current_page * response.data.data.per_page < response.data.data.total, additional: { page: page + 1, },
         };
     }
 
@@ -110,6 +110,13 @@ function RequestFilter({ onClickClose, onClickConfirm, onClickStatus, status, se
                     additional={{
                         page: 1
                     }}
+                    styles={{
+                        option: (provided, state) => ({
+                            ...provided,
+                            color: 'black'
+                        }),
+                    }}
+                    isSearchable={false}
                     className="mt-2 !bg-gray-200"
                     placeholder={<Box className="flex items-center"><PersonOutlineOutlinedIcon /><Typography variant="body2" className="">اسم الأستاذ</Typography> </Box>}
                 />

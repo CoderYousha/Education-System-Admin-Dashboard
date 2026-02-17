@@ -12,12 +12,14 @@ import WithdrawalRequestsFilter from "../../popup/WithdrawalRequestsFilter";
 import { useWaits } from "../../hooks/UseWait";
 import DeleteDialog from "../../popup/DeleteDialog";
 import Fetch from "../../services/Fetch";
+import { useWithdrawFilter } from "../../filter/UseWithdrawFilter";
 
 function ProfitWithdrawalRequests() {
     const { language, host } = useConstants();
     const { setPopup } = usePopups();
     const { wait } = useContext(AuthContext);
     const { filterWait, setFilterWait, getWait, setGetWait } = useWaits();
+    const { from, setFrom, to, setTo, teacherId, setTeacherId, teacherValue, setTeacherValue } = useWithdrawFilter();
     const { StyledTableCell, StyledTableRow } = useTableStyles();
     const [page, setPage] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
@@ -29,7 +31,7 @@ function ProfitWithdrawalRequests() {
     const theme = useTheme();
 
     const getWithdraws = async () => {
-        let result = await Fetch(host + '/admin/profit/withdraws');
+        let result = await Fetch(host + `/admin/profit/withdraws?page=${page+1}${from  && `&from=${from}`}${to && `&to=${to}`}${teacherId && `&user_id=${teacherId}`}`);
 
         if (result.status === 200) {
             setTotalPages(result.data.pagination.last_page);
@@ -39,6 +41,20 @@ function ProfitWithdrawalRequests() {
         }
 
         setGetWait(false);
+    }
+
+    const filteringWithdraw = async () => {
+        let result = await Fetch(host + `/admin/profit/withdraws?page=${page+1}${from  && `&from=${from}`}${to && `&to=${to}`}${teacherId && `&user_id=${teacherId}`}`);
+
+        if (result.status === 200) {
+            setTotalPages(result.data.pagination.last_page);
+            setWithdrawCounts(result.data.pagination.total);
+            setCurrentPage(page);
+            setWithdraws(result.data.data);
+            setPopup('filter', 'none');
+        }
+        
+        setFilterWait(false);
     }
 
     useEffect(() => {
@@ -79,7 +95,7 @@ function ProfitWithdrawalRequests() {
                                                         <Box className="flex w-2/4 items-center max-sm:w-full max-sm:mt-2 max-sm:justify-between">
                                                             <select style={{ backgroundColor: theme.palette.background.select }} onChange={(e) => setOrder(e.target.value)} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
                                                                 <option value=''>التاريخ</option>
-                                                                <option value={language === 'en' ? 'order_by=name_en&direction=asc' : 'order_by=name_ar&direction=asc'}>المبلغ المطلوب</option>
+                                                                <option value={language === 'en' ? 'order_by=name_en&direction=asc' : 'order_by=name_ar&direction=asc'}>المبلغ</option>
                                                             </select>
                                                             <Typography variant="body1" className="!text-gray-500">إجمالي السجل: {withdrawCounts}</Typography>
                                                         </Box>
@@ -90,7 +106,7 @@ function ProfitWithdrawalRequests() {
                                                                 <StyledTableCell align="right">رقم السجل</StyledTableCell>
                                                                 <StyledTableCell align="right">اسم المدرس</StyledTableCell>
                                                                 <StyledTableCell align="right">الرصيد المتاح</StyledTableCell>
-                                                                <StyledTableCell align="right">تاريخ الطلب</StyledTableCell>
+                                                                <StyledTableCell align="right">التاريخ</StyledTableCell>
                                                             </TableRow>
                                                         </TableHead>
                                                         <TableBody>
@@ -122,7 +138,7 @@ function ProfitWithdrawalRequests() {
                                 </>
                         }
                         <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
-                            <WithdrawalRequestsFilter onClickClose={() => setPopup('filter', 'none')} filterWait={filterWait} setFilterWait={setFilterWait} />
+                            <WithdrawalRequestsFilter onClickClose={() => setPopup('filter', 'none')} onClickConfirm={filteringWithdraw} filterWait={filterWait} setFilterWait={setFilterWait} from={from} to={to} teachrrId={teacherId} teacherValue={teacherValue} setFrom={setFrom} setTo={setTo} setTeacherId={setTeacherId} setTeacherValue={setTeacherValue} />
                         </Box>
                         <Box id="delete" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <DeleteDialog onClickCancel={() => setPopup('delete', 'none')} title="تأكيد رفض طلب السحب" subtitle="أنت على وشك رفض طلب سحب الأرباح لهذا المدرس، يرجى التأكد من صحة القرار قبل المتابعة." hasInput={true} placeholder="اكتب سبب الرفض هنا..." warning="سيتم إشعار المدرس بسبب الرفض فور التأكيد" label="سبب الرفض" />

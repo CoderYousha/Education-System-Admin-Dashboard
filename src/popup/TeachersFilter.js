@@ -19,14 +19,14 @@ function TeachersFilter({ onClickClose, onClickConfirm, majorsValue, academicDeg
 
     const loadMajors = async (search, loadedOptions, { page }) => {
         const host = `${process.env.REACT_APP_LOCAL_HOST}`;
-        const response = await Fetch(host + `/majors`);
+        const response = await Fetch(host + `/majors?page=${page}`);
         const optionsFromApi = response.data.data.map((item) => ({
             value: item.id, label: language === 'en' ? item.name_en : item.name_ar,
         }));
         return {
             options: [{ value: '', label: 'الكل' }, ...optionsFromApi],
 
-            hasMore: response.data.data.page * response.data.data.perPage < response.data.data.total, additional: { page: page + 1, },
+            hasMore: response.data.pagination.current_page * response.data.pagination.per_page < response.data.pagination.total, additional: { page: page + 1, },
         };
     }
 
