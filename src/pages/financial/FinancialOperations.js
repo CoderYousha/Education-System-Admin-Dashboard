@@ -36,26 +36,26 @@ function FinancialOperations() {
     }
 
     const getSales = async () => {
-        let result = await Fetch(host + `/reports/sales?is_detailed=1${from  && `&from=${from}`}${to && `&to=${to}`}${courseId && `&course_id=${courseId}`}${pathId && `&path_id=${pathId}`}${teacherId && `&teacher_id=${teacherId}`}`);
+        let result = await Fetch(host + `/reports/sales?is_detailed=1${order}${search && `&search=${search}`}${from  && `&from=${from}`}${to && `&to=${to}`}${courseId && `&course_id=${courseId}`}${pathId && `&path_id=${pathId}`}${teacherId && `&teacher_id=${teacherId}`}`);
 
         if (result.status === 200) {
-            setTotalPages(result.data.data.last_page);
-            setSaleCounts(result.data.data.total);
+            setTotalPages(result.data.data[0].last_page);
+            setSaleCounts(result.data.data[0].total);
             setCurrentPage(page);
-            setSales(result.data.data.data);
+            setSales(result.data.data[0].data);
         }
 
         setGetWait(false);
     }
 
     const filteringSales = async () => {
-        let result = await Fetch(host + `/reports/sales?is_detailed=1${from  && `&from=${from}`}${to && `&to=${to}`}${courseId && `&course_id=${courseId}`}${pathId && `&path_id=${pathId}`}${teacherId && `&teacher_id=${teacherId}`}`);
+        let result = await Fetch(host + `/reports/sales?is_detailed=1${order}${order}${search && `&search=${search}`}${from  && `&from=${from}`}${to && `&to=${to}`}${courseId && `&course_id=${courseId}`}${pathId && `&path_id=${pathId}`}${teacherId && `&teacher_id=${teacherId}`}`);
 
         if (result.status === 200) {
-            setTotalPages(result.data.data.last_page);
-            setSaleCounts(result.data.data.total);
+            setTotalPages(result.data.data[0].last_page);
+            setSaleCounts(result.data.data[0].total);
             setCurrentPage(page);
-            setSales(result.data.data.data);
+            setSales(result.data.data[0].data);
             setPopup('filter', 'none');
         }
 
@@ -64,7 +64,7 @@ function FinancialOperations() {
 
     useEffect(() => {
         getSales();
-    }, []);
+    }, [order, search]);
 
     return (
         <>
@@ -100,9 +100,9 @@ function FinancialOperations() {
                                                         <Box className="flex w-2/4 items-center max-sm:w-full max-sm:mt-2 max-sm:justify-between">
                                                             <select style={{ backgroundColor: theme.palette.background.select }} onChange={(e) => setOrder(e.target.value)} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
                                                                 <option value=''>التاريخ</option>
-                                                                <option value={language === 'en' ? 'order_by=name_en&direction=asc' : 'order_by=name_ar&direction=asc'}>رقم العملية</option>
+                                                                <option value='&order_by=id&direction=asc'>رقم العملية</option>
                                                             </select>
-                                                            <Typography variant="body1" className="!text-gray-500">إجمالي الطلبات: {saleCounts}</Typography>
+                                                            <Typography variant="body1" className="!text-gray-500">إجمالي السجل: {saleCounts}</Typography>
                                                         </Box>
                                                     </Box>
                                                     <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">

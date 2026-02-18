@@ -60,7 +60,6 @@ function Requests() {
                     b.status === 'pending' ? 1 : 0
             );
             setCoursesRequests(sorted);
-            // setCoursesRequests(result.data.data);
             setCurrentPage(page);
         }
 
@@ -168,7 +167,6 @@ function Requests() {
                                                                 <StyledTableCell align="right">{request.created_at.split(" ")[0]}</StyledTableCell>
                                                                 <StyledTableCell align="right"><Box className="text-center py-1 rounded-lg font-bold" sx={{ backgroundColor: request.status === 'accepted' ? "#CCFFCC" : request.status === 'rejected' ? "#FF9999" : "#FCF0CF", color: request.status === 'accepted' ? "green" : request.status === 'rejected' ? "red" : "orange" }}>{request.status === 'accepted' ? 'تمت الموافقة' : request.status === 'rejected' ? 'تم الرفض' : 'بانتظار الموافقة'}</Box></StyledTableCell>
                                                                 <StyledTableCell align="right" className="!flex justify-between">
-                                                                    {/* <Button onClick={() => getCourseDetails(request.id)} disabled={request.status === 'rejected' || request.status === 'accepted'} className="h-8 !bg-gray-200 !text-gray-700">عرض التفاصيل</Button> */}
                                                                     <Button disabled={request.status === 'rejected' || request.status === 'accepted'} onClick={() => changeCourseStatus(request.id, 'rejected')} variant="contained" sx={{ backgroundColor: request.status === 'rejected' || request.status === 'accepted' ? '#F2F2F2 !important' : '', color: request.status === 'rejected' || request.status === 'accepted' ? '#666666 !important' : '' }} className="mr-2 h-8 !bg-red-300 !text-red-600 !font-bold hover:!bg-red-600 hover:!text-white">
                                                                         {sendWait && courseId === request.id && operation === 'rejected' ?
                                                                             <CircularProgress size={20} className="" color="white" />

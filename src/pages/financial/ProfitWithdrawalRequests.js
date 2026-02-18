@@ -31,7 +31,7 @@ function ProfitWithdrawalRequests() {
     const theme = useTheme();
 
     const getWithdraws = async () => {
-        let result = await Fetch(host + `/admin/profit/withdraws?page=${page+1}${from  && `&from=${from}`}${to && `&to=${to}`}${teacherId && `&user_id=${teacherId}`}`);
+        let result = await Fetch(host + `/admin/profit/withdraws?page=${page+1}${order}${search && `&search=${search}`}${from  && `&from=${from}`}${to && `&to=${to}`}${teacherId && `&user_id=${teacherId}`}`);
 
         if (result.status === 200) {
             setTotalPages(result.data.pagination.last_page);
@@ -44,7 +44,7 @@ function ProfitWithdrawalRequests() {
     }
 
     const filteringWithdraw = async () => {
-        let result = await Fetch(host + `/admin/profit/withdraws?page=${page+1}${from  && `&from=${from}`}${to && `&to=${to}`}${teacherId && `&user_id=${teacherId}`}`);
+        let result = await Fetch(host + `/admin/profit/withdraws?page=${page+1}${order}${search && `&search=${search}`}${from  && `&from=${from}`}${to && `&to=${to}`}${teacherId && `&user_id=${teacherId}`}`);
 
         if (result.status === 200) {
             setTotalPages(result.data.pagination.last_page);
@@ -59,7 +59,7 @@ function ProfitWithdrawalRequests() {
 
     useEffect(() => {
         getWithdraws();
-    }, []);
+    }, [search, order]);
 
     return (
         <>
@@ -95,7 +95,7 @@ function ProfitWithdrawalRequests() {
                                                         <Box className="flex w-2/4 items-center max-sm:w-full max-sm:mt-2 max-sm:justify-between">
                                                             <select style={{ backgroundColor: theme.palette.background.select }} onChange={(e) => setOrder(e.target.value)} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
                                                                 <option value=''>التاريخ</option>
-                                                                <option value={language === 'en' ? 'order_by=name_en&direction=asc' : 'order_by=name_ar&direction=asc'}>المبلغ</option>
+                                                                <option value='&order_by=amount&direction=asc'>المبلغ</option>
                                                             </select>
                                                             <Typography variant="body1" className="!text-gray-500">إجمالي السجل: {withdrawCounts}</Typography>
                                                         </Box>

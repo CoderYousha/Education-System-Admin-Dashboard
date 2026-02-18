@@ -23,6 +23,7 @@ function App() {
       <div className="App" style={{ backgroundColor: theme.palette.background.default }}>
         <BrowserRouter>
           <Routes>
+            <Route path='/' element={<Navigate to='login' />} />
             {
               AuthRoutes().map((route, index) =>
                 <Route key={index} path={route.path} element={route.element} />

@@ -33,6 +33,7 @@ function Financial() {
     const [teacherProfits, setTeacherProfits] = useState('');
     const [sales, setSales] = useState([]);
     const [withdraws, setWithdraws] = useState([]);
+    const [cards, setCards] = useState('');
     const visibleSales = sales.slice(0, 4);
     const visibleWithdraws = withdraws.slice(0, 4);
     const theme = useTheme();
@@ -48,7 +49,8 @@ function Financial() {
         let result = await Fetch(host + '/reports/sales?is_detailed=1');
 
         if (result.status === 200) {
-            setSales(result.data.data.data);
+            setSales(result.data.data[0].data);
+            setCards(result.data.data[1]);
         }
     }
 
@@ -64,7 +66,7 @@ function Financial() {
     const getWithdraws = async () => {
         let result = await Fetch(host + '/admin/profit/withdraws');
 
-        if(result.status === 200){
+        if (result.status === 200) {
             setWithdraws(result.data.data);
         }
     }
@@ -119,12 +121,26 @@ function Financial() {
                                                 <img src={MoneyImage} />
                                             </Box>
                                             <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm">إجمالي المبيعات</Typography>
-                                            <Typography variant="h4" className="pr-2 pt-3">45200.00$</Typography>
+                                            <Typography variant="h4" className="pr-2 pt-3">{cards.total_sales.total}$</Typography>
                                             <Box className="absolute top-5 left-2">
-                                                <Box>
-                                                    <img src={ArrowIncrease} className="w-4 h-4 inline-block mr-2" />
-                                                    <Typography variant="body2" className="text-green-500 inline-block !mr-1">12%</Typography>
-                                                </Box>
+                                                {
+                                                    cards.total_sales.percent > 0 ?
+                                                        <Box>
+                                                            <img src={ArrowIncrease} className="w-4 h-4 inline-block mr-2" />
+                                                            <Typography variant="body2" className="text-green-500 inline-block !mr-1">+{cards.total_sales.percent}%</Typography>
+                                                        </Box>
+                                                        :
+                                                        cards.total_sales.percent < 0 ?
+                                                            <Box>
+                                                                <img src={ArrowDecrease} className="w-4 h-4 inline-block mr-2" />
+                                                                <Typography variant="body2" className="text-red-500 inline-block !mr-1">-{cards.total_sales.percent}%</Typography>
+                                                            </Box>
+                                                            :
+                                                            <Box>
+                                                                <img src={Arrow} className="w-4 h-4 inline-block mr-2" />
+                                                                <Typography variant="body2" className="text-gray-500 inline-block !mr-1">{cards.total_sales.percent}%</Typography>
+                                                            </Box>
+                                                }
                                             </Box>
                                         </Box>
                                         <Box sx={{ backgroundColor: theme.palette.background.paper }} className="rounded-xl bg-white w-3/6 mx-2 min-h-32 py-2 relative shadow-xl max-sm:w-5/6 max-sm:mx-auto max-sm:mt-2">
@@ -132,12 +148,26 @@ function Financial() {
                                                 <img src={BankImage} />
                                             </Box>
                                             <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm">إجمالي عمولة المنصة</Typography>
-                                            <Typography variant="h4" className="pr-2 pt-3">12350.50$</Typography>
+                                            <Typography variant="h4" className="pr-2 pt-3">{cards.total_admin_revenue.total}$</Typography>
                                             <Box className="absolute top-5 left-2">
-                                                <Box>
-                                                    <img src={ArrowIncrease} className="w-4 h-4 inline-block mr-2" />
-                                                    <Typography variant="body2" className="text-green-500 inline-block !mr-1">6.2%</Typography>
-                                                </Box>
+                                                {
+                                                    cards.total_admin_revenue.percent > 0 ?
+                                                        <Box>
+                                                            <img src={ArrowIncrease} className="w-4 h-4 inline-block mr-2" />
+                                                            <Typography variant="body2" className="text-green-500 inline-block !mr-1">+{cards.total_admin_revenue.percent}%</Typography>
+                                                        </Box>
+                                                        :
+                                                        cards.total_admin_revenue.percent < 0 ?
+                                                            <Box>
+                                                                <img src={ArrowDecrease} className="w-4 h-4 inline-block mr-2" />
+                                                                <Typography variant="body2" className="text-red-500 inline-block !mr-1">-{cards.total_admin_revenue.percent}%</Typography>
+                                                            </Box>
+                                                            :
+                                                            <Box>
+                                                                <img src={Arrow} className="w-4 h-4 inline-block mr-2" />
+                                                                <Typography variant="body2" className="text-gray-500 inline-block !mr-1">{cards.total_admin_revenue.percent}%</Typography>
+                                                            </Box>
+                                                }
                                             </Box>
                                         </Box>
                                         <Box sx={{ backgroundColor: theme.palette.background.paper }} className="rounded-xl bg-white w-3/6 mx-2 min-h-32 py-2 relative shadow-xl max-sm:w-5/6 max-sm:mx-auto max-sm:mt-2">
@@ -145,12 +175,26 @@ function Financial() {
                                                 <img src={TeachersImage} />
                                             </Box>
                                             <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm">إجمالي أرباح المدرسين</Typography>
-                                            <Typography variant="h4" className="pr-2 pt-3">28400.00</Typography>
+                                            <Typography variant="h4" className="pr-2 pt-3">{cards.total_teacher_revenue.total}$</Typography>
                                             <Box className="absolute top-5 left-2">
-                                                <Box>
-                                                    <img src={ArrowIncrease} className="w-4 h-4 inline-block mr-2" />
-                                                    <Typography variant="body2" className="text-green-500 inline-block">6%</Typography>
-                                                </Box>
+                                                {
+                                                    cards.total_teacher_revenue.percent > 0 ?
+                                                        <Box>
+                                                            <img src={ArrowIncrease} className="w-4 h-4 inline-block mr-2" />
+                                                            <Typography variant="body2" className="text-green-500 inline-block !mr-1">+{cards.total_teacher_revenue.percent}%</Typography>
+                                                        </Box>
+                                                        :
+                                                        cards.total_teacher_revenue.percent < 0 ?
+                                                            <Box>
+                                                                <img src={ArrowDecrease} className="w-4 h-4 inline-block mr-2" />
+                                                                <Typography variant="body2" className="text-red-500 inline-block !mr-1">-{cards.total_teacher_revenue.percent}%</Typography>
+                                                            </Box>
+                                                            :
+                                                            <Box>
+                                                                <img src={Arrow} className="w-4 h-4 inline-block mr-2" />
+                                                                <Typography variant="body2" className="text-gray-500 inline-block !mr-1">{cards.total_teacher_revenue.percent}%</Typography>
+                                                            </Box>
+                                                }
                                             </Box>
                                         </Box>
                                         <Box sx={{ backgroundColor: theme.palette.background.paper }} className="rounded-xl bg-white w-3/6 mx-2 min-h-32 py-2 relative shadow-xl max-sm:w-5/6 max-sm:mx-auto max-sm:mt-2">
@@ -158,12 +202,26 @@ function Financial() {
                                                 <img src={WalletImage} />
                                             </Box>
                                             <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm">رصيد محافظ الطلاب</Typography>
-                                            <Typography variant="h4" className="pr-2 pt-3">4450.25</Typography>
+                                            <Typography variant="h4" className="pr-2 pt-3">{cards.total_student_wallets.total}$</Typography>
                                             <Box className="absolute top-5 left-2">
-                                                <Box>
-                                                    <img src={ArrowDecrease} className="w-4 h-4 inline-block mr-2" />
-                                                    <Typography variant="body2" className="text-red-500 inline-block">4.5%</Typography>
-                                                </Box>
+                                                {
+                                                    cards.total_student_wallets.percent > 0 ?
+                                                        <Box>
+                                                            <img src={ArrowIncrease} className="w-4 h-4 inline-block mr-2" />
+                                                            <Typography variant="body2" className="text-green-500 inline-block !mr-1">+{cards.total_student_wallets.percent}%</Typography>
+                                                        </Box>
+                                                        :
+                                                        cards.total_student_wallets.percent < 0 ?
+                                                            <Box>
+                                                                <img src={ArrowDecrease} className="w-4 h-4 inline-block mr-2" />
+                                                                <Typography variant="body2" className="text-red-500 inline-block !mr-1">-{cards.total_student_wallets.percent}%</Typography>
+                                                            </Box>
+                                                            :
+                                                            <Box>
+                                                                <img src={Arrow} className="w-4 h-4 inline-block mr-2" />
+                                                                <Typography variant="body2" className="text-gray-500 inline-block !mr-1">{cards.total_student_wallets.percent}%</Typography>
+                                                            </Box>
+                                                }
                                             </Box>
                                         </Box>
                                     </Box>
@@ -226,7 +284,7 @@ function Financial() {
                                         <Box sx={{ backgroundColor: theme.palette.background.default }} className="bg-white mx-2 rounded-xl">
                                             <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2 py-4 rounded-t-xl" dir="rtl">
                                                 <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">سجل العمليات المالية</Typography>
-                                                <Typography variant="body1" className="cursor-pointer max-sm:!text-sm text-blue-600" onClick={() => navigate('financial-operations')}>عرض جميع الطلبات <ArrowBackIosNewIcon /></Typography>
+                                                <Typography variant="body1" className="cursor-pointer max-sm:!text-sm text-blue-600" onClick={() => navigate('financial-operations')}>عرض السجل كامل <ArrowBackIosNewIcon /></Typography>
                                             </Box>
                                             <TableContainer sx={{ borderRadius: '0' }} className="!rounded-b-xl" component={Paper} dir="rtl">
                                                 <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">

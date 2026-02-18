@@ -13,6 +13,7 @@ import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 import LogoImage from "../images/logo/logo.png";
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 
 function Sidebar () {
      const theme = useTheme();
@@ -23,6 +24,11 @@ function Sidebar () {
                'title': 'لوحة التحكم',
                'icon': <DashboardOutlinedIcon fontSize="medium" className="mr-2 max-sm:mx-auto" />,
                'link': '../dashboard'
+          },
+          {
+               'title': 'الإشعارات',
+               'icon': <NotificationsNoneOutlinedIcon fontSize="medium" className="mr-2 max-sm:mx-auto" />,
+               'link': '../notifications',
           },
           {
                'title': 'طلبات الموافقة',

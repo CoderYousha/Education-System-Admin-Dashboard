@@ -1,4 +1,5 @@
 import Dashboard from "../pages/dashboard/Dashboard";
+import Notifications from "../pages/dashboard/Notifications";
 import Requests from "../pages/dashboard/Requests";
 
 function DashboardRoutes () {
@@ -10,6 +11,10 @@ function DashboardRoutes () {
         {
             path: '/accept-requests',
             element: <Requests />
+        },
+        {
+            path: '/notifications',
+            element: <Notifications />
         }
     ];
 }

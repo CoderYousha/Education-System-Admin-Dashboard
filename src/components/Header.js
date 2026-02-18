@@ -1,4 +1,4 @@
-import { Avatar, Box, Divider, ListItemIcon, Menu, MenuItem, Typography, useTheme } from "@mui/material";
+import { Box, ListItemIcon, Menu, MenuItem, Typography, useTheme } from "@mui/material";
 import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import React, { useContext, useEffect, useState } from "react";
