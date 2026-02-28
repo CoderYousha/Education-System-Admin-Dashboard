@@ -15,6 +15,7 @@ import FinancialRoutes from './routes/FinancialRoutes';
 import ReportsRoutes from './routes/ReportsRoutes';
 import AccountRoutes from './routes/AccountRoutes';
 import AuthRoutes from './routes/AuthRoutes';
+import WalletRoutes from './routes/WalletRoutes';
 
 function App() {
   const theme = useTheme();
@@ -67,6 +68,11 @@ function App() {
             {
               AccountRoutes().map((route, index) =>
                 <Route key={index} path={route.path} element={<AuthProvider><Header isFullWidth={true} />{route.element}</AuthProvider>} />
+              )
+            }
+            {
+              WalletRoutes().map((route, index) =>
+                <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar /> {route.element}</AuthProvider>} />
               )
             }
           </Routes>

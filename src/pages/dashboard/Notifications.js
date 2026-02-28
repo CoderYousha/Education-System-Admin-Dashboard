@@ -10,16 +10,24 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import CourseNotificationImage from "../../images/icons/course-notification.png";
 import PathNotificationImage from "../../images/icons/path-notification.png";
 import UpdateNotificationImage from "../../images/icons/update-notification.png";
+import NotificationFilter from "../../popup/NotificationFilter";
+import { useWaits } from "../../hooks/UseWait";
 
 function Notifications() {
     const { host, language } = useConstants();
     const { wait } = useContext(AuthContext);
     const { setPopup } = usePopups();
+    const { filterWait, setFilterWait } = useWaits();
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const theme = useTheme();
+
+    const notificationsFiltering = async () => {
+
+    }
+
     return (
         <>
             {
@@ -135,6 +143,9 @@ function Notifications() {
                                     </Box>
                                 </Box>
                             </Box>
+                        </Box>
+                        <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
+                            <NotificationFilter filterWait={filterWait} setFilterWait={setFilterWait} onClickClose={() => setPopup('filter', 'none')} onClickConfirm={notificationsFiltering} />
                         </Box>
                     </Box>
             }

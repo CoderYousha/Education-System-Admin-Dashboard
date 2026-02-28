@@ -141,7 +141,7 @@ function Reports() {
                                 <PieChartWithCenterLabel />
                             </Box>
                             <Box sx={{ backgroundColor: theme.palette.background.paper }} className="w-7/12 my-5 rounded-xl float-right pb-9" dir="rtl">
-                                <Typography variant="h6" className="!pt-2 !mr-4">توزيع العمليات حسب النوع</Typography>
+                                <Typography variant="h6" className="!pt-2 !mr-4">نمو المبيعات</Typography>
                                 <StackedBarChart />
                             </Box>
                         </Box>

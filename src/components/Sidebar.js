@@ -6,14 +6,13 @@ import CastForEducationOutlinedIcon from '@mui/icons-material/CastForEducationOu
 import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
 import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
 import AssessmentOutlinedIcon from '@mui/icons-material/AssessmentOutlined';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 import LogoImage from "../images/logo/logo.png";
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
+import WalletOutlinedIcon from '@mui/icons-material/WalletOutlined';
 
 function Sidebar () {
      const theme = useTheme();
@@ -59,6 +58,11 @@ function Sidebar () {
                'title': 'المالية',
                'icon': <AccountBalanceWalletOutlinedIcon fontSize="medium" className="mr-2 max-sm:mx-auto" />,
                'link': '../financial',
+          },
+          {
+               'title': 'المحفظة',
+               'icon': <WalletOutlinedIcon fontSize="medium" className="mr-2 max-sm:mx-auto" />,
+               'link': '../wallet',
           },
           {
                'title': 'التقارير',
