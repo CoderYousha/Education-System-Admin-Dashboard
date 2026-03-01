@@ -3,6 +3,7 @@ import { PieChart } from '@mui/x-charts/PieChart';
 import { useDrawingArea } from '@mui/x-charts/hooks';
 import { styled } from '@mui/material/styles';
 import { Box, Typography } from "@mui/material";
+import { FormattedMessage } from 'react-intl';
 
 const data = [
   { value: 40, label: 'الهندسة المعلوماتية 40%' },
@@ -45,7 +46,7 @@ export default function PieChartWithCenterLabel({counts, values, labels}) {
     <Box className="flex justify-center items-center p-5">
     <PieChart className='mx-auto' sx={{flexDirection: 'column-reverse !important', alignItems: 'start'}} series={[{ data: useData, innerRadius: 80, }]} {...size}>
       <PieCenterLabel>
-          {totalCount} دورات
+          {totalCount} <FormattedMessage id='courses' />
       </PieCenterLabel>
     </PieChart>
      </Box>

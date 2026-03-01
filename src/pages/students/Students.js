@@ -18,6 +18,7 @@ import { useTableStyles } from "../../hooks/UseTableStyles";
 import { usePopups } from "../../hooks/UsePopups";
 import { useStudentsFilter } from "../../filter/UseStudentsFilter";
 import DeleteDialog from "../../popup/DeleteDialog";
+import { FormattedMessage, useIntl } from "react-intl";
 
 function Students() {
     const { host, language } = useConstants();
@@ -38,6 +39,7 @@ function Students() {
     const [student, setStudent] = useState('');
     const [order, setOrder] = useState('');
     const theme = useTheme();
+    const intl = useIntl();
 
     const getStudents = async () => {
         let result = await Fetch(host + `/admin/users?account_role=student&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}${fromCount && `&enrolled_courses[from]=${fromCount}`}${toCount && `&enrolled_courses[to]=${toCount}`}${fromDate && `&from=${fromDate}`}${toDate && `&to=${toDate}`}${majorId && `&major_id=${majorId}`}`, 'GET', null);
@@ -107,7 +109,7 @@ function Students() {
                                     :
                                     <Box className="rounded-xl px-2">
                                         <Box sx={{ backgroundColor: theme.palette.background.default }} className="flex justify-between items-center px-2">
-                                            <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">الطلاب</Typography>
+                                            <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg"><FormattedMessage id='students' /></Typography>
                                         </Box>
                                         <Box>
                                             <TableContainer component={Paper} dir="rtl">
@@ -115,28 +117,28 @@ function Students() {
                                                     <Box className="w-full flex items-center">
                                                         <FilterAltOutlinedIcon className="cursor-pointer" onClick={() => setPopup('filter', 'flex')} fontSize="large" />
                                                         <Box className="w-2/4 relative mr-3 max-sm:w-full">
-                                                            <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder="البحث بالاسم الثلاثي أو البريد الإلكتروني" />
+                                                            <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder={intl.formatMessage({id: "search_students"})} />
                                                             <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" />
                                                         </Box>
                                                     </Box>
                                                     <Box className="flex w-2/4 items-center max-sm:w-full max-sm:mt-2 max-sm:justify-between">
                                                         <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.select }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
-                                                            <option value="">التاريخ</option>
-                                                            <option value="first_name">اسم الطالب</option>
-                                                            <option value="email">البريد الإلكتروني</option>
+                                                            <option value=""><FormattedMessage id='date' /></option>
+                                                            <option value="first_name"><FormattedMessage id='student_name' /></option>
+                                                            <option value="email"><FormattedMessage id='email' /></option>
                                                         </select>
-                                                        <Typography variant="body1" className="!text-gray-500">إجمالي الطلاب: {studentsCount}</Typography>
+                                                        <Typography variant="body1" className="!text-gray-500"><FormattedMessage id='total_students' />: {studentsCount}</Typography>
                                                     </Box>
                                                 </Box>
                                                 <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                     <TableHead className="bg-gray-200">
                                                         <TableRow sx={{ backgroundColor: theme.palette.background.paper }}>
-                                                            <StyledTableCell align="right">الاسم الثلاثي</StyledTableCell>
-                                                            <StyledTableCell align="right">البريد الإلكتروني</StyledTableCell>
-                                                            <StyledTableCell align="right">التخصص التعليمي</StyledTableCell>
-                                                            <StyledTableCell align="right" className="!text-center">عدد الدورات المسجلة</StyledTableCell>
-                                                            <StyledTableCell align="right">تاريخ التسجيل</StyledTableCell>
-                                                            <StyledTableCell align="right" className="!text-center">الإجراء</StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='full_name' /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='email' /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='education_specialization' /></StyledTableCell>
+                                                            <StyledTableCell align="right" className="!text-center"><FormattedMessage id='registeration_courses_count' /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='registeration_date' /></StyledTableCell>
+                                                            <StyledTableCell align="right" className="!text-center"><FormattedMessage id='procedures' /></StyledTableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
@@ -150,7 +152,7 @@ function Students() {
                                                                 <StyledTableCell align="right" className="!text-center">{student.enrolled_courses_count}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="text-center">{student?.verified_at?.split("T")[0]}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="!text-center">
-                                                                    <Button variant="contained" className="mr-2 h-8 !bg-red-300 !text-red-600 !font-bold hover:!bg-red-600 hover:!text-white" onClick={(e) => { e.stopPropagation(); setStudentId(student.id); setPopup('delete', 'flex'); }}>حذف</Button>
+                                                                    <Button variant="contained" className="mr-2 h-8 !bg-red-300 !text-red-600 !font-bold hover:!bg-red-600 hover:!text-white" onClick={(e) => { e.stopPropagation(); setStudentId(student.id); setPopup('delete', 'flex'); }}><FormattedMessage id='delete' /></Button>
                                                                 </StyledTableCell>
                                                             </StyledTableRow>
                                                         ))}
@@ -177,7 +179,7 @@ function Students() {
                             <StudentDetails student={student} onClickClose={() => setPopup('details', 'none')} />
                         </Box>
                         <Box id="delete" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
-                            <DeleteDialog onClickConfirm={deleteStudent} onClickCancel={() => setPopup('delete', 'none')} title="تأكيد حذف الطالب" subtitle="سيتم حذف هذا الطالب نهائيا ولن يظهر مرة أخرى، لا يمكن التراجع عن هذا الإجراء" />
+                            <DeleteDialog onClickConfirm={deleteStudent} onClickCancel={() => setPopup('delete', 'none')} title={<FormattedMessage id='delete_title' />} subtitle={<FormattedMessage id='delete_description' />} />
                         </Box>
                         <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
                         <AlertDialog wait={sendWait} openDialog={open} title={title} description={description} onCancel={() => setOpen(false)} onConfirm={() => deleteStudent()} />

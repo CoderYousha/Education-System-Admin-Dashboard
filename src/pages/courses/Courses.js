@@ -15,6 +15,7 @@ import { useCoursesFilter } from "../../filter/UseCoursesFilter";
 import { usePopups } from "../../hooks/UsePopups";
 import { useTableStyles } from "../../hooks/UseTableStyles";
 import { useConstants } from "../../hooks/UseConstants";
+import { FormattedMessage, useIntl } from "react-intl";
 
 function Courses() {
     const {host, language} = useConstants();
@@ -33,6 +34,7 @@ function Courses() {
     const [course, setCourse] = useState('');
     const [order, setOrder] = useState('');
     const theme = useTheme();
+    const intl = useIntl();
 
     const getCourses = async () => {
         let result = await Fetch(host + `/courses?status[]=accepted&page=${page + 1}&search=${search}&${order}${category && `&category_id=${category}`}${path && `&path_id=${path}`}${fromCount && `&files_number[from]=${fromCount}`}${category && `&files_number[to]=${toCount}`}${fromDate && `&from=${fromDate}`}${toDate && `&to=${toDate}`}`, 'GET', null);
@@ -89,7 +91,7 @@ function Courses() {
                                     :
                                     <Box sx={{ backgroundColor: theme.palette.background.paper }} className="bg-white rounded-xl px-2">
                                         <Box sx={{ backgroundColor: theme.palette.background.default }} className="flex justify-between items-center px-2">
-                                            <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">الدورات</Typography>
+                                            <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg"><FormattedMessage id='courses' /></Typography>
                                         </Box>
                                         <Box>
                                             <TableContainer component={Paper} dir="rtl">
@@ -97,28 +99,28 @@ function Courses() {
                                                     <Box className="w-full flex items-center">
                                                         <FilterAltOutlinedIcon onClick={() => setPopup('filter', 'flex')} className="cursor-pointer" fontSize="large" />
                                                         <Box className="w-2/4 relative mr-3 max-sm:w-full">
-                                                            <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder="البحث باسم الدورة أو اسم المدرس" />
+                                                            <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder={intl.formatMessage({id: "search_course_teacher_name"})} />
                                                             <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" />
                                                         </Box>
                                                     </Box>
                                                     <Box className="flex w-2/4 items-center max-sm:mt-2 max-sm:w-full max-sm:justify-between">
                                                         <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.select }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
-                                                            <option value=''>التاريخ</option>
-                                                            <option value={language === 'en' ? 'order_by=name_en&direction=asc' : 'order_by=name_ar&direction=asc'}>اسم الدورة</option>
-                                                            <option value='order_by=teacher.name&direction=asc'>اسم الأستاذ</option>
+                                                            <option value=''><FormattedMessage id='date' /></option>
+                                                            <option value={language === 'en' ? 'order_by=name_en&direction=asc' : 'order_by=name_ar&direction=asc'}><FormattedMessage id='course_name' /></option>
+                                                            <option value='order_by=teacher.name&direction=asc'><FormattedMessage id='teacher_name' /></option>
                                                         </select>
-                                                        <Typography variant="body1" className="!text-gray-500">إجمالي الدورات: {coursesCounts}</Typography>
+                                                        <Typography variant="body1" className="!text-gray-500"><FormattedMessage id='total_courses' />: {coursesCounts}</Typography>
                                                     </Box>
                                                 </Box>
                                                 <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                     <TableHead className="bg-gray-200">
                                                         <TableRow sx={{ backgroundColor: theme.palette.background.paper }}>
-                                                            <StyledTableCell align="right">اسم الدورة</StyledTableCell>
-                                                            <StyledTableCell align="right">اسم المدرس</StyledTableCell>
-                                                            <StyledTableCell align="right">الفئة</StyledTableCell>
-                                                            <StyledTableCell align="right" className="">المسار التعليمي</StyledTableCell>
-                                                            <StyledTableCell align="right">عدد ملفات الدورة</StyledTableCell>
-                                                            <StyledTableCell align="right" className="!text-center">تاريخ النشر</StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='course_name' /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='teacher_name' /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='category' /></StyledTableCell>
+                                                            <StyledTableCell align="right" className=""><FormattedMessage id='education_path' /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='course_files_count' /></StyledTableCell>
+                                                            <StyledTableCell align="right" className="!text-center"><FormattedMessage id='publication_date' /></StyledTableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>

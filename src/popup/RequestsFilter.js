@@ -7,6 +7,7 @@ import { AsyncPaginate } from "react-select-async-paginate";
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import { useEffect } from "react";
 import Fetch from "../services/Fetch";
+import { FormattedMessage } from "react-intl";
 
 function RequestFilter({ onClickClose, onClickConfirm, onClickStatus, status, setStatus, from, setFrom, to, setTo, teacherId, value, setValue, setTeacherId, courseName, setCourseName, filterWait, setFilterWait }) {
     const host = `${process.env.REACT_APP_LOCAL_HOST}`;
@@ -48,15 +49,15 @@ function RequestFilter({ onClickClose, onClickConfirm, onClickStatus, status, se
 
     return (
         <Box sx={{ backgroundColor: theme.palette.background.paper }} className="shadow-lg w-3/5 h-screen rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative" dir="rtl">
-            <Typography variant="h5" className="!font-semibold max-sm:!text-xl">تصفية الطلبات</Typography>
+            <Typography variant="h5" className="!font-semibold max-sm:!text-xl"><FormattedMessage id='filtering_requests' /></Typography>
             <CloseIcon onClick={onClickClose} className="text-gray-700 cursor-pointer absolute top-5 left-5" fontSize="large"></CloseIcon>
             <Divider className="!my-5" />
-            <Typography variant="body1" className="!font-semibold text-gray-400">حالة الطلب</Typography>
+            <Typography variant="body1" className="!font-semibold text-gray-400"><FormattedMessage id='status' /></Typography>
             <Box className="">
                 <Box className="flex justify-between items-center border-2 rounded-lg py-1 px-2 mt-4 cursor-pointer" onClick={() => onClickStatus("pending")}>
                     <Box className="flex items-center">
                         <CircleIcon className="text-orange-400" fontSize="small" />
-                        <Typography variant="body1" className="!font-semibold pr-2">بانتظار الموافقة</Typography>
+                        <Typography variant="body1" className="!font-semibold pr-2"><FormattedMessage id='wait_approval' /></Typography>
                     </Box>
                     {
                         status.includes("pending") &&
@@ -68,7 +69,7 @@ function RequestFilter({ onClickClose, onClickConfirm, onClickStatus, status, se
                 <Box className="flex justify-between items-center border-2 rounded-lg py-1 px-2 mt-4 cursor-pointer" onClick={() => onClickStatus("accepted")}>
                     <Box className="flex items-center">
                         <CircleIcon className="text-green-400" fontSize="small" />
-                        <Typography variant="body1" className="!font-semibold pr-2">مقبول</Typography>
+                        <Typography variant="body1" className="!font-semibold pr-2"><FormattedMessage id='approved' /></Typography>
                     </Box>
                     {
                         status.includes("accepted") &&
@@ -80,7 +81,7 @@ function RequestFilter({ onClickClose, onClickConfirm, onClickStatus, status, se
                 <Box className="flex justify-between items-center border-2 rounded-lg py-1 px-2 mt-4 cursor-pointer" onClick={() => onClickStatus("rejected")}>
                     <Box className="flex items-center">
                         <CircleIcon className="text-red-600" fontSize="small" />
-                        <Typography variant="body1" className="!font-semibold pr-2">مرفوض</Typography>
+                        <Typography variant="body1" className="!font-semibold pr-2"><FormattedMessage id='rejected' /></Typography>
                     </Box>
                     {
                         status.includes("rejected") &&
@@ -90,18 +91,18 @@ function RequestFilter({ onClickClose, onClickConfirm, onClickStatus, status, se
                     }
                 </Box>
             </Box>
-            <Typography variant="body1" className="!font-semibold text-gray-400 !mt-5">تاريخ الطلب</Typography>
+            <Typography variant="body1" className="!font-semibold text-gray-400 !mt-5"><FormattedMessage id='request_date' /></Typography>
             <Box className="flex justify-between mt-5 max-sm:flex-col">
                 <Box className="w-2/5 max-sm:w-full">
-                    <Typography variant="body2" className="!font-semibold text-gray-400">من</Typography>
+                    <Typography variant="body2" className="!font-semibold text-gray-400"><FormattedMessage id='from' /></Typography>
                     <input onChange={(e) => setFrom(e.target.value)} type="date" className="text-black mt-2 w-full rounded-lg h-10 bg-gray-200 px-2" value={from} />
                 </Box>
                 <Box className="w-2/5 max-sm:w-full">
-                    <Typography variant="body2" className="!font-semibold text-gray-400">إلى</Typography>
+                    <Typography variant="body2" className="!font-semibold text-gray-400"><FormattedMessage id='to' /></Typography>
                     <input onChange={(e) => setTo(e.target.value)} type="date" className="text-black mt-2 w-full rounded-lg h-10 bg-gray-200 px-2" value={to} />
                 </Box>
             </Box>
-            <Typography variant="body1" className="!font-semibold text-gray-400 !mt-5">اسم المدرس</Typography>
+            <Typography variant="body1" className="!font-semibold text-gray-400 !mt-5"><FormattedMessage id='teacher_name' /></Typography>
             <Box className="">
                 <AsyncPaginate
                     value={value}
@@ -118,22 +119,22 @@ function RequestFilter({ onClickClose, onClickConfirm, onClickStatus, status, se
                     }}
                     isSearchable={false}
                     className="mt-2 !bg-gray-200"
-                    placeholder={<Box className="flex items-center"><PersonOutlineOutlinedIcon /><Typography variant="body2" className="">اسم الأستاذ</Typography> </Box>}
+                    placeholder={<Box className="flex items-center"><PersonOutlineOutlinedIcon /><Typography variant="body2" className=""><FormattedMessage id='teacher_name' /></Typography> </Box>}
                 />
             </Box>
-            <Typography variant="body1" className="!font-semibold text-gray-400 !mt-5">اسم الدورة</Typography>
+            {/* <Typography variant="body1" className="!font-semibold text-gray-400 !mt-5"><FormattedMessage id='course_name' /></Typography>
             <Box className="">
                 <input value={courseName} onChange={(e) => setCourseName(e.target.value)} className="text-black mt-2 w-full h-10 rounded-lg border bg-gray-200 indent-3 outline-none" placeholder="أدخل اسم الدورة" />
-            </Box>
+            </Box> */}
             <Box className="w-full flex justify-between mt-10 max-sm:flex-col">
-                <Button onClick={resetFilter} variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold hover:!bg-gray-200 duration-300 max-sm:w-full">إعادة التعيين</Button>
+                <Button onClick={resetFilter} variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold hover:!bg-gray-200 duration-300 max-sm:w-full"><FormattedMessage id='reset' /></Button>
                 <Button variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5 !text-white hover:bg-blue-400 duration-300" onClick={() => { setFilterWait(true); onClickConfirm(); }}>
                     {
                         filterWait ?
                             <CircularProgress size={20} className="" color="white" />
                             :
                             <Box>
-                                تطبيق الفلترة
+                                <FormattedMessage id='filtering' />
                                 <FilterAltOutlinedIcon />
                             </Box>
                     }

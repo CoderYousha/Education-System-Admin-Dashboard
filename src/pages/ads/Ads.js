@@ -20,6 +20,7 @@ import DeleteDialog from "../../popup/DeleteDialog";
 import CircleIcon from '@mui/icons-material/Circle';
 import AdsFilter from "../../popup/AdsFilter";
 import { useAdsFilter } from "../../filter/UseAdsFilter";
+import { FormattedMessage, useIntl } from "react-intl";
 
 function Ads() {
     const { host, language } = useConstants();
@@ -39,6 +40,7 @@ function Ads() {
     const [search, setSearch] = useState('');
     const [order, setOrder] = useState('');
     const theme = useTheme();
+    const intl = useIntl();
 
     const getBanners = async () => {
         let result = await Fetch(host + `/banners?status=${status}&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}${category && `&category=${category}`}${activeFrom && `&active_from=${activeFrom}`}${activeUntil && `&active_until=${activeUntil}`}`, 'GET', null);
@@ -111,10 +113,10 @@ function Ads() {
                                     :
                                     <Box sx={{ backgroundColor: theme.palette.background.paper }} className="bg-white rounded-xl px-2">
                                         <Box sx={{ backgroundColor: theme.palette.background.default }} className="flex justify-between items-center px-2">
-                                            <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">الإعلانات</Typography>
+                                            <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg"><FormattedMessage id='ads' /></Typography>
                                             <Button variant="contained" onClick={() => setPopup('add', 'flex')} className="">
                                                 <AddIcon />
-                                                إضافة إعلان جديد
+                                               <FormattedMessage id='add_ads' />
                                             </Button>
                                         </Box>
                                         <Box>
@@ -123,57 +125,57 @@ function Ads() {
                                                     <Box className="w-full flex items-center">
                                                         <FilterAltOutlinedIcon onClick={() => setPopup('filter', 'flex')} className="cursor-pointer" fontSize="large" />
                                                         <Box className="w-2/4 relative mr-3 max-sm:w-full">
-                                                            <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder="البحث بالعنوان أو الفئة/الدورة" />
+                                                            <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder={intl.formatMessage({id: "search_ads"})} />
                                                             <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" />
                                                         </Box>
                                                     </Box>
                                                     <Box className="flex w-2/4 items-center max-sm:mt-2 max-sm:w-full max-sm:justify-between">
                                                         <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.select }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
-                                                            <option value=''>التاريخ</option>
-                                                            <option value={language === 'en' ? 'name_en' : 'name_ar'}>عنوان الإعلان</option>
+                                                            <option value=''><FormattedMessage id='date' /></option>
+                                                            <option value={language === 'en' ? 'name_en' : 'name_ar'}><FormattedMessage id='ads_title' /></option>
                                                         </select>
-                                                        <Typography variant="body1" className="!text-gray-500">إجمالي الإعلانات: {bannersCounts}</Typography>
+                                                        <Typography variant="body1" className="!text-gray-500"><FormattedMessage id='total_ads' />: {bannersCounts}</Typography>
                                                     </Box>
                                                 </Box>
                                                 <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                     <TableHead className="bg-gray-200">
                                                         <TableRow sx={{ backgroundColor: theme.palette.background.paper }}>
-                                                            <StyledTableCell align="right">عنوان الإعلان</StyledTableCell>
-                                                            <StyledTableCell align="right">نوع الإعلان</StyledTableCell>
-                                                            <StyledTableCell align="right">الفئة/الدورة</StyledTableCell>
-                                                            <StyledTableCell align="right" className="">تاريخ البدء</StyledTableCell>
-                                                            <StyledTableCell align="right">تاريخ الانتهاء</StyledTableCell>
-                                                            <StyledTableCell align="right" className="!text-center">الحالة</StyledTableCell>
-                                                            <StyledTableCell align="right" className="!text-center">الإجراءات</StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='ads_title' /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='ads_type' /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='category' />/<FormattedMessage id='course' /></StyledTableCell>
+                                                            <StyledTableCell align="right" className=""><FormattedMessage id='start_date' /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='end_date' /></StyledTableCell>
+                                                            <StyledTableCell align="right" className="!text-center"><FormattedMessage id='ads_state' /></StyledTableCell>
+                                                            <StyledTableCell align="right" className="!text-center"><FormattedMessage id='procedures' /></StyledTableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
                                                         {banners.map((banner, index) => (
                                                             <StyledTableRow key={index} className="hover:bg-gray-400 duration-100 cursor-pointer" onClick={() => bannerDetails(banner.id)}>
                                                                 <StyledTableCell align="right" component="th" scope="row">{language === 'en' ? banner.name_en : banner.name_ar}</StyledTableCell>
-                                                                <StyledTableCell align="right" className="">{banner.category === 'course' ? 'دورة' : 'مسار'}</StyledTableCell>
+                                                                <StyledTableCell align="right" className="">{banner.category === 'course' ? <FormattedMessage id='course' /> : <FormattedMessage id='path' />}</StyledTableCell>
                                                                 <StyledTableCell align="right">{language === 'en' ? banner.related_data?.name_en : banner.related_data?.name_ar}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="text-center">{banner.active_from}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="">{banner.active_until}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="!text-center" dir="ltr">
                                                                     <Select disabled={true} value={ new Date() < new Date(banner.active_from) ? "not_started" : banner.is_active && new Date() <= new Date(banner.active_until) ? "1" : !banner.is_active ? "0" : "ended"} variant="standard" defaultValue="active" onClick={(e) => e.stopPropagation()} className="!border-0" sx={{ border: 'none' }}>
                                                                         <MenuItem value="1">
-                                                                            <CircleIcon className="text-green-700" fontSize="small" /> نشط
+                                                                            <CircleIcon className="text-green-700" fontSize="small" /> <FormattedMessage id='active' />
                                                                         </MenuItem>
                                                                         <MenuItem value="0">
-                                                                            <CircleIcon className="text-gray-700" fontSize="small" /> متوقف
+                                                                            <CircleIcon className="text-gray-700" fontSize="small" /> <FormattedMessage id='stopped' />
                                                                         </MenuItem>
                                                                         <MenuItem value="ended">
-                                                                            <CircleIcon className="text-red-700" fontSize="small" /> منهي
+                                                                            <CircleIcon className="text-red-700" fontSize="small" /> <FormattedMessage id='finished' />
                                                                         </MenuItem>
                                                                         <MenuItem value="not_started">
-                                                                            <CircleIcon className="text-orange-500" fontSize="small" /> لم يبدأ بعد
+                                                                            <CircleIcon className="text-orange-500" fontSize="small" /> <FormattedMessage id='not_started' />
                                                                         </MenuItem>
                                                                     </Select>
                                                                 </StyledTableCell>
                                                                 <StyledTableCell align="right" className="!flex justify-around items-center">
-                                                                    <Button variant="contained" className="!bg-red-300 !font-bold !text-red-700 hover:!bg-red-500 hover:!text-white duration-300" onClick={(e) => {e.stopPropagation(); setBannerId(banner.id); setPopup('delete', 'flex');}}>حذف</Button>
-                                                                    <Button variant="contained" className="!bg-green-300 !font-bold !text-green-800 hover:!bg-green-500 hover:!text-white duration-300" onClick={(e) => {e.stopPropagation(); updateBanner(banner.id);}}>تعديل</Button>
+                                                                    <Button variant="contained" className="!bg-red-300 !font-bold !text-red-700 hover:!bg-red-500 hover:!text-white duration-300" onClick={(e) => {e.stopPropagation(); setBannerId(banner.id); setPopup('delete', 'flex');}}><FormattedMessage id='delete' /></Button>
+                                                                    <Button variant="contained" className="!bg-green-300 !font-bold !text-green-800 hover:!bg-green-500 hover:!text-white duration-300" onClick={(e) => {e.stopPropagation(); updateBanner(banner.id);}}><FormattedMessage id='update' /></Button>
                                                                 </StyledTableCell>
                                                             </StyledTableRow>
                                                         ))}

@@ -21,6 +21,7 @@ import { useWaits } from "../../hooks/UseWait";
 import Fetch from "../../services/Fetch";
 import SnackbarAlert from "../../components/SnackBar";
 import useSnackBar from "../../hooks/UseSnackBar";
+import { FormattedMessage } from "react-intl";
 
 function Financial() {
     const { host, language } = useConstants();
@@ -120,7 +121,7 @@ function Financial() {
                                             <Box className="bg-blue-100 w-10 h-10 rounded-lg flex justify-center items-center mr-2 mt-2 text-blue-900">
                                                 <img src={MoneyImage} />
                                             </Box>
-                                            <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm">إجمالي المبيعات</Typography>
+                                            <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm"><FormattedMessage id="total_sales" /></Typography>
                                             <Typography variant="h4" className="pr-2 pt-3">{cards.total_sales.total}$</Typography>
                                             <Box className="absolute top-5 left-2">
                                                 {
@@ -147,7 +148,7 @@ function Financial() {
                                             <Box className="bg-blue-100 w-10 h-10 rounded-lg flex justify-center items-center text-blue-900 mr-2 mt-2">
                                                 <img src={BankImage} />
                                             </Box>
-                                            <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm">إجمالي عمولة المنصة</Typography>
+                                            <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm"><FormattedMessage id="total_platform_commission" /></Typography>
                                             <Typography variant="h4" className="pr-2 pt-3">{cards.total_admin_revenue.total}$</Typography>
                                             <Box className="absolute top-5 left-2">
                                                 {
@@ -174,7 +175,7 @@ function Financial() {
                                             <Box className="bg-blue-100 w-10 h-10 rounded-lg flex justify-center items-center mr-2 mt-2 text-blue-900">
                                                 <img src={TeachersImage} />
                                             </Box>
-                                            <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm">إجمالي أرباح المدرسين</Typography>
+                                            <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm"><FormattedMessage id="total_teacher_earnings" /></Typography>
                                             <Typography variant="h4" className="pr-2 pt-3">{cards.total_teacher_revenue.total}$</Typography>
                                             <Box className="absolute top-5 left-2">
                                                 {
@@ -201,7 +202,7 @@ function Financial() {
                                             <Box className="bg-blue-100 w-10 h-10 rounded-lg flex justify-center items-center mr-2 mt-2 text-blue-900">
                                                 <img src={WalletImage} />
                                             </Box>
-                                            <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm">رصيد محافظ الطلاب</Typography>
+                                            <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm"><FormattedMessage id="student_wallets" /></Typography>
                                             <Typography variant="h4" className="pr-2 pt-3">{cards.total_student_wallets.total}$</Typography>
                                             <Box className="absolute top-5 left-2">
                                                 {
@@ -228,14 +229,14 @@ function Financial() {
                                     <Box className="w-4/5 flex flex-row-reverse">
                                         <Box sx={{ backgroundColor: theme.palette.background.paper }} className="w-1/4 rounded-xl mt-10 mr-2 py-2 px-3">
                                             <Box className="flex justify-end items-center">
-                                                <Typography variant="h6" fontWeight="800" className="!mr-2">إعدادات توزيع الإيرادات</Typography>
+                                                <Typography variant="h6" fontWeight="800" className="!mr-2"><FormattedMessage id="revenue_distribution_settings" /></Typography>
                                                 <img src={SettingsImage} className="" />
                                             </Box>
-                                            <TextField type="number" variant="outlined" label="نسبة عمولة المنصة (%)" dir="rtl" className="w-full !my-5" value={systemProfits} onChange={(e) => { setSystemProfits(e.target.value); setTeacherProfits(100 - e.target.value); }} />
-                                            <TextField variant="outlined" label="نسبة أرباح المدرس المستحقة (%)" dir="rtl" className="w-full !my-5" value={teacherProfits} aria-readonly />
+                                            <TextField type="number" variant="outlined" label={<FormattedMessage id="platform_commission_percentage" />} dir="rtl" className="w-full !my-5" value={systemProfits} onChange={(e) => { setSystemProfits(e.target.value); setTeacherProfits(100 - e.target.value); }} />
+                                            <TextField variant="outlined" label={<FormattedMessage id="teachers_earnings_percentage" />} dir="rtl" className="w-full !my-5" value={teacherProfits} aria-readonly />
                                             <Box className="w-full rounded-lg bg-blue-100 border border-blue-400 py-2 px-2 flex items-center mt-10" dir="rtl">
                                                 <img src={WarningImage} className="" />
-                                                <Typography variant="body1" className="text-blue-600 !mr-5">يتم احتساب حصة المدرس تلقائيا بناء على خصم عمولة المنصة من المبلغ الكلي لكل عملية بيع</Typography>
+                                                <Typography variant="body1" className="text-blue-600 !mr-5"><FormattedMessage id="revenue_distribution_settings_note" /></Typography>
                                             </Box>
                                             <Button onClick={updatePercentage} variant="contained" className="w-full !mt-8 !text-white !text-lg hover:!bg-blue-400 duration-300 max-sm:w-full">
                                                 {
@@ -243,7 +244,7 @@ function Financial() {
                                                         <CircularProgress size={20} className="" color="white" />
                                                         :
                                                         <>
-                                                            حفظ التغييرات
+                                                            <FormattedMessage id="save_changes" />
                                                             <SaveOutlinedIcon className="mx-2" />
                                                         </>
                                                 }
@@ -252,16 +253,16 @@ function Financial() {
                                         <Box className="w-2/3 ml-2 mt-10 flex-grow mr-5">
                                             <Box sx={{ backgroundColor: theme.palette.background.default }} className="bg-white mr-2 rounded-xl">
                                                 <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2 py-4 rounded-t-xl" dir="rtl">
-                                                    <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">سجل الأرباح</Typography>
-                                                    <Typography variant="body1" className="cursor-pointer max-sm:!text-sm text-blue-600" onClick={() => navigate('withdrawal-requests')}>عرض السجل كامل <ArrowBackIosNewIcon /></Typography>
+                                                    <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg"><FormattedMessage id="earnings_record" /></Typography>
+                                                    <Typography variant="body1" className="cursor-pointer max-sm:!text-sm text-blue-600" onClick={() => navigate('withdrawal-requests')}><FormattedMessage id="view_record" /><ArrowBackIosNewIcon /></Typography>
                                                 </Box>
                                                 <TableContainer sx={{ borderRadius: '0' }} className="!rounded-b-xl" component={Paper} dir="rtl">
                                                     <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                         <TableHead className="bg-gray-200">
                                                             <TableRow sx={{ backgroundColor: theme.palette.background.paper }} className="!rounded-none">
-                                                                <StyledTableCell align="right">اسم المدرس</StyledTableCell>
-                                                                <StyledTableCell align="right">الرصيد المتاح</StyledTableCell>
-                                                                <StyledTableCell align="right">التاريخ</StyledTableCell>
+                                                                <StyledTableCell align="right"><FormattedMessage id="teacher_name" /></StyledTableCell>
+                                                                <StyledTableCell align="right"><FormattedMessage id="available_balance" /></StyledTableCell>
+                                                                <StyledTableCell align="right"><FormattedMessage id="date" /></StyledTableCell>
                                                             </TableRow>
                                                         </TableHead>
                                                         <TableBody>
@@ -283,22 +284,22 @@ function Financial() {
                                     <Box className="w-4/5 mt-5">
                                         <Box sx={{ backgroundColor: theme.palette.background.default }} className="bg-white mx-2 rounded-xl">
                                             <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2 py-4 rounded-t-xl" dir="rtl">
-                                                <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">سجل العمليات المالية</Typography>
-                                                <Typography variant="body1" className="cursor-pointer max-sm:!text-sm text-blue-600" onClick={() => navigate('financial-operations')}>عرض السجل كامل <ArrowBackIosNewIcon /></Typography>
+                                                <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg"><FormattedMessage id="record_financial_transactions" /></Typography>
+                                                <Typography variant="body1" className="cursor-pointer max-sm:!text-sm text-blue-600" onClick={() => navigate('financial-operations')}><FormattedMessage id="view_record" /> <ArrowBackIosNewIcon /></Typography>
                                             </Box>
                                             <TableContainer sx={{ borderRadius: '0' }} className="!rounded-b-xl" component={Paper} dir="rtl">
                                                 <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                     <TableHead className="bg-gray-200">
                                                         <TableRow sx={{ backgroundColor: theme.palette.background.paper }} className="!rounded-none">
-                                                            <StyledTableCell align="right">رقم العملية</StyledTableCell>
-                                                            <StyledTableCell align="right">نوع العملية</StyledTableCell>
-                                                            <StyledTableCell align="right">تفاصيل العملية</StyledTableCell>
-                                                            <StyledTableCell align="right">اسم الطالب</StyledTableCell>
-                                                            <StyledTableCell align="right">اسم المدرس</StyledTableCell>
-                                                            <StyledTableCell align="right">المبلغ</StyledTableCell>
-                                                            <StyledTableCell align="right">عمولة المنصة</StyledTableCell>
-                                                            <StyledTableCell align="right">أرباح المدرس</StyledTableCell>
-                                                            <StyledTableCell align="right">تاريخ العملية</StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id="transaction_id" /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id="transaction_type" /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id="transaction_details" /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id="student_name" /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id="teacher_name" /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id="amount" /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id="platform_commission" /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id="teacher_earnings" /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id="transaction_date" /></StyledTableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>

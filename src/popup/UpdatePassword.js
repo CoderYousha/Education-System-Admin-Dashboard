@@ -7,6 +7,7 @@ import Fetch from '../services/Fetch';
 import { useUpdatePassword } from '../hooks/UseUpdatePassword';
 import { buildUpdatePasswordFormData } from '../helper/UpdatePasswordFormData';
 import LockResetOutlinedIcon from '@mui/icons-material/LockResetOutlined';
+import { FormattedMessage } from 'react-intl';
 
 function UpdatePassword({ onClickCancel, setSnackBar }) {
     const { host, language } = useConstants();
@@ -47,11 +48,11 @@ function UpdatePassword({ onClickCancel, setSnackBar }) {
             <Box className="w-20 h-20 rounded-full mx-auto my-5 flex justify-center items-center" sx={{ background: "#E8EEFD" }}>
                 <LockResetOutlinedIcon className='text-blue-500 !text-5xl' />
             </Box>
-            <Typography variant='h5' fontWeight={800} className='text-center'>تعديل الملف الشخصي</Typography>
-            <Typography variant='body1' className='text-center !mt-5 text-gray-700'>قم بتحديث بيانات حسابك الأساسية</Typography>
-            <TextField type='password' className='w-full !mt-5' label="كلمة المرور الأساسية" onChange={(e) => setPassword(e.target.value)} value={password} />
-            <TextField type='password' className='w-full !mt-5' label="كلمة المرور الجديدة" onChange={(e) => setNewPassword(e.target.value)} value={newPassword} />
-            <TextField type='password' className='w-full !mt-5' label="تأكيد كلمة المرور" onChange={(e) => setConfirmNewPassword(e.target.value)} value={confirmNewPassword} />
+            <Typography variant='h5' fontWeight={800} className='text-center'><FormattedMessage id="reset_password" /></Typography>
+            <Typography variant='body1' className='text-center !mt-5 text-gray-700'><FormattedMessage id="reset_password_description" /></Typography>
+            <TextField type='password' className='w-full !mt-5' label={<FormattedMessage id="basic_password" />} onChange={(e) => setPassword(e.target.value)} value={password} />
+            <TextField type='password' className='w-full !mt-5' label={<FormattedMessage id="new_password" />} onChange={(e) => setNewPassword(e.target.value)} value={newPassword} />
+            <TextField type='password' className='w-full !mt-5' label={<FormattedMessage id="confirm_new_password" />} onChange={(e) => setConfirmNewPassword(e.target.value)} value={confirmNewPassword} />
             <Box className="py-3 flex justify-between max-sm:flex-col">
                 <Button onClick={updatePassword} variant='contained' className='w-2/5 !py-3 flex max-sm:w-full !text-white'>
                     {
@@ -59,7 +60,7 @@ function UpdatePassword({ onClickCancel, setSnackBar }) {
                             <CircularProgress size={20} className="" color="white" />
                             :
                             <>
-                                حفظ
+                                <FormattedMessage id="save" />
                                 <SaveOutlinedIcon className='ml-2' />
                             </>
 

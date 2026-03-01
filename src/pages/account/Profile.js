@@ -25,11 +25,12 @@ import UpdatePassword from "../../popup/UpdatePassword";
 import { useWaits } from "../../hooks/UseWait";
 import Fetch from "../../services/Fetch";
 import { buildProfileFormData } from "../../helper/ProfileFormData";
+import { FormattedMessage } from "react-intl";
 
 function Profile() {
     const { host, language } = useConstants();
     const { wait, profile, setProfile } = useContext(AuthContext);
-    const {sendWait, setSendWait} = useWaits();
+    const { sendWait, setSendWait } = useWaits();
     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -65,6 +66,7 @@ function Profile() {
             localStorage.setItem('language', language);
             handleClose();
             setSnackBar('success', 'تم تعديل بيانات حسابك بنجاح');
+            window.location.reload();
         } else if (result.status === 422) {
             setSnackBar('error', result.data.errors[0]);
         }
@@ -96,7 +98,7 @@ function Profile() {
                                 <Box className="mr-5 flex flex-col">
                                     <Box className="flex items-center">
                                         <Typography variant="h5" fontWeight={800} className="">{profile.first_name + ' ' + profile.last_name}</Typography>
-                                        <Typography variant="body2" className="!text-blue-400 w-fit h-full bg-blue-200 px-2 py-1 rounded-full !mr-3">المدير العام</Typography>
+                                        <Typography variant="body2" className="!text-blue-400 w-fit h-full bg-blue-200 px-2 py-1 rounded-full !mr-3"><FormattedMessage id="general_manager" /></Typography>
                                     </Box>
                                     <Box className="flex items-center my-5">
                                         <EmailOutlinedIcon className="ml-5" />
@@ -106,18 +108,18 @@ function Profile() {
                                     </Box>
                                     <Button sx={{ backgroundImage: 'linear-gradient(to right, #85A4E8, #2563EA)' }} className="!rounded-full" variant="contained" onClick={() => setPopup('update', 'flex')}>
                                         <EditOutlinedIcon />
-                                        تعديل الملف الشخصي
+                                        <FormattedMessage id="update_profile" />
                                     </Button>
                                 </Box>
                             </Box>
                             <Box className="h-full flex flex-col justify-between max-sm:flex-row max-sm:w-full max-sm:mt-5">
                                 <Box className="max-sm:flex">
-                                    <Typography className="text-gray-400 max-sm:text-black max-sm:!ml-5" variant="body2">عضو منذ</Typography>
+                                    <Typography className="text-gray-400 max-sm:text-black max-sm:!ml-5" variant="body2"><FormattedMessage id="member_since" /></Typography>
                                     <Typography className="text-white max-sm:text-gray-600" variant="body2">{profile.verified_at.split("-")[0]}</Typography>
                                 </Box>
                                 <Box className="max-sm:flex">
-                                    <Typography className="text-gray-400 max-sm:text-black max-sm:!ml-5" variant="body2">مستوى الوصول</Typography>
-                                    <Typography className="text-white max-sm:text-gray-700" variant="body2">صلاحيات كاملة</Typography>
+                                    <Typography className="text-gray-400 max-sm:text-black max-sm:!ml-5" variant="body2"><FormattedMessage id="access_level" /></Typography>
+                                    <Typography className="text-white max-sm:text-gray-700" variant="body2"><FormattedMessage id="full_powers" /></Typography>
                                 </Box>
                             </Box>
                         </Box>
@@ -125,7 +127,7 @@ function Profile() {
                             <Box sx={{ backgroundColor: theme.palette.background.paper }} className="mt-10 w-7/12 rounded-xl px-4 py-4 float-right max-sm:float-none max-sm:w-full" dir="rtl">
                                 <Box className="flex items-center">
                                     <AdminPanelSettingsOutlinedIcon fontSize="large" />
-                                    <Typography variant="h6" fontWeight={800} className="!mr-2">الصلاحيات والوصول</Typography>
+                                    <Typography variant="h6" fontWeight={800} className="!mr-2"><FormattedMessage id="permissions_access" /></Typography>
                                 </Box>
                                 <Box className="mt-5 grid grid-cols-2 gap-x-5 gap-y-7 max-sm:grid-cols-1">
                                     <Box className="h-24 flex items-center justify-between px-3 rounded-3xl bg-gray-100 overflow-hidden relative shadow-sm" sx={{ boxShadow: theme.palette.mode === 'dark' ? '5px 0px 4px -3px gray' : '5px 0px 4px -3px blue' }}>
@@ -134,8 +136,8 @@ function Profile() {
                                         <Box className="flex items-center">
                                             <img src={StudentsImage} />
                                             <Box className="mr-5">
-                                                <Typography variant="h6" fontWeight={800} className="text-black">إدارة الطلاب</Typography>
-                                                <Typography variant="body2" className="text-gray-500 !mt-5">إضافة، حذف وتعديل البيانات</Typography>
+                                                <Typography variant="h6" fontWeight={800} className="text-black"><FormattedMessage id="student_management" /></Typography>
+                                                <Typography variant="body2" className="text-gray-500 !mt-5"><FormattedMessage id="student_management_description" /></Typography>
                                             </Box>
                                         </Box>
                                         <Switch checked={true} />
@@ -146,8 +148,8 @@ function Profile() {
                                         <Box className="flex items-center">
                                             <img src={TeachersImage} />
                                             <Box className="mr-5">
-                                                <Typography variant="h6" fontWeight={800} className="text-black">إدارة المدرسين</Typography>
-                                                <Typography variant="body2" className="text-gray-500 !mt-5">إضافة مدرس جديد، مراجعة طلبات الدورات</Typography>
+                                                <Typography variant="h6" fontWeight={800} className="text-black"><FormattedMessage id="teacher_management" /></Typography>
+                                                <Typography variant="body2" className="text-gray-500 !mt-5"><FormattedMessage id="teacher_management_description" /></Typography>
                                             </Box>
                                         </Box>
                                         <Switch checked={true} />
@@ -158,8 +160,8 @@ function Profile() {
                                         <Box className="flex items-center">
                                             <img src={MoneyImage} />
                                             <Box className="mr-5">
-                                                <Typography variant="h6" fontWeight={800} className="text-black">الإدارة المالية</Typography>
-                                                <Typography variant="body2" className="text-gray-500 !mt-5">مراجعة طلبات سحب الأرباح، إدارة المدفوعات</Typography>
+                                                <Typography variant="h6" fontWeight={800} className="text-black"><FormattedMessage id="financial_management" /></Typography>
+                                                <Typography variant="body2" className="text-gray-500 !mt-5"><FormattedMessage id="financial_management_description" /></Typography>
                                             </Box>
                                         </Box>
                                         <Switch checked={true} />
@@ -170,8 +172,8 @@ function Profile() {
                                         <Box className="flex items-center">
                                             <img src={ReportImage} />
                                             <Box className="mr-5">
-                                                <Typography variant="h6" fontWeight={800} className="text-black">تقارير النظام</Typography>
-                                                <Typography variant="body2" className="text-gray-500 !mt-5">إنشاء تقارير الطلاب والمدرسين والمبيعات</Typography>
+                                                <Typography variant="h6" fontWeight={800} className="text-black"><FormattedMessage id="system_reports" /></Typography>
+                                                <Typography variant="body2" className="text-gray-500 !mt-5"><FormattedMessage id="system_reports_description" /></Typography>
                                             </Box>
                                         </Box>
                                         <Switch checked={true} />
@@ -181,7 +183,7 @@ function Profile() {
                             <Box sx={{ backgroundColor: theme.palette.background.paper }} className="mt-10 w-4/12 rounded-xl px-4 py-4 float-left max-sm:float-none max-sm:w-full" dir="rtl">
                                 <Box className="flex items-center">
                                     <GppGoodOutlinedIcon fontSize="large" />
-                                    <Typography variant="h6" fontWeight={800} className="!mr-2">الأمن والإعدادات</Typography>
+                                    <Typography variant="h6" fontWeight={800} className="!mr-2"><FormattedMessage id="security_settings" /></Typography>
                                 </Box>
                                 <Box className="h-24 flex items-center justify-between px-3 rounded-3xl bg-gray-100 overflow-hidden relative shadow-sm mt-5 cursor-pointer" onClick={() => setPopup('update-password', 'flex')} sx={{ boxShadow: theme.palette.mode === 'dark' ? '10px 0px gray' : '10px 0px #172554' }}>
                                     <Box className="w-12 h-12 rounded-full bg-gray-300 absolute -top-5 -right-6"></Box>
@@ -189,8 +191,8 @@ function Profile() {
                                     <Box className="flex items-center">
                                         <img src={ResetPasswordImage} />
                                         <Box className="mr-5">
-                                            <Typography variant="h6" fontWeight={800} className="text-black">إعادة تعيين كلمة المرور</Typography>
-                                            <Typography variant="body2" className="text-gray-500 !mt-5">تحديث كلمة مرور الحساب</Typography>
+                                            <Typography variant="h6" fontWeight={800} className="text-black"><FormattedMessage id="reset_password" /></Typography>
+                                            <Typography variant="body2" className="text-gray-500 !mt-5"><FormattedMessage id="reset_password_description" /></Typography>
                                         </Box>
                                     </Box>
                                 </Box>
@@ -200,8 +202,8 @@ function Profile() {
                                     <Box className="flex items-center">
                                         <img src={LanguageImage} />
                                         <Box className="mr-5">
-                                            <Typography variant="h6" fontWeight={800} className="text-black">لغة النظام</Typography>
-                                            <Typography variant="body2" className="text-gray-500 !mt-5">تغيير لغة الواجهة</Typography>
+                                            <Typography variant="h6" fontWeight={800} className="text-black"><FormattedMessage id="system_language" /></Typography>
+                                            <Typography variant="body2" className="text-gray-500 !mt-5"><FormattedMessage id="system_language_description" /></Typography>
                                         </Box>
                                     </Box>
                                 </Box>
@@ -246,27 +248,27 @@ function Profile() {
                             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                             dir="rtl"
                         >
-                            <MenuItem sx={{background: lang === 'en' && '#F3F4F6'}} onClick={() => { setLang('en'); changeLanguage('en'); }}>
+                            <MenuItem sx={{ background: lang === 'en' && '#F3F4F6' }} onClick={() => { setLang('en'); changeLanguage('en'); }}>
                                 <ListItemIcon className="ml-5">
                                     {
                                         sendWait && lang === 'en' ?
-                                        <CircularProgress size={20} className="" color="white" />
-                                        :
-                                        <img src={AuImage} />
+                                            <CircularProgress size={20} className="" color="white" />
+                                            :
+                                            <img src={AuImage} />
                                     }
                                 </ListItemIcon>
-                                اللغة الإنكليزية
+                                <FormattedMessage id="english_language" />
                             </MenuItem>
-                            <MenuItem sx={{background: lang === 'ar' && '#F3F4F6'}} className="!mt-5" onClick={() => {setLang('ar'); changeLanguage('ar');}}>
+                            <MenuItem sx={{ background: lang === 'ar' && '#F3F4F6' }} className="!mt-5" onClick={() => { setLang('ar'); changeLanguage('ar'); }}>
                                 <ListItemIcon className="ml-5">
                                     {
                                         sendWait && lang === 'ar' ?
-                                        <CircularProgress size={20} className="" color="white" />
-                                        :
-                                        <img src={SyImage} />
+                                            <CircularProgress size={20} className="" color="white" />
+                                            :
+                                            <img src={SyImage} />
                                     }
                                 </ListItemIcon>
-                                اللغة العربية
+                                <FormattedMessage id="arabic_language" />
                             </MenuItem>
                         </Menu>
 

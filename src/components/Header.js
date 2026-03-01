@@ -15,6 +15,7 @@ import UpdateNotificationImage from "../images/icons/update-notification.png";
 import { useNavigate } from "react-router-dom";
 import LogoutPopup from "../popup/Logout";
 import { usePopups } from "../hooks/UsePopups";
+import { FormattedMessage } from "react-intl";
 
 function Header({ isFullWidth = false }) {
      const { wait, profile } = useContext(AuthContext);
@@ -54,7 +55,7 @@ function Header({ isFullWidth = false }) {
                     !wait &&
                     <React.Fragment>
                          <Box sx={{ backgroundColor: theme.palette.background.paper, width: isFullWidth && '100% !important' }} className="flex justify-between items-center px-2 py-3 !w-4/5 bg-white max-sm:w-5/6 max-sm:justify-start" dir="rtl">
-                              <Typography variant="h4" className="font-bold pr-5 max-sm:!text-lg max-sm:!ml-3">لوحة تحكم المسؤول</Typography>
+                              <Typography variant="h4" className="font-bold pr-5 max-sm:!text-lg max-sm:!ml-3"><FormattedMessage id="admin_control_panel" /></Typography>
                               <Box className="flex items-center w-1/5">
                                    <NotificationsNoneOutlinedIcon onClick={() => openNotification()} src={NotificationImage} alt="notification" className="w-6 h-6 cursor-pointer max-sm:ml-3" />
                                    {
@@ -76,7 +77,7 @@ function Header({ isFullWidth = false }) {
                                         }
                                         <Box className="mr-2">
                                              <Typography variant="body1" className="max-sm:hidden">{profile.first_name} {profile.last_name}</Typography>
-                                             <Typography variant="body2" className="max-sm:hidden">المدير العام</Typography>
+                                             <Typography variant="body2" className="max-sm:hidden"><FormattedMessage id="general_manager" /></Typography>
                                         </Box>
                                    </Box>
                               </Box>
@@ -123,13 +124,13 @@ function Header({ isFullWidth = false }) {
                                    <ListItemIcon>
                                         <PermIdentityIcon fontSize="small" />
                                    </ListItemIcon>
-                                   الملف الشخصي
+                                   <FormattedMessage id="profile" />
                               </MenuItem>
-                              <MenuItem className="!text-red-500" onClick={() => {setPopup('logout', 'flex'); handleClose();}}>
+                              <MenuItem className="!text-red-500" onClick={() => { setPopup('logout', 'flex'); handleClose(); }}>
                                    <ListItemIcon className="!text-red-500">
                                         <Logout fontSize="small" />
                                    </ListItemIcon>
-                                   تسجيل الخروج
+                                   <FormattedMessage id="logout" />
                               </MenuItem>
                          </Menu>
                          <Box sx={{ backgroundColor: theme.palette.background.default }} id="notification-box" className="w-1/3 min-h-20 bg-white z-50 shadow-md rounded-lg absolute top-15 left-44 max-sm:w-8/12 max-sm:left-10 max-sm:top-16 hidden" dir="rtl">
@@ -189,7 +190,7 @@ function Header({ isFullWidth = false }) {
                               </Box>
                               <Box className="text-center text-blue-500 py-2 cursor-pointer max-sm:!text-sm">عرض الكل <ArrowBackIosNewIcon /></Box>
                          </Box>
-                         <Box id="logout" className="w-screen h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0" sx={{zIndex: 1000}}>
+                         <Box id="logout" className="w-screen h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0" sx={{ zIndex: 1000 }}>
                               <LogoutPopup onClickCancel={() => setPopup('logout', 'none')} />
                          </Box>
                     </React.Fragment>

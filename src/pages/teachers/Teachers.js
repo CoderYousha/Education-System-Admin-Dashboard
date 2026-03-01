@@ -17,6 +17,7 @@ import { useConstants } from "../../hooks/UseConstants";
 import { useTableStyles } from "../../hooks/UseTableStyles";
 import { usePopups } from "../../hooks/UsePopups";
 import { useTeachersFilter } from "../../filter/UseTeachersFilter";
+import { FormattedMessage, useIntl } from "react-intl";
 
 function Teachers() {
     const { host, language } = useConstants();
@@ -35,6 +36,7 @@ function Teachers() {
     const [search, setSearch] = useState('');
     const [order, setOrder] = useState('');
     const theme = useTheme();
+    const intl = useIntl();
 
     const getTeachers = async () => {
         let result = await Fetch(host + `/admin/users?account_role=teacher&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}${majorId && `&major_id=${majorId}`}${teacherSpecializations && `&specialization_id=${teacherSpecializations}`}${academicDegree && `&academic_degree_id=${academicDegree}`}`, 'GET', null);
@@ -91,10 +93,10 @@ function Teachers() {
                                     :
                                     <Box sx={{ backgroundColor: theme.palette.background.paper }} className="bg-white rounded-xl px-2">
                                         <Box sx={{ backgroundColor: theme.palette.background.default }} className="flex justify-between items-center px-2">
-                                            <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">المدرسون</Typography>
+                                            <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg"><FormattedMessage id='teachers' /></Typography>
                                             <Button variant="contained" onClick={() => setPopup('add', 'flex')} className="">
                                                 <AddIcon />
-                                                إضافة مدرس جديد
+                                                <FormattedMessage id='add_teacher' />
                                             </Button>
                                         </Box>
                                         <Box>
@@ -103,28 +105,28 @@ function Teachers() {
                                                     <Box className="w-full flex items-center">
                                                         <FilterAltOutlinedIcon onClick={() => setPopup('filter', 'flex')} className="cursor-pointer" fontSize="large" />
                                                         <Box className="w-2/4 relative mr-3 max-sm:w-full">
-                                                            <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder="البحث باسم المدرس أو البريد الإلكتروني" />
+                                                            <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-11/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder={intl.formatMessage({id: "search_teachers"})} />
                                                             <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" />
                                                         </Box>
                                                     </Box>
                                                     <Box className="flex w-2/4 items-center max-sm:mt-2 max-sm:w-full max-sm:justify-between">
                                                         <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.select }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
-                                                            <option value=''>التاريخ</option>
-                                                            <option value='first_name'>اسم المدرس</option>
-                                                            <option value="email">البريد الإلكتروني</option>
+                                                            <option value=''><FormattedMessage id='date' /></option>
+                                                            <option value='first_name'><FormattedMessage id='teacher_name' /></option>
+                                                            <option value="email"><FormattedMessage id='email' /></option>
                                                         </select>
-                                                        <Typography variant="body1" className="!text-gray-500">إجمالي المدرسين: {teachersCounts}</Typography>
+                                                        <Typography variant="body1" className="!text-gray-500"><FormattedMessage id='total_teachers' />: {teachersCounts}</Typography>
                                                     </Box>
                                                 </Box>
                                                 <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                     <TableHead className="bg-gray-200">
                                                         <TableRow sx={{ backgroundColor: theme.palette.background.paper }}>
-                                                            <StyledTableCell align="right">اسم المدرس</StyledTableCell>
-                                                            <StyledTableCell align="right">الإختصاص</StyledTableCell>
-                                                            <StyledTableCell align="right">التخصص التعليمي</StyledTableCell>
-                                                            <StyledTableCell align="right" className="">الدرجة العلمية</StyledTableCell>
-                                                            <StyledTableCell align="right">البريد الإلكتروني</StyledTableCell>
-                                                            <StyledTableCell align="right" className="!text-center">الرقم</StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='teacher_name' /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='specialization' /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='education_specialization' /></StyledTableCell>
+                                                            <StyledTableCell align="right" className=""><FormattedMessage id='academic_degree' /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='email' /></StyledTableCell>
+                                                            <StyledTableCell align="right" className="!text-center"><FormattedMessage id='phone' /></StyledTableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
@@ -132,7 +134,7 @@ function Teachers() {
                                                             <StyledTableRow key={index} onClick={() => teacherDetails(teacher.id)} className="hover:bg-gray-400 duration-100 cursor-pointer">
                                                                 <StyledTableCell align="right" component="th" scope="row">{teacher.first_name + ' ' + teacher.last_name}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="">{language === 'en' ? teacher.specialization?.name_en : teacher.specialization?.name_ar}</StyledTableCell>
-                                                                <StyledTableCell align="right">{teacher.major?.level === 'university' ? 'تعليم جامعي' : 'تعليم مدرسي'}</StyledTableCell>
+                                                                <StyledTableCell align="right">{teacher.major?.level === 'university' ? <FormattedMessage id='university_education' /> : <FormattedMessage id='school_education' />}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="text-center">{language === 'en' ? teacher.academic_degree?.name_en : teacher.academic_degree?.name_ar}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="">{teacher.email}</StyledTableCell>
                                                                 <StyledTableCell align="right" className="!text-center" dir="ltr">{teacher.phone_code + teacher.phone}</StyledTableCell>

@@ -3,6 +3,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import QRCode from "react-qr-code";
 import QRCodeLib from "qrcode";
 import { useEffect, useRef, useState } from "react";
+import { FormattedMessage } from "react-intl";
 
 function QrCodeWallet({ onClickClose, value }) {
     const theme = useTheme();
@@ -31,7 +32,7 @@ function QrCodeWallet({ onClickClose, value }) {
 
     return (
         <Box sx={{ backgroundColor: theme.palette.background.paper }} className="shadow-lg w-2/4 h-fit rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll !z-50 max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative" dir="rtl">
-            <Typography variant="h5" className="!font-semibold max-sm:!text-xl">امسح ال Qr-Code لتعبئة محفظتك</Typography>
+            <Typography variant="h5" className="!font-semibold max-sm:!text-xl"><FormattedMessage id="qr_code_description" /></Typography>
             <CloseIcon onClick={() => { onClickClose(); }} className="text-gray-700 cursor-pointer absolute top-5 left-5" fontSize="large" />
             <Divider className="!my-5" />
             <Box ref={qrWrapperRef} className="relative w-full h-32 rounded-xl mt-5 flex flex-col items-center justify-center cursor-pointer">
@@ -41,7 +42,7 @@ function QrCodeWallet({ onClickClose, value }) {
                 }
             </Box>
             <Box className="w-4/5 mx-auto">
-                <Button onClick={downloadQR} variant="contained" className="w-full !my-10">تحميل</Button>
+                <Button onClick={downloadQR} variant="contained" className="w-full !my-10"><FormattedMessage id="download" /></Button>
             </Box>
         </Box>
     );

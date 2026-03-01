@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { useTableStyles } from "../../hooks/UseTableStyles";
 import { usePopups } from "../../hooks/UsePopups";
 import { useConstants } from "../../hooks/UseConstants";
+import { FormattedMessage } from "react-intl";
 
 function Dashboard() {
      const { host, language } = useConstants();
@@ -49,7 +50,6 @@ function Dashboard() {
                     b.status === 'pending' ? 1 : 0
                );
                setCoursesRequests(sorted);
-               // setCoursesRequests(result.data.data);
           }
      }
 
@@ -62,7 +62,7 @@ function Dashboard() {
           let result = await Fetch(host + `/admin/courses/${courseId}/change-status`, 'POST', formData);
           if (result.status === 200) {
                getCoursesRequests();
-               setSnackBar('success', status === 'accepted' ? 'تم التفعيل بنجاح' : 'تم الرفض بنجاح');
+               setSnackBar('success', status === 'accepted' ? <FormattedMessage id='approved_msg' /> : <FormattedMessage id='rejected_msg' />);
                setCourseId(null);
           }
           setSendWait(false);
@@ -113,7 +113,7 @@ function Dashboard() {
                                         <>
                                              <Box className="w-4/5 flex justify-between mt-10 max-sm:block" dir="rtl">
                                                   <Box sx={{ backgroundColor: theme.palette.background.paper }} className="rounded-xl bg-white w-3/6 mx-2 h-32 relative shadow-xl max-sm:w-5/6 max-sm:mx-auto">
-                                                       <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm">إجمالي الطلاب</Typography>
+                                                       <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm"><FormattedMessage id='total_students' /></Typography>
                                                        <Typography variant="h4" className="pr-2 pt-3">{dashboard.cards.students.total}</Typography>
                                                        <Box className="bg-blue-100 w-10 h-10 rounded-lg flex justify-center items-center absolute top-5 left-5 text-blue-900">
                                                             <img src={StudentsImage} />
@@ -123,23 +123,23 @@ function Dashboard() {
                                                                  dashboard.cards.students.percent > 0 ?
                                                                       <Box>
                                                                            <img src={ArrowIncrease} className="w-4 h-4 inline-block mr-2" />
-                                                                           <Typography variant="body2" className="text-green-500 inline-block">+{dashboard.cards.students.percent}% زيادة عن الشهر الماضي</Typography>
+                                                                           <Typography variant="body2" className="text-green-500 inline-block">+{dashboard.cards.students.percent}% <FormattedMessage id='more_month' /></Typography>
                                                                       </Box>
                                                                       : dashboard.cards.students.percent < 0 ?
                                                                            <Box>
                                                                                 <img src={ArrowDecrease} className="w-4 h-4 inline-block mr-2" />
-                                                                                <Typography variant="body2" className="text-red-500 inline-block">-{dashboard.cards.students.percent}% أقل عن الشهر الماضي</Typography>
+                                                                                <Typography variant="body2" className="text-red-500 inline-block">-{dashboard.cards.students.percent}% <FormattedMessage id='less_month' /></Typography>
                                                                            </Box>
                                                                            :
                                                                            <Box>
                                                                                 <img src={Arrow} className="w-4 h-4 inline-block mx-2" />
-                                                                                <Typography variant="body2" className="inline-block">نمو مستقر</Typography>
+                                                                                <Typography variant="body2" className="inline-block"><FormattedMessage id='stable_growth' /></Typography>
                                                                            </Box>
                                                             }
                                                        </Box>
                                                   </Box>
                                                   <Box sx={{ backgroundColor: theme.palette.background.paper }} className="rounded-xl bg-white w-3/6 mx-2 h-32 relative shadow-xl max-sm:w-5/6 max-sm:mx-auto max-sm:mt-2">
-                                                       <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm">إجمالي المدرسين</Typography>
+                                                       <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm"><FormattedMessage id='total_teachers' /></Typography>
                                                        <Typography variant="h4" className="pr-2 pt-3">{dashboard.cards.teachers.total}</Typography>
                                                        <Box className="bg-blue-100 w-10 h-10 rounded-lg flex justify-center items-center absolute top-5 left-5 text-blue-900">
                                                             <img src={TeachersImage} />
@@ -149,23 +149,23 @@ function Dashboard() {
                                                                  dashboard.cards.teachers.percent > 0 ?
                                                                       <Box>
                                                                            <img src={ArrowIncrease} className="w-4 h-4 inline-block mr-2" />
-                                                                           <Typography variant="body2" className="text-green-500 inline-block">+{dashboard.cards.teachers.percent}% زيادة عن الشهر الماضي</Typography>
+                                                                           <Typography variant="body2" className="text-green-500 inline-block">+{dashboard.cards.teachers.percent}% <FormattedMessage id='more_month' /></Typography>
                                                                       </Box>
                                                                       : dashboard.cards.teachers.percent < 0 ?
                                                                            <Box>
                                                                                 <img src={ArrowDecrease} className="w-4 h-4 inline-block mr-2" />
-                                                                                <Typography variant="body2" className="text-red-500 inline-block">-{dashboard.cards.teachers.percent}% أقل عن الشهر الماضي</Typography>
+                                                                                <Typography variant="body2" className="text-red-500 inline-block">-{dashboard.cards.teachers.percent}% <FormattedMessage id='less_month' /></Typography>
                                                                            </Box>
                                                                            :
                                                                            <Box>
                                                                                 <img src={Arrow} className="w-4 h-4 inline-block mx-2" />
-                                                                                <Typography variant="body2" className="inline-block">نمو مستقر</Typography>
+                                                                                <Typography variant="body2" className="inline-block"><FormattedMessage id='stable_growth' /></Typography>
                                                                            </Box>
                                                             }
                                                        </Box>
                                                   </Box>
                                                   <Box sx={{ backgroundColor: theme.palette.background.paper }} className="rounded-xl bg-white w-3/6 mx-2 h-32 relative shadow-xl max-sm:w-5/6 max-sm:mx-auto max-sm:mt-2">
-                                                       <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm">إجمالي الدورات</Typography>
+                                                       <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm"><FormattedMessage id='total_courses' /></Typography>
                                                        <Typography variant="h4" className="pr-2 pt-3">{dashboard.cards.courses.total}</Typography>
                                                        <Box className="bg-blue-100 w-10 h-10 rounded-lg flex justify-center items-center absolute top-5 left-5 text-blue-900">
                                                             <img src={CoursesImage} />
@@ -175,23 +175,23 @@ function Dashboard() {
                                                                  dashboard.cards.courses.percent > 0 ?
                                                                       <Box>
                                                                            <img src={ArrowIncrease} className="w-4 h-4 inline-block mr-2" />
-                                                                           <Typography variant="body2" className="text-green-500 inline-block">+{dashboard.cards.courses.percent}% زيادة عن الشهر الماضي</Typography>
+                                                                           <Typography variant="body2" className="text-green-500 inline-block">+{dashboard.cards.courses.percent}% <FormattedMessage id='more_month' /></Typography>
                                                                       </Box>
                                                                       : dashboard.cards.courses.percent < 0 ?
                                                                            <Box>
                                                                                 <img src={ArrowDecrease} className="w-4 h-4 inline-block mr-2" />
-                                                                                <Typography variant="body2" className="text-red-500 inline-block">-{dashboard.cards.courses.percent}% أقل عن الشهر الماضي</Typography>
+                                                                                <Typography variant="body2" className="text-red-500 inline-block">-{dashboard.cards.courses.percent}% <FormattedMessage id='less_month' /></Typography>
                                                                            </Box>
                                                                            :
                                                                            <Box>
                                                                                 <img src={Arrow} className="w-4 h-4 inline-block mx-2" />
-                                                                                <Typography variant="body2" className="inline-block">نمو مستقر</Typography>
+                                                                                <Typography variant="body2" className="inline-block"><FormattedMessage id='stable_growth' /></Typography>
                                                                            </Box>
                                                             }
                                                        </Box>
                                                   </Box>
                                                   <Box sx={{ backgroundColor: theme.palette.background.paper }} className="rounded-xl bg-white w-3/6 mx-2 h-32 relative shadow-xl max-sm:w-5/6 max-sm:mx-auto max-sm:mt-2">
-                                                       <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm">إجمالي الإيرادات</Typography>
+                                                       <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm"><FormattedMessage id='total_revenue' /></Typography>
                                                        <Typography variant="h4" className="pr-2 pt-3">{dashboard.cards.revenue.total}</Typography>
                                                        <Box className="bg-blue-100 w-10 h-10 rounded-lg flex justify-center items-center absolute top-5 left-5 text-blue-900">
                                                             <img src={MoneyImage} />
@@ -201,17 +201,17 @@ function Dashboard() {
                                                                  dashboard.cards.revenue.percent > 0 ?
                                                                       <Box>
                                                                            <img src={ArrowIncrease} className="w-4 h-4 inline-block mr-2" />
-                                                                           <Typography variant="body2" className="text-green-500 inline-block">+{dashboard.cards.revenue.percent}% زيادة عن الشهر الماضي</Typography>
+                                                                           <Typography variant="body2" className="text-green-500 inline-block">+{dashboard.cards.revenue.percent}% <FormattedMessage id='more_month' /></Typography>
                                                                       </Box>
                                                                       : dashboard.cards.revenue.percent < 0 ?
                                                                            <Box>
                                                                                 <img src={ArrowDecrease} className="w-4 h-4 inline-block mr-2" />
-                                                                                <Typography variant="body2" className="text-red-500 inline-block">-{dashboard.cards.revenue.percent}% أقل عن الشهر الماضي</Typography>
+                                                                                <Typography variant="body2" className="text-red-500 inline-block">-{dashboard.cards.revenue.percent}% <FormattedMessage id='less_month' /></Typography>
                                                                            </Box>
                                                                            :
                                                                            <Box>
                                                                                 <img src={Arrow} className="w-4 h-4 inline-block mx-2" />
-                                                                                <Typography variant="body2" className="inline-block">نمو مستقر</Typography>
+                                                                                <Typography variant="body2" className="inline-block"><FormattedMessage id='stable_growth' /></Typography>
                                                                            </Box>
                                                             }
                                                        </Box>
@@ -219,40 +219,40 @@ function Dashboard() {
                                              </Box>
                                              <Box className="grid grid-cols-2 w-4/5 mb-10 clearfix max-sm:grid-cols-1">
                                                   <Box sx={{ backgroundColor: theme.palette.background.paper }} className="bg-white rounded-xl mt-3 mx-2 max-sm:mx-auto" dir="rtl">
-                                                       <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">توزيع الدورات</Typography>
-                                                       <Typography variant="h6" className="px-3 text-gray-400 max-sm:!text-sm">حسب الفئات الرئيسية</Typography>
+                                                       <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg"><FormattedMessage id='distribution_courses' /></Typography>
+                                                       <Typography variant="h6" className="px-3 text-gray-400 max-sm:!text-sm"><FormattedMessage id='main_categories' /></Typography>
                                                        <PieChartWithCenterLabel values={dashboard.categories.map(category => category.percent)} labels={dashboard.categories.map(category => language === 'en' ? category.name_en : category.name_ar)} counts={dashboard.categories.map(category => category.count)} />
                                                   </Box>
                                                   <Box sx={{ backgroundColor: theme.palette.background.paper }} className="bg-white rounded-xl mt-3 mr-2 relative max-sm:mx-auto" dir="rtl">
-                                                       <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">نمط المنصة</Typography>
-                                                       <Typography variant="h6" className="px-3 text-gray-400 max-sm:!text-sm">تسجيلات الطلاب خلال آخر 6 أشهر</Typography>
+                                                       <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg"><FormattedMessage id='platform_style' /></Typography>
+                                                       <Typography variant="h6" className="px-3 text-gray-400 max-sm:!text-sm"><FormattedMessage id='students_registrations' /></Typography>
                                                        <Box className="py-10"></Box>
                                                        <Box className="">
                                                             <SimpleAreaChart monthlyChart={dashboard.monthly_chart} from={fromDate} to={toDate} values={dashboard.monthly_chart.map(chart => chart.total)} months={dashboard.monthly_chart.map(chart => chart.month)} />
                                                        </Box>
                                                        <Box className="mb-2 float-left flex justify-around w-full">
-                                                            <TextField value={toDate} onChange={(e) => setToDate(e.target.value)} type="date" label="To" className="z-0" />
-                                                            <TextField value={fromDate} onChange={(e) => setFromDate(e.target.value)} type="date" label="From" className="z-0" />
+                                                            <TextField value={toDate} onChange={(e) => setToDate(e.target.value)} type="date" label={<FormattedMessage id='to' />} className="z-0" />
+                                                            <TextField value={fromDate} onChange={(e) => setFromDate(e.target.value)} type="date" label={<FormattedMessage id='from' />} className="z-0" />
                                                        </Box>
                                                   </Box>
                                              </Box>
                                              <Box className="w-4/5 rounded-lg mx-2 px-2" dir="rtl">
                                                   <Box sx={{ backgroundColor: theme.palette.background.default }} className="mr-2 !rounded-lg overflow-hidden">
                                                        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2">
-                                                            <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">طلبات الموافقة</Typography>
-                                                            <Typography onClick={() => navigate('/accept-requests')} variant="body1" className="cursor-pointer text-blue-500 max-sm:!text-sm">عرض جميع الطلبات <ArrowBackIosNewIcon /></Typography>
+                                                            <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg"><FormattedMessage id='approval_requests' /></Typography>
+                                                            <Typography onClick={() => navigate('/accept-requests')} variant="body1" className="cursor-pointer text-blue-500 max-sm:!text-sm"><FormattedMessage id='view_all_requests' /> <ArrowBackIosNewIcon /></Typography>
                                                        </Box>
                                                        <Box>
                                                             <TableContainer className="!rounded-none" component={Paper} dir="rtl">
                                                                  <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                                       <TableHead className="bg-gray-200">
                                                                            <TableRow sx={{ backgroundColor: theme.palette.background.paper }}>
-                                                                                <StyledTableCell align="right">رقم الطلب</StyledTableCell>
-                                                                                <StyledTableCell align="right">اسم الدورة</StyledTableCell>
-                                                                                <StyledTableCell align="right">اسم المدرس</StyledTableCell>
-                                                                                <StyledTableCell align="right">تاريخ الطلب</StyledTableCell>
-                                                                                <StyledTableCell align="right">الحالة</StyledTableCell>
-                                                                                <StyledTableCell align="right">الإجراءات</StyledTableCell>
+                                                                                <StyledTableCell align="right"><FormattedMessage id='student_id' /></StyledTableCell>
+                                                                                <StyledTableCell align="right"><FormattedMessage id='course_name' /></StyledTableCell>
+                                                                                <StyledTableCell align="right"><FormattedMessage id='teacher_name' /></StyledTableCell>
+                                                                                <StyledTableCell align="right"><FormattedMessage id='request_date' /></StyledTableCell>
+                                                                                <StyledTableCell align="right"><FormattedMessage id='status' /></StyledTableCell>
+                                                                                <StyledTableCell align="right"><FormattedMessage id='procedures' /></StyledTableCell>
                                                                            </TableRow>
                                                                       </TableHead>
                                                                       <TableBody>
@@ -264,21 +264,20 @@ function Dashboard() {
                                                                                      </StyledTableCell>
                                                                                      <StyledTableCell align="right" className=""><Box className="flex flex-row-reverse items-center justify-end"><Box className="mr-2">{request.teacher.first_name} {request.teacher.last_name}</Box><Box className="w-7 h-7 rounded-full bg-gray-300 flex justify-center items-center font-bold">{request.teacher.first_name.charAt(0)}</Box><Box className=""></Box></Box></StyledTableCell>
                                                                                      <StyledTableCell align="right">{request.created_at.split(" ")[0]}</StyledTableCell>
-                                                                                     <StyledTableCell align="right"><Box className="text-center py-1 rounded-lg font-bold" sx={{ backgroundColor: request.status === 'accepted' ? "#CCFFCC" : request.status === 'rejected' ? "#FF9999" : "#FCF0CF", color: request.status === 'accepted' ? "green" : request.status === 'rejected' ? "red" : "orange" }}>{request.status === 'accepted' ? 'تمت الموافقة' : request.status === 'rejected' ? 'تم الرفض' : 'بانتظار الموافقة'}</Box></StyledTableCell>
+                                                                                     <StyledTableCell align="right"><Box className="text-center py-1 rounded-lg font-bold" sx={{ backgroundColor: request.status === 'accepted' ? "#CCFFCC" : request.status === 'rejected' ? "#FF9999" : "#FCF0CF", color: request.status === 'accepted' ? "green" : request.status === 'rejected' ? "red" : "orange" }}>{request.status === 'accepted' ? <FormattedMessage id='approved' /> : request.status === 'rejected' ? <FormattedMessage id='rejected' /> : <FormattedMessage id='wait_approval' />}</Box></StyledTableCell>
                                                                                      <StyledTableCell align="right" className="!flex justify-between">
-                                                                                          {/* <Button onClick={() => getCourseDetails(request.id)} disabled={request.status === 'rejected' || request.status === 'accepted'} className="h-8 !bg-gray-200 !text-gray-700">عرض التفاصيل</Button> */}
                                                                                           <Button disabled={request.status === 'rejected' || request.status === 'accepted'} onClick={() => changeCourseStatus(request.id, 'rejected')} variant="contained" sx={{ backgroundColor: request.status === 'rejected' || request.status === 'accepted' ? '#F2F2F2 !important' : '', color: request.status === 'rejected' || request.status === 'accepted' ? '#666666 !important' : '' }} className="mr-2 h-8 !bg-red-300 !text-red-600 !font-bold hover:!bg-red-600 hover:!text-white">
                                                                                                {sendWait && courseId === request.id && operation === 'rejected' ?
                                                                                                     <CircularProgress size={20} className="" color="white" />
                                                                                                     :
-                                                                                                    'رفض'
+                                                                                                    <FormattedMessage id='reject' />
                                                                                                }
                                                                                           </Button>
                                                                                           <Button disabled={request.status === 'rejected' || request.status === 'accepted'} onClick={() => changeCourseStatus(request.id, 'accepted')} variant="contained" sx={{ backgroundColor: request.status === 'rejected' || request.status === 'accepted' ? '#F2F2F2 !important' : '', color: request.status === 'rejected' || request.status === 'accepted' ? '#666666 !important' : '' }} className="!font-bold h-8 mx-2 !text-green-600 !bg-green-300 hover:!bg-green-600 hover:!text-white">
                                                                                                {sendWait && courseId === request.id && operation === 'accepted' ?
                                                                                                     <CircularProgress size={20} className="" color="white" />
                                                                                                     :
-                                                                                                    'قبول'
+                                                                                                    <FormattedMessage id='approve' />
                                                                                                }
                                                                                           </Button>
                                                                                      </StyledTableCell>

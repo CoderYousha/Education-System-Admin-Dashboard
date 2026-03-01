@@ -10,6 +10,7 @@ import { useConstants } from "../hooks/UseConstants";
 import { buildAddAdsFormData } from "../helper/AddAdsFormData";
 import { useEffect, useState } from "react";
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
+import { FormattedMessage } from "react-intl";
 
 function UpdateAds({ onClickClose, setSnackbar, banner, setBanner, getBanners }) {
     const { language, host } = useConstants();
@@ -94,21 +95,21 @@ function UpdateAds({ onClickClose, setSnackbar, banner, setBanner, getBanners })
 
     return (
         <Box sx={{ backgroundColor: theme.palette.background.paper }} className="shadow-lg w-3/5 h-screen rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative max-sm:h-screen" dir="rtl">
-            <Typography variant="h5" className="!font-semibold max-sm:!text-xl">تعديل الإعلان</Typography>
+            <Typography variant="h5" className="!font-semibold max-sm:!text-xl"><FormattedMessage id='ads_update' /></Typography>
             <CloseIcon onClick={() => { setBanner(''); onClickClose(); }} className="text-gray-700 cursor-pointer absolute top-5 left-5" fontSize="large" />
             <Divider className="!my-5" />
-            <TextField variant="outlined" label="عنوان الإعلان بالعربية" className="w-full" onChange={(e) => setNameAr(e.target.value)} value={nameAr} />
-            <TextField variant="outlined" label="عنوان الإعلان بالإنجليزية" className="w-full !mt-5" onChange={(e) => setNameEn(e.target.value)} value={nameEn} />
+            <TextField variant="outlined" label={<FormattedMessage id='ads_title_ar' />} className="w-full" onChange={(e) => setNameAr(e.target.value)} value={nameAr} />
+            <TextField variant="outlined" label={<FormattedMessage id='ads_title_en' />} className="w-full !mt-5" onChange={(e) => setNameEn(e.target.value)} value={nameEn} />
             <Box className="grid grid-cols-2 gap-x-2 gap-y-7 my-7 max-sm:grid-cols-1">
                 <Box className="">
-                    <Typography variant="body1" className="!font-semibold text-gray-400">نوع الإعلان</Typography>
+                    <Typography variant="body1" className="!font-semibold text-gray-400"><FormattedMessage id='ads_type' /></Typography>
                     <select className="w-full h-10 rounded-xl text-gray-500 bg-gray-200 mt-2 outline-none border border-gray-300" onChange={(e) => setCategory(e.target.value)} value={category}>
-                        <option value="course">الدورات</option>
-                        <option value="path">المسارات</option>
+                        <option value="course"><FormattedMessage id='courses' /></option>
+                        <option value="path"><FormattedMessage id='paths' /></option>
                     </select>
                 </Box>
                 <Box className="">
-                    <Typography variant="body1" className="!font-semibold text-gray-400">الفئة / الدورة</Typography>
+                    <Typography variant="body1" className="!font-semibold text-gray-400"><FormattedMessage id='category' /> / <FormattedMessage id='course' /></Typography>
                     <AsyncPaginate
                         key={category}
                         value={categoryValue}
@@ -130,30 +131,30 @@ function UpdateAds({ onClickClose, setSnackbar, banner, setBanner, getBanners })
                     />
                 </Box>
                 <Box className="">
-                    <Typography variant="body2" className="!font-semibold text-gray-400">تاريخ البدء</Typography>
+                    <Typography variant="body2" className="!font-semibold text-gray-400"><FormattedMessage id='start_date' /></Typography>
                     <input type="date" className="text-black mt-2 w-full rounded-lg h-10 bg-gray-200 px-2 outline-none" onChange={(e) => setActiveFrom(e.target.value)} value={activeFrom} />
                 </Box>
                 <Box className="">
-                    <Typography variant="body2" className="!font-semibold text-gray-400">تاريخ الإنتهاء</Typography>
+                    <Typography variant="body2" className="!font-semibold text-gray-400"><FormattedMessage id='end_date' /></Typography>
                     <input type="date" className="text-black mt-2 w-full rounded-lg h-10 bg-gray-200 px-2 outline-none" onChange={(e) => setActiveUntil(e.target.value)} value={activeUntil} />
                 </Box>
             </Box>
-            <TextField variant="outlined" label="محتوى الإعلان بالعربية" className="w-full" onChange={(e) => setDescriptionAr(e.target.value)} value={descriptionAr} />
-            <TextField variant="outlined" label="محتوى الإعلان بالإنجليزية" className="w-full !mt-5" onChange={(e) => setDescriptionEn(e.target.value)} value={descriptionEn} />
+            <TextField variant="outlined" label={<FormattedMessage id='ads_description_ar' />} className="w-full" onChange={(e) => setDescriptionAr(e.target.value)} value={descriptionAr} />
+            <TextField variant="outlined" label={<FormattedMessage id='ads_description_en' />} className="w-full !mt-5" onChange={(e) => setDescriptionEn(e.target.value)} value={descriptionEn} />
             <Box className="mt-7">
-                <Typography variant="body2" className="!font-semibold text-gray-400">الحالة</Typography>
+                <Typography variant="body2" className="!font-semibold text-gray-400"><FormattedMessage id='ads_state' /></Typography>
                 <Select value={isActive ? "1" : "0"} variant="standard" onChange={(e) => setIsActive(e.target.value === "1" ? 1 : 0)} className="w-full !rounded-xl !border-none" sx={{ '& .MuiOutlinedInput-notchedOutline': { border: 'none', }, '&:hover .MuiOutlinedInput-notchedOutline': { border: 'none', }, '&.Mui-focused .MuiOutlinedInput-notchedOutline': { border: 'none', }, }}>
                     <MenuItem dir="rtl" value="1">
-                        <CircleIcon className="text-green-700" fontSize="small" /> نشط
+                        <CircleIcon className="text-green-700" fontSize="small" /> <FormattedMessage id='active' />
                     </MenuItem>
                     <MenuItem dir="rtl" value="0">
-                        <CircleIcon className="text-gray-700" fontSize="small" /> متوقف
+                        <CircleIcon className="text-gray-700" fontSize="small" /> <FormattedMessage id='stopped' />
                     </MenuItem>
                 </Select>
             </Box>
             <Box className="relative w-full h-32 bg-gray-200 rounded-xl mt-5 flex flex-col items-center justify-center cursor-pointer">
                 <img src={UploadImage} className="" />
-                <Typography variant="body1" className="text-gray-700">إضافة صورة</Typography>
+                <Typography variant="body1" className="text-gray-700"><FormattedMessage id='add_image' /></Typography>
                 <input type="file" accept="image/*" className="w-full h-full opacity-0 absolute cursor-pointer" onChange={(e) => setImage(e.target.files[0])} />
             </Box>
             <Box className="flex justify-between mt-5 w-full max-sm:flex-col max-sm:items-center">
@@ -164,11 +165,11 @@ function UpdateAds({ onClickClose, setSnackbar, banner, setBanner, getBanners })
                             :
                             <>
                                 <SaveOutlinedIcon />
-                                حفظ
+                                <FormattedMessage id='save' />
                             </>
                     }
                 </Button>
-                <Button onClick={() => { onClickClose(); }} variant="contained" className="w-5/12 !bg-gray-400 !text-gray-700 !font-bold hover:!bg-gray-200 duration-300 max-sm:w-full max-sm:!mt-2">إلغاء</Button>
+                <Button onClick={() => { onClickClose(); }} variant="contained" className="w-5/12 !bg-gray-400 !text-gray-700 !font-bold hover:!bg-gray-200 duration-300 max-sm:w-full max-sm:!mt-2"><FormattedMessage id='cancel' /></Button>
             </Box>
         </Box>
     );

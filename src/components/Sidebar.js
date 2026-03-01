@@ -13,6 +13,7 @@ import AuthContext from "../context/AuthContext";
 import LogoImage from "../images/logo/logo.png";
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import WalletOutlinedIcon from '@mui/icons-material/WalletOutlined';
+import { FormattedMessage } from "react-intl";
 
 function Sidebar () {
      const theme = useTheme();
@@ -20,52 +21,52 @@ function Sidebar () {
 
      const items = [
           {
-               'title': 'لوحة التحكم',
+               'title': <FormattedMessage id="dashboard" />,
                'icon': <DashboardOutlinedIcon fontSize="medium" className="mr-2 max-sm:mx-auto" />,
                'link': '../dashboard'
           },
           {
-               'title': 'الإشعارات',
+               'title': <FormattedMessage id="notifications" />,
                'icon': <NotificationsNoneOutlinedIcon fontSize="medium" className="mr-2 max-sm:mx-auto" />,
                'link': '../notifications',
           },
           {
-               'title': 'طلبات الموافقة',
+               'title': <FormattedMessage id="approval_requests" />,
                'icon': <CheckCircleOutlineIcon fontSize="medium" className="mr-2 max-sm:mx-auto" />,
                'link': '../accept-requests',
           },
           {
-               'title': 'الطلاب',
+               'title': <FormattedMessage id="students" />,
                'icon': <SchoolOutlinedIcon fontSize="medium" className="mr-2 max-sm:mx-auto" />,
                'link': '../students',
           },
           {
-               'title': 'المدرسون',
+               'title': <FormattedMessage id="teachers" />,
                'icon': <PeopleOutlineIcon fontSize="medium" className="mr-2 max-sm:mx-auto" />,
                'link': '../teachers',
           },
           {
-               'title': 'الدورات',
+               'title': <FormattedMessage id="courses" />,
                'icon': <CastForEducationOutlinedIcon fontSize="medium" className="mr-2 max-sm:mx-auto" />,
                'link': '../courses',
           },
           {
-               'title': 'الإعلانات',
+               'title': <FormattedMessage id="ads" />,
                'icon': <CampaignOutlinedIcon fontSize="medium" className="mr-2 max-sm:mx-auto" />,
                'link': '../ads',
           },
           {
-               'title': 'المالية',
+               'title': <FormattedMessage id="financial" />,
                'icon': <AccountBalanceWalletOutlinedIcon fontSize="medium" className="mr-2 max-sm:mx-auto" />,
                'link': '../financial',
           },
           {
-               'title': 'المحفظة',
+               'title': <FormattedMessage id="wallet" />,
                'icon': <WalletOutlinedIcon fontSize="medium" className="mr-2 max-sm:mx-auto" />,
                'link': '../wallet',
           },
           {
-               'title': 'التقارير',
+               'title': <FormattedMessage id="reports" />,
                'icon': <AssessmentOutlinedIcon fontSize="medium" className="mr-2 max-sm:mx-auto" />,
                'link': '../reports',
           },

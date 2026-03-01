@@ -3,6 +3,7 @@ import { useConstants } from "../hooks/UseConstants";
 import DeleteImage from '../images/icons/delete.png';
 import { useWaits } from "../hooks/UseWait";
 import GratWarningImage from "../images/icons/gray-warning.png";
+import { FormattedMessage } from "react-intl";
 
 function DeleteDialog({ onClickConfirm, onClickCancel, title, subtitle, hasInput, label, placeholder, warning }) {
     const { language } = useConstants();
@@ -33,10 +34,10 @@ function DeleteDialog({ onClickConfirm, onClickCancel, title, subtitle, hasInput
                         sendWait ?
                             <CircularProgress size={20} className="" color="white" />
                             :
-                            "حذف"
+                            <FormattedMessage id='delete' />
                     }
                 </Button>
-                <Button variant="contained" className="w-2/5 !bg-gray-300 !text-gray-700 !font-bold hover:!bg-gray-200 duration-300" onClick={onClickCancel}>إلغاء</Button>
+                <Button variant="contained" className="w-2/5 !bg-gray-300 !text-gray-700 !font-bold hover:!bg-gray-200 duration-300" onClick={onClickCancel}><FormattedMessage id='cancel' /></Button>
             </Box>
         </Box>
     );

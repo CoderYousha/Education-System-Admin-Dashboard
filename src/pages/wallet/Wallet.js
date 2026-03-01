@@ -8,6 +8,7 @@ import Fetch from "../../services/Fetch";
 import { buildWalletFormData } from "../../helper/WalletFormData";
 import { usePopups } from "../../hooks/UsePopups";
 import QrCodeWallet from "../../popup/QrCodeWallet";
+import { FormattedMessage } from "react-intl";
 
 function Wallet() {
     const { host, language } = useConstants();
@@ -20,7 +21,7 @@ function Wallet() {
 
     const addToWallet = async () => {
         setSendWait(true);
-        const formData = buildWalletFormData({amount: amount});
+        const formData = buildWalletFormData({ amount: amount });
         let result = await Fetch(host + `/admin/wallet/charge/create`, 'POST', formData);
 
         if (result.status === 200) {
@@ -41,15 +42,15 @@ function Wallet() {
                     <Box sx={{ backgroundColor: theme.palette.background.default }}>
                         <Box className="w-4/5 rounded-xl relative" dir="rtl">
                             <Box sx={{ backgroundColor: theme.palette.background.paper }} className="w-2/5 mx-auto text-center mt-10 rounded-xl py-10 px-5">
-                                <Typography variant="h4" fontWeight={800}>تعبئة المحفظة</Typography>
-                                <TextField label="المبلغ" className="w-full !my-10 !z-0" variant="outlined" onChange={(e) => setAmount(e.target.value)}/>
+                                <Typography variant="h4" fontWeight={800}><FormattedMessage id="fill_wallet" /></Typography>
+                                <TextField label={<FormattedMessage id="amount" />} className="w-full !my-10 !z-0" variant="outlined" onChange={(e) => setAmount(e.target.value)} />
                                 <Button onClick={addToWallet} className="w-4/5" variant="contained">
                                     {
                                         sendWait ?
                                             <CircularProgress size={20} className="" color="white" />
                                             :
                                             <Box>
-                                                إنشاء
+                                                <FormattedMessage id="create" />
                                             </Box>
                                     }
                                 </Button>

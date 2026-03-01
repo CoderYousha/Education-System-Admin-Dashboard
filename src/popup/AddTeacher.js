@@ -9,6 +9,7 @@ import 'react-phone-input-2/lib/style.css';
 import { buildAddTeacherFormData } from "../helper/AddTeacherFormData";
 import { useWaits } from "../hooks/UseWait";
 import { useState } from "react";
+import { FormattedMessage } from "react-intl";
 
 function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
     const host = `${process.env.REACT_APP_LOCAL_HOST}`;
@@ -127,15 +128,15 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
 
     return (
         <Box sx={{ backgroundColor: theme.palette.background.paper }} className="shadow-lg w-3/5 h-fit rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative max-sm:overflow-y-scroll max-sm:h-screen" dir="rtl">
-            <Typography variant="h5" className="!font-semibold max-sm:!text-xl">إضافة مدرس جديد</Typography>
+            <Typography variant="h5" className="!font-semibold max-sm:!text-xl"><FormattedMessage id='add_teacher' /></Typography>
             <CloseIcon onClick={() => {resetInputs(); onClickClose();}} className="text-gray-700 cursor-pointer absolute top-5 left-5" fontSize="large"></CloseIcon>
             <Divider className="!my-5" />
             <Box className=""></Box>
             <Box className="grid grid-cols-2 w-full gap-x-2 gap-y-5 mt-5 max-sm:grid-cols-1 max-sm:gap-x-0">
-                <TextField value={firstName} onChange={(e) => setFirstName(e.target.value)} variant="outlined" className="w-full" label="الاسم الأول" />
-                <TextField value={lastName} onChange={(e) => setLastName(e.target.value)} variant="outlined" className="w-full" label="الاسم الأخير" />
+                <TextField value={firstName} onChange={(e) => setFirstName(e.target.value)} variant="outlined" className="w-full" label={<FormattedMessage id='first_name' />} />
+                <TextField value={lastName} onChange={(e) => setLastName(e.target.value)} variant="outlined" className="w-full" label={<FormattedMessage id='last_name' />} />
                 <Box className="col-span-2 max-sm:col-span-1">
-                    <Typography variant="body1">الاختصاص</Typography>
+                    <Typography variant="body1"><FormattedMessage id='specialization' /></Typography>
                     <AsyncPaginate
                         value={teacherSpecializationsValue}
                         loadOptions={loadTeacherSpecializations}
@@ -144,7 +145,7 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
                             page: 1
                         }}
                         className="mt-2 !bg-gray-200"
-                        placeholder="الاختصاص"
+                        placeholder={<FormattedMessage id='specialization' />}
                         styles={{
                             option: (provided, state) => ({
                                 ...provided,
@@ -155,7 +156,7 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
                     />
                 </Box>
                 <Box className="">
-                    <Typography variant="body1">التخصص التعليمي</Typography>
+                    <Typography variant="body1"><FormattedMessage id='education_specialization' /></Typography>
                     <AsyncPaginate
                         value={majorValue}
                         loadOptions={loadMajors}
@@ -164,7 +165,7 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
                             page: 1
                         }}
                         className="mt-2 !bg-gray-200"
-                        placeholder="التخصص التعليمي"
+                        placeholder={<FormattedMessage id='education_specialization' />}
                         styles={{
                             option: (provided, state) => ({
                                 ...provided,
@@ -175,7 +176,7 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
                     />
                 </Box>
                 <Box className="">
-                    <Typography variant="body1">الدرجة العلمية</Typography>
+                    <Typography variant="body1"><FormattedMessage id='academic_degree' /></Typography>
                     <AsyncPaginate
                         value={academicDegreeValue}
                         loadOptions={loadAcademicDegrees}
@@ -184,7 +185,7 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
                             page: 1
                         }}
                         className="mt-2 !bg-gray-200"
-                        placeholder="الدرجة العلمية"
+                        placeholder={<FormattedMessage id='academic_degree' />}
                         styles={{
                             option: (provided, state) => ({
                                 ...provided,
@@ -194,14 +195,14 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
                         isSearchable={false}
                     />
                 </Box>
-                <TextField type="number" value={experienceYears} onChange={(e) => setExperienceYears(e.target.value)} variant="outlined" className="w-full" label="سنوات الخبرة" />
-                <TextField value={birthdate} onChange={(e) => setBirthDate(e.target.value)} variant="outlined" type="date" defaultValue="2025-01-01" className="w-full" label="تاريخ الميلاد" />
-                <TextField value={email} onChange={(e) => setEmail(e.target.value)} variant="outlined" className="w-full" label="البريد الإلكتروني" />
+                <TextField type="number" value={experienceYears} onChange={(e) => setExperienceYears(e.target.value)} variant="outlined" className="w-full" label={<FormattedMessage id='experience_years' />} />
+                <TextField value={birthdate} onChange={(e) => setBirthDate(e.target.value)} variant="outlined" type="date" defaultValue="2025-01-01" className="w-full" label={<FormattedMessage id='birth_date' />} />
+                <TextField value={email} onChange={(e) => setEmail(e.target.value)} variant="outlined" className="w-full" label={<FormattedMessage id='email' />} />
                 <Box dir="ltr" className="w-full h-full max-sm:h-12">
                     <PhoneInput country={'us'} containerStyle={{ width: "100%" }} buttonStyle={{ background: theme.palette.mode === 'dark' ? 'none' : '' }} inputStyle={{ width: '100%', height: "100%", color: theme.palette.mode === 'dark' ? 'white' : 'black', background: 'none' }} onChange={handleChange} />
                 </Box>
-                <TextField value={password} onChange={(e) => setPassword(e.target.value)} variant="outlined" type="password" className="w-full" label="كلمة المرور" />
-                <TextField value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} variant="outlined" type="password" className="w-full" label="تأكيد كلمة المرور" />
+                <TextField value={password} onChange={(e) => setPassword(e.target.value)} variant="outlined" type="password" className="w-full" label={<FormattedMessage id='password' />} />
+                <TextField value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} variant="outlined" type="password" className="w-full" label={<FormattedMessage id='confirm_password' />} />
             </Box>
             <Box className="flex justify-between mt-5 w-full max-sm:flex-col max-sm:items-center">
                 <Button variant="contained" className="w-5/12 !text-white !font-bold hover:!bg-blue-400 duration-300 max-sm:w-full" onClick={addTeacher}>
@@ -211,11 +212,11 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
                             :
                             <>
                                 <AddIcon />
-                                إضافة
+                                <FormattedMessage id='add' />
                             </>
                     }
                 </Button>
-                <Button onClick={() => {resetInputs(); onClickClose();}} variant="contained" className="w-5/12 !bg-gray-400 !text-gray-700 !font-bold hover:!bg-gray-200 duration-300 max-sm:w-full max-sm:!mt-2">إلغاء</Button>
+                <Button onClick={() => {resetInputs(); onClickClose();}} variant="contained" className="w-5/12 !bg-gray-400 !text-gray-700 !font-bold hover:!bg-gray-200 duration-300 max-sm:w-full max-sm:!mt-2"><FormattedMessage id='cancel' /></Button>
             </Box>
         </Box>
     );

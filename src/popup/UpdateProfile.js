@@ -10,6 +10,7 @@ import { useWaits } from '../hooks/UseWait';
 import { useConstants } from '../hooks/UseConstants';
 import Fetch from '../services/Fetch';
 import { buildProfileFormData } from '../helper/ProfileFormData';
+import { FormattedMessage } from 'react-intl';
 
 function UpdateProfile({ onClickCancel, setSnackBar }) {
     const {host, language} = useConstants();
@@ -72,17 +73,17 @@ function UpdateProfile({ onClickCancel, setSnackBar }) {
             <Box className="w-20 h-20 rounded-full mx-auto my-5 flex justify-center items-center" sx={{ background: "#E8EEFD" }}>
                 <EditOutlinedIcon className='text-blue-500 !text-5xl' />
             </Box>
-            <Typography variant='h5' fontWeight={800} className='text-center'>تعديل الملف الشخصي</Typography>
-            <Typography variant='body1' className='text-center !mt-5 text-gray-700'>قم بتحديث بيانات حسابك الأساسية</Typography>
-            <TextField className='w-full !mt-5' label="الاسم الأول" onChange={(e) => setFirstName(e.target.value)} value={firstName} />
-            <TextField className='w-full !mt-5' label="الاسم الأخير" onChange={(e) => setLastName(e.target.value)} value={lastName} />
-            <TextField type='date' className='w-full !mt-5' label="تاريخ الميلاد" onChange={(e) => setBirthDate(e.target.value)} value={birthDate} />
+            <Typography variant='h5' fontWeight={800} className='text-center'><FormattedMessage id="update_profile" /></Typography>
+            <Typography variant='body1' className='text-center !mt-5 text-gray-700'><FormattedMessage id="update_profile_description" /></Typography>
+            <TextField className='w-full !mt-5' label={<FormattedMessage id="first_name" />}onChange={(e) => setFirstName(e.target.value)} value={firstName} />
+            <TextField className='w-full !mt-5' label={<FormattedMessage id="last_name" />} onChange={(e) => setLastName(e.target.value)} value={lastName} />
+            <TextField type='date' className='w-full !mt-5' label={<FormattedMessage id="birth_date" />} onChange={(e) => setBirthDate(e.target.value)} value={birthDate} />
             <Box dir="ltr" className="w-full h-14 mt-5 max-sm:h-12">
                 <PhoneInput country={'us'} value={code + phoneNumber} containerStyle={{ width: "100%" }} buttonStyle={{ background: theme.palette.mode === 'dark' ? 'none' : '' }} inputStyle={{ width: '100%', height: "100%", color: theme.palette.mode === 'dark' ? 'white' : 'black', background: 'none' }} onChange={handleChange} />
             </Box>
             <Box className="relative w-full h-32 bg-gray-200 rounded-xl mt-5 flex flex-col items-center justify-center cursor-pointer">
                 <img src={UploadImage} className="" />
-                <Typography variant="body1" className="text-gray-700">إضافة صورة</Typography>
+                <Typography variant="body1" className="text-gray-700"><FormattedMessage id="add_image" /></Typography>
                 <input type="file" accept="image/*" className="w-full h-full opacity-0 absolute cursor-pointer" onChange={(e) => setImage(e.target.files[0])} />
             </Box>
             <Box className="py-3 flex justify-between max-sm:flex-col">
@@ -92,13 +93,13 @@ function UpdateProfile({ onClickCancel, setSnackBar }) {
                             <CircularProgress size={20} className="" color="white" />
                             :
                             <>
-                                حفظ
+                                <FormattedMessage id="save" />
                                 <SaveOutlinedIcon className='ml-2' />
                             </>
 
                     }
                 </Button>
-                <Button onClick={() => {setInputs(); onClickCancel();}} variant='contained' className='w-2/5 !py-3 flex !text-gray-500 !font-bold max-sm:w-full max-sm:!mt-3' color='inherit'>إلغاء</Button>
+                <Button onClick={() => {setInputs(); onClickCancel();}} variant='contained' className='w-2/5 !py-3 flex !text-gray-500 !font-bold max-sm:w-full max-sm:!mt-3' color='inherit'><FormattedMessage id="cancel" /></Button>
             </Box>
         </Box>
     );

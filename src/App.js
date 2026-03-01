@@ -16,66 +16,74 @@ import ReportsRoutes from './routes/ReportsRoutes';
 import AccountRoutes from './routes/AccountRoutes';
 import AuthRoutes from './routes/AuthRoutes';
 import WalletRoutes from './routes/WalletRoutes';
+import { IntlProvider } from 'react-intl';
+import { useConstants } from './hooks/UseConstants';
+import Translation from './translation/Translation';
 
 function App() {
+  const { language } = useConstants();
   const theme = useTheme();
+  const messages = Translation();
+
   return (
     <main>
       <div className="App" style={{ backgroundColor: theme.palette.background.default }}>
         <BrowserRouter>
-          <Routes>
-            <Route path='/' element={<Navigate to='login' />} />
-            {
-              AuthRoutes().map((route, index) =>
-                <Route key={index} path={route.path} element={route.element} />
-              )
-            }
-            {
-              DashboardRoutes().map((route, index) =>
-                <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
-              )
-            }
-            {
-              StudentsRoutes().map((route, index) =>
-                <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
-              )
-            }
-            {
-              TeachersRoutes().map((route, index) =>
-                <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
-              )
-            }
-            {
-              CoursesRoutes().map((route, index) =>
-                <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
-              )
-            }
-            {
-              AdsRoutes().map((route, index) =>
-                <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
-              )
-            }
-            {
-              FinancialRoutes().map((route, index) =>
-                <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
-              )
-            }
-            {
-              ReportsRoutes().map((route, index) =>
-                <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
-              )
-            }
-            {
-              AccountRoutes().map((route, index) =>
-                <Route key={index} path={route.path} element={<AuthProvider><Header isFullWidth={true} />{route.element}</AuthProvider>} />
-              )
-            }
-            {
-              WalletRoutes().map((route, index) =>
-                <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar /> {route.element}</AuthProvider>} />
-              )
-            }
-          </Routes>
+          <IntlProvider locale={language} messages={messages[language]}>
+            <Routes>
+              <Route path='/' element={<Navigate to='login' />} />
+              {
+                AuthRoutes().map((route, index) =>
+                  <Route key={index} path={route.path} element={route.element} />
+                )
+              }
+              {
+                DashboardRoutes().map((route, index) =>
+                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+                )
+              }
+              {
+                StudentsRoutes().map((route, index) =>
+                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+                )
+              }
+              {
+                TeachersRoutes().map((route, index) =>
+                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+                )
+              }
+              {
+                CoursesRoutes().map((route, index) =>
+                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+                )
+              }
+              {
+                AdsRoutes().map((route, index) =>
+                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+                )
+              }
+              {
+                FinancialRoutes().map((route, index) =>
+                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+                )
+              }
+              {
+                ReportsRoutes().map((route, index) =>
+                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar />{route.element}</AuthProvider>} />
+                )
+              }
+              {
+                AccountRoutes().map((route, index) =>
+                  <Route key={index} path={route.path} element={<AuthProvider><Header isFullWidth={true} />{route.element}</AuthProvider>} />
+                )
+              }
+              {
+                WalletRoutes().map((route, index) =>
+                  <Route key={index} path={route.path} element={<AuthProvider><Header /> <Sidebar /> {route.element}</AuthProvider>} />
+                )
+              }
+            </Routes>
+          </IntlProvider>
         </BrowserRouter>
       </div>
     </main>

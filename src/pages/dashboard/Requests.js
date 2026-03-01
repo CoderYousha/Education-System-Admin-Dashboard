@@ -15,6 +15,7 @@ import { useConstants } from "../../hooks/UseConstants";
 import { useTableStyles } from "../../hooks/UseTableStyles";
 import { usePopups } from "../../hooks/UsePopups";
 import { useRequestsFilter } from "../../filter/UseRequestsFilter";
+import { FormattedMessage, useIntl } from "react-intl";
 
 function Requests() {
     const { host, language } = useConstants();
@@ -36,6 +37,7 @@ function Requests() {
     const [courseName, setCourseName] = useState('');
     const [order, setOrder] = useState('');
     const theme = useTheme();
+    const intl = useIntl();
 
     const setFilterStatus = (s) => {
         setStatus((prevStatus) => {
@@ -96,7 +98,7 @@ function Requests() {
         let result = await Fetch(host + `/admin/courses/${courseId}/change-status`, 'POST', formData);
         if (result.status === 200) {
             getCoursesRequests();
-            setSnackBar('success', status === 'accepted' ? 'تم التفعيل بنجاح' : 'تم الرفض بنجاح');
+            setSnackBar('success', status === 'accepted' ? <FormattedMessage id='approved_msg' /> : <FormattedMessage id='rejected_msg' />);
             setCourseId(null);
         }
         setSendWait(false);
@@ -124,7 +126,7 @@ function Requests() {
                                     :
                                     <Box className="rounded-xl px-2">
                                         <Box sx={{ backgroundColor: theme.palette.background.default }} className="flex justify-between items-center px-2">
-                                            <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">طلبات الموافقة</Typography>
+                                            <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg"><FormattedMessage id='approval_requests' /></Typography>
                                         </Box>
                                         <Box className="">
                                             <TableContainer component={Paper} dir="rtl">
@@ -132,28 +134,28 @@ function Requests() {
                                                     <Box className="w-full flex items-center">
                                                         <FilterAltOutlinedIcon className="cursor-pointer" onClick={() => setPopup('filter', 'flex')} fontSize="large" />
                                                         <Box className="w-2/4 relative mr-3 max-sm:w-full">
-                                                            <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-8/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder="البحث باسم الدورة أو المدرس" />
+                                                            <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-9/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder={intl.formatMessage({id: 'search_course_teacher_name'})} />
                                                             <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" />
                                                         </Box>
                                                     </Box>
                                                     <Box className="flex w-2/4 items-center max-sm:w-full max-sm:mt-2 max-sm:justify-between">
                                                         <select style={{ backgroundColor: theme.palette.background.select }} onChange={(e) => setOrder(e.target.value)} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
-                                                            <option value=''>التاريخ</option>
-                                                            <option value={language === 'en' ? 'order_by=name_en&direction=asc' : 'order_by=name_ar&direction=asc'}>اسم الدورة</option>
-                                                            <option value='order_by=teacher.name&direction=asc'>اسم الأستاذ</option>
+                                                            <option value=''><FormattedMessage id='date' /></option>
+                                                            <option value={language === 'en' ? 'order_by=name_en&direction=asc' : 'order_by=name_ar&direction=asc'}><FormattedMessage id='course_name' /></option>
+                                                            <option value='order_by=teacher.name&direction=asc'><FormattedMessage id='teacher_name' /></option>
                                                         </select>
-                                                        <Typography variant="body1" className="!text-gray-500">إجمالي الطلبات: {requestCounts}</Typography>
+                                                        <Typography variant="body1" className="!text-gray-500"><FormattedMessage id='total_requests' />: {requestCounts}</Typography>
                                                     </Box>
                                                 </Box>
                                                 <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                     <TableHead className="bg-gray-200">
                                                         <TableRow sx={{ backgroundColor: theme.palette.background.paper }}>
-                                                            <StyledTableCell align="right">رقم الطلب</StyledTableCell>
-                                                            <StyledTableCell align="right">اسم الدورة</StyledTableCell>
-                                                            <StyledTableCell align="right">اسم المدرس</StyledTableCell>
-                                                            <StyledTableCell align="right">تاريخ الطلب</StyledTableCell>
-                                                            <StyledTableCell align="right">حالة الطلب</StyledTableCell>
-                                                            <StyledTableCell align="right">الإجراءات</StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='request_id' /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='course_name' /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='teacher_name' /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='request_date' /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='status' /></StyledTableCell>
+                                                            <StyledTableCell align="right"><FormattedMessage id='procedures' /></StyledTableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
@@ -165,20 +167,20 @@ function Requests() {
                                                                 </StyledTableCell>
                                                                 <StyledTableCell align="right" className=""><Box className="flex flex-row-reverse items-center justify-end"><Box className="mr-2">{request.teacher.first_name} {request.teacher.last_name}</Box><Box className="w-7 h-7 rounded-full bg-gray-300 flex justify-center items-center font-bold">{request.teacher.first_name.charAt(0)}</Box><Box className=""></Box></Box></StyledTableCell>
                                                                 <StyledTableCell align="right">{request.created_at.split(" ")[0]}</StyledTableCell>
-                                                                <StyledTableCell align="right"><Box className="text-center py-1 rounded-lg font-bold" sx={{ backgroundColor: request.status === 'accepted' ? "#CCFFCC" : request.status === 'rejected' ? "#FF9999" : "#FCF0CF", color: request.status === 'accepted' ? "green" : request.status === 'rejected' ? "red" : "orange" }}>{request.status === 'accepted' ? 'تمت الموافقة' : request.status === 'rejected' ? 'تم الرفض' : 'بانتظار الموافقة'}</Box></StyledTableCell>
+                                                                <StyledTableCell align="right"><Box className="text-center py-1 rounded-lg font-bold" sx={{ backgroundColor: request.status === 'accepted' ? "#CCFFCC" : request.status === 'rejected' ? "#FF9999" : "#FCF0CF", color: request.status === 'accepted' ? "green" : request.status === 'rejected' ? "red" : "orange" }}>{request.status === 'accepted' ? <FormattedMessage id='approved' /> : request.status === 'rejected' ? <FormattedMessage id='rejected' /> : <FormattedMessage id='wait_approval' />}</Box></StyledTableCell>
                                                                 <StyledTableCell align="right" className="!flex justify-between">
                                                                     <Button disabled={request.status === 'rejected' || request.status === 'accepted'} onClick={() => changeCourseStatus(request.id, 'rejected')} variant="contained" sx={{ backgroundColor: request.status === 'rejected' || request.status === 'accepted' ? '#F2F2F2 !important' : '', color: request.status === 'rejected' || request.status === 'accepted' ? '#666666 !important' : '' }} className="mr-2 h-8 !bg-red-300 !text-red-600 !font-bold hover:!bg-red-600 hover:!text-white">
                                                                         {sendWait && courseId === request.id && operation === 'rejected' ?
                                                                             <CircularProgress size={20} className="" color="white" />
                                                                             :
-                                                                            'رفض'
+                                                                            <FormattedMessage id='reject' />
                                                                         }
                                                                     </Button>
                                                                     <Button disabled={request.status === 'rejected' || request.status === 'accepted'} onClick={() => changeCourseStatus(request.id, 'accepted')} variant="contained" sx={{ backgroundColor: request.status === 'rejected' || request.status === 'accepted' ? '#F2F2F2 !important' : '', color: request.status === 'rejected' || request.status === 'accepted' ? '#666666 !important' : '' }} className="!font-bold h-8 mx-2 !text-green-600 !bg-green-300 hover:!bg-green-600 hover:!text-white">
                                                                         {sendWait && courseId === request.id && operation === 'accepted' ?
                                                                             <CircularProgress size={20} className="" color="white" />
                                                                             :
-                                                                            'قبول'
+                                                                            <FormattedMessage id='approve' />
                                                                         }
                                                                     </Button>
                                                                 </StyledTableCell>
