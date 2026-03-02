@@ -13,9 +13,9 @@ function TeacherDetails({ onClickClose, teacher }) {
     const intl = useIntl();
 
     return (
-        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="shadow-lg w-3/5 h-fit rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative max-sm:h-screen max-sm:overflow-y-scroll" dir="rtl">
+        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="shadow-lg w-3/5 h-fit rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative max-sm:h-screen max-sm:overflow-y-scroll" dir={language === 'en' ? 'ltr' : "rtl"}>
             <Typography variant="h5" className="!font-semibold max-sm:!text-xl"><FormattedMessage id='teacher_details' /></Typography>
-            <CloseIcon onClick={onClickClose} className="text-gray-700 cursor-pointer absolute top-5 left-5" fontSize="large" />
+            <CloseIcon onClick={onClickClose} className="text-gray-700 cursor-pointer absolute top-5 left-5" sx={{left: language === 'en' && '90%'}} fontSize="large" />
             <Divider className="!my-5" />
             <Box className="w-20 h-20 bg-gray-200 rounded-full mx-auto mb-5 flex justify-center items-center text-gray-500 text-2xl font-bold">{teacher.first_name?.charAt(0) + '' + teacher.last_name?.charAt(0)}</Box>
             <TextField variant="outlined" label={<FormattedMessage id='teacher_name' />} className="w-full" value={teacher.first_name + ' ' + teacher.last_name} />

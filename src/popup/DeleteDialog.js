@@ -28,6 +28,7 @@ function DeleteDialog({ onClickConfirm, onClickCancel, title, subtitle, hasInput
                         <Typography variant="body2" className="!mr-1 text-gray-600">{warning}</Typography>
                     </Box>
             }
+            {/* Buttons Container */}
             <Box className="flex justify-between mt-5">
                 <Button onClick={async () => { setSendWait(true); await onClickConfirm(); setSendWait(false); onClickCancel(); }} variant="contained" className="w-2/5 !bg-red-300 !text-red-700 hover:!bg-red-500 hover:!text-white duration-300 !font-bold">
                     {

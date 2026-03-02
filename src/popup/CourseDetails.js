@@ -31,82 +31,98 @@ function CourseDetails({ data, onClickClose }) {
     };
 
     return (
-        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="w-4/5 h-screen bg-white rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative" dir="rtl">
+        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="w-4/5 h-screen bg-white rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative" dir={language === 'en' ? 'ltr' : "rtl"}>
             <Typography variant="h5" className="!font-semibold max-sm:!text-xl"><FormattedMessage id='course_details' /></Typography>
             {/* <Typography variant="h6" className="text-gray-400 !mt-3 max-sm:!text-lg">مراجعة ملفات الدورة المقدمة من المعلم</Typography> */}
-            <CloseIcon onClick={onClickClose} className="text-gray-700 cursor-pointer absolute top-5 left-5" fontSize="large"></CloseIcon>
+            <CloseIcon onClick={onClickClose} className="text-gray-700 cursor-pointer absolute top-5 left-5" sx={{left: language === 'en' && '90%'}} fontSize="large"></CloseIcon>
             <Divider className="!my-5" />
             <Box className="flex py-3">
                 <img src={ReportImage} />
                 <Typography variant="h5" className="!font-semibold !mr-2 max-sm:!text-xl"><FormattedMessage id='course_information' /></Typography>
             </Box>
+
+            {/* Course Information Card */}
             <Box className="mt-7 grid grid-cols-3 gap-x-3 gap-y-5 max-sm:grid-cols-1">
+                {/* Course Name Card */}
                 <Box className="h-28 shadow-lg rounded-xl overflow-hidden">
-                    <Box sx={{ backgroundColor: "#E8EEFD" }} className="w-1/4 h-full float-right flex justify-center items-center">
+                    <Box sx={{ backgroundColor: "#E8EEFD", float: language === 'en' && 'left' }} className="w-1/4 h-full float-right flex justify-center items-center">
                         <img src={CoursesImage} className="" />
                     </Box>
-                    <Box className="mt-4 mr-2 float-right">
+                    <Box className="mt-4 mx-2 float-right" sx={{float: language === 'en' && 'left'}}>
                         <Typography variant="body1" className="text-gray-400"><FormattedMessage id='course_name' /></Typography>
                         <Typography variant="h6" className="!mt-4 !font-semibold">{language == 'en' ? data.course?.name_en : data.course?.name_ar}</Typography>
                     </Box>
                 </Box>
+
+                {/* Teacher Name Card */}
                 <Box className="h-28 shadow-lg rounded-xl overflow-hidden">
-                    <Box sx={{ backgroundColor: "#E8EEFD" }} className="w-1/4 h-full float-right flex justify-center items-center">
+                    <Box sx={{ backgroundColor: "#E8EEFD", float: language === 'en' && 'left' }} className="w-1/4 h-full float-right flex justify-center items-center">
                         <img src={PersonImage} className="" />
                     </Box>
-                    <Box className="mt-4 mr-2 float-right">
+                    <Box className="mt-4 mx-2 float-right" sx={{float: language === 'en' && 'left'}}>
                         <Typography variant="body1" className="text-gray-400"><FormattedMessage id='teacher_name' /></Typography>
                         <Typography variant="h6" className="!mt-4 !font-semibold">{data.course?.teacher?.first_name + ' ' + data.course?.teacher?.last_name}</Typography>
                     </Box>
                 </Box>
+
+                {/* Category Card */}
                 <Box className="h-28 shadow-lg rounded-xl overflow-hidden">
-                    <Box sx={{ backgroundColor: "#E8EEFD" }} className="w-1/4 h-full float-right flex justify-center items-center">
+                    <Box sx={{ backgroundColor: "#E8EEFD", float: language === 'en' && 'left' }} className="w-1/4 h-full float-right flex justify-center items-center">
                         <img src={CategoryImage} className="" />
                     </Box>
-                    <Box className="mt-4 mr-2 float-right">
+                    <Box className="mt-4 mx-2 float-right" sx={{float: language === 'en' && 'left'}}>
                         <Typography variant="body1" className="text-gray-400"><FormattedMessage id='category' /></Typography>
                         <Typography variant="h6" className="!mt-4 !font-semibold">{language == 'en' ? data.course?.category?.name_en : data.course?.category?.name_ar}</Typography>
                     </Box>
                 </Box>
+                
+                {/* Path Card */}
                 {
                     data.path &&
                     <Box className="h-28 shadow-lg rounded-xl overflow-hidden">
-                        <Box sx={{ backgroundColor: "#E8EEFD" }} className="w-1/4 h-full float-right flex justify-center items-center">
+                        <Box sx={{ backgroundColor: "#E8EEFD", float: language === 'en' && 'left' }} className="w-1/4 h-full float-right flex justify-center items-center">
                             <img src={PathImage} className="" />
                         </Box>
-                        <Box className="mt-4 mr-2 float-right">
+                        <Box className="mt-4 mx-2 float-right" sx={{float: language === 'en' && 'left'}}>
                             <Typography variant="body1" className="text-gray-400"><FormattedMessage id='education_path' /></Typography>
                             <Typography variant="h6" className="!mt-4 !font-semibold">{language == 'en' ? data.path?.name_en : data.path?.name_ar}</Typography>
                         </Box>
                     </Box>
                 }
+
+                {/* Course Files Count Card */}
                 <Box className="h-28 shadow-lg rounded-xl overflow-hidden">
-                    <Box sx={{ backgroundColor: "#E8EEFD" }} className="w-1/4 h-full float-right flex justify-center items-center">
+                    <Box sx={{ backgroundColor: "#E8EEFD", float: language === 'en' && 'left' }} className="w-1/4 h-full float-right flex justify-center items-center">
                         <img src={FilesImage} className="" />
                     </Box>
-                    <Box className="mt-4 mr-2 float-right">
+                    <Box className="mt-4 mx-2 float-right" sx={{float: language === 'en' && 'left'}}>
                         <Typography variant="body1" className="text-gray-400"><FormattedMessage id='course_files_count' /></Typography>
                         <Typography variant="h6" className="!mt-4 !font-semibold">{contents?.length}</Typography>
                     </Box>
                 </Box>
+
+                {/* Publication Date Card */}
                 <Box className="h-28 shadow-lg rounded-xl overflow-hidden">
-                    <Box sx={{ backgroundColor: "#E8EEFD" }} className="w-1/4 h-full float-right flex justify-center items-center">
+                    <Box sx={{ backgroundColor: "#E8EEFD", float: language === 'en' && 'left' }} className="w-1/4 h-full float-right flex justify-center items-center">
                         <img src={BlueCalendarImage} className="" />
                     </Box>
-                    <Box className="mt-4 mr-2 float-right">
+                    <Box className="mt-4 mx-2 float-right" sx={{float: language === 'en' && 'left'}}>
                         <Typography variant="body1" className="text-gray-400"><FormattedMessage id='publication_date' /></Typography>
                         <Typography variant="h6" className="!mt-4 !font-semibold">{data.course?.created_at.split(" ")[0]}</Typography>
                     </Box>
                 </Box>
             </Box>
+            
             <Box className="flex pt-7 pb-8">
                 <img src={FilesImage} />
                 <Typography variant="h5" className="!font-semibold !mr-2 max-sm:!text-xl"><FormattedMessage id='uploaded_files' /></Typography>
             </Box>
+
+            {/* Course Contents */}
             {
                 contents?.map((content, index) =>
                     <Box key={index} className="w-full h-28 rounded-xl shadow-lg overflow-hidden mt-4 max-sm:min-h-20">
-                        <Box className="w-1/4 h-full float-right relative max-sm:w-2/4">
+                        <Box className="w-1/4 h-full float-right relative max-sm:w-2/4" sx={{float: language === 'en' && 'left'}}>
                             <img src={content.content.thumbnail_url} className="w-full h-full" />
                             <img src={PlayImage} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
                         </Box>

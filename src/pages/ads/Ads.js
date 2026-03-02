@@ -99,12 +99,12 @@ function Ads() {
         <>
             {
                 wait ?
-                    <Box className="w-full h-screen relative flex justify-center items-center">
+                    <Box className="w-full h-screen relative flex justify-center items-center" sx={{float: language === 'en' && 'right'}}>
                         <CircularProgress size={70} />
                     </Box>
                     :
                     <Box sx={{ backgroundColor: theme.palette.background.default }}>
-                        <Box className="w-4/5 rounded-xl relative" dir="rtl">
+                        <Box className="w-4/5 rounded-xl relative" dir={language === 'en' ? 'ltr' : "rtl"} sx={{float: language === 'en' && 'right'}}>
                             {
                                 getWait ?
                                     <Box className="w-full h-screen relative flex justify-center items-center">
@@ -120,44 +120,47 @@ function Ads() {
                                             </Button>
                                         </Box>
                                         <Box>
-                                            <TableContainer component={Paper} dir="rtl">
+                                            <TableContainer component={Paper} dir={language === 'en' ? 'ltr' : "rtl"}>
+                                                {/* Top Table */}
                                                 <Box className="min-h-12 py-2 px-2 flex justify-between items-center max-sm:flex-col">
                                                     <Box className="w-full flex items-center">
                                                         <FilterAltOutlinedIcon onClick={() => setPopup('filter', 'flex')} className="cursor-pointer" fontSize="large" />
                                                         <Box className="w-2/4 relative mr-3 max-sm:w-full">
                                                             <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder={intl.formatMessage({id: "search_ads"})} />
-                                                            <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" />
+                                                            <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" sx={{right: language === 'en' && '90%'}}/>
                                                         </Box>
                                                     </Box>
                                                     <Box className="flex w-2/4 items-center max-sm:mt-2 max-sm:w-full max-sm:justify-between">
-                                                        <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.select }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
+                                                        <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.select }} className="w-2/5 py-1 rounded-lg mx-3 outline-none">
                                                             <option value=''><FormattedMessage id='date' /></option>
                                                             <option value={language === 'en' ? 'name_en' : 'name_ar'}><FormattedMessage id='ads_title' /></option>
                                                         </select>
                                                         <Typography variant="body1" className="!text-gray-500"><FormattedMessage id='total_ads' />: {bannersCounts}</Typography>
                                                     </Box>
                                                 </Box>
+
+                                                {/* Banners Table */}
                                                 <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                     <TableHead className="bg-gray-200">
                                                         <TableRow sx={{ backgroundColor: theme.palette.background.paper }}>
-                                                            <StyledTableCell align="right"><FormattedMessage id='ads_title' /></StyledTableCell>
-                                                            <StyledTableCell align="right"><FormattedMessage id='ads_type' /></StyledTableCell>
-                                                            <StyledTableCell align="right"><FormattedMessage id='category' />/<FormattedMessage id='course' /></StyledTableCell>
-                                                            <StyledTableCell align="right" className=""><FormattedMessage id='start_date' /></StyledTableCell>
-                                                            <StyledTableCell align="right"><FormattedMessage id='end_date' /></StyledTableCell>
-                                                            <StyledTableCell align="right" className="!text-center"><FormattedMessage id='ads_state' /></StyledTableCell>
-                                                            <StyledTableCell align="right" className="!text-center"><FormattedMessage id='procedures' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id='ads_title' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id='ads_type' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id='category' />/<FormattedMessage id='course' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : 'right'} className=""><FormattedMessage id='start_date' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id='end_date' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="!text-center"><FormattedMessage id='ads_state' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="!text-center"><FormattedMessage id='procedures' /></StyledTableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
                                                         {banners.map((banner, index) => (
                                                             <StyledTableRow key={index} className="hover:bg-gray-400 duration-100 cursor-pointer" onClick={() => bannerDetails(banner.id)}>
-                                                                <StyledTableCell align="right" component="th" scope="row">{language === 'en' ? banner.name_en : banner.name_ar}</StyledTableCell>
-                                                                <StyledTableCell align="right" className="">{banner.category === 'course' ? <FormattedMessage id='course' /> : <FormattedMessage id='path' />}</StyledTableCell>
-                                                                <StyledTableCell align="right">{language === 'en' ? banner.related_data?.name_en : banner.related_data?.name_ar}</StyledTableCell>
-                                                                <StyledTableCell align="right" className="text-center">{banner.active_from}</StyledTableCell>
-                                                                <StyledTableCell align="right" className="">{banner.active_until}</StyledTableCell>
-                                                                <StyledTableCell align="right" className="!text-center" dir="ltr">
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'} component="th" scope="row">{language === 'en' ? banner.name_en : banner.name_ar}</StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="">{banner.category === 'course' ? <FormattedMessage id='course' /> : <FormattedMessage id='path' />}</StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}>{language === 'en' ? banner.related_data?.name_en : banner.related_data?.name_ar}</StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="text-center">{banner.active_from}</StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="">{banner.active_until}</StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="!text-center" dir="ltr">
                                                                     <Select disabled={true} value={ new Date() < new Date(banner.active_from) ? "not_started" : banner.is_active && new Date() <= new Date(banner.active_until) ? "1" : !banner.is_active ? "0" : "ended"} variant="standard" defaultValue="active" onClick={(e) => e.stopPropagation()} className="!border-0" sx={{ border: 'none' }}>
                                                                         <MenuItem value="1">
                                                                             <CircleIcon className="text-green-700" fontSize="small" /> <FormattedMessage id='active' />
@@ -181,6 +184,7 @@ function Ads() {
                                                         ))}
                                                     </TableBody>
                                                 </Table>
+
                                                 <Box className="flex justify-center items-center" dir="rtl">
                                                     <Button disabled={page + 1 === totalPages} className="cursor-pointer" onClick={() => setPage(currentPage + 1)}>
                                                         <NavigateNextIcon fontSize="large" />
@@ -195,19 +199,19 @@ function Ads() {
                                     </Box>
                             }
                         </Box>
-                        <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+                        <Box id="filter" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <AdsFilter onClickClose={() => setPopup('filter', 'none')} onClickConfirm={filteringBanners} status={status} setStatus={setStatus} category={category} setCategory={setCategory} activeFrom={activeFrom} setActiveFrom={setActiveFrom} activeUntil={activeUntil} setActiveUntil={setActiveUntil} filterWait={filterWait} setFilterWait={setFilterWait} />
                         </Box>
-                        <Box id="add" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+                        <Box id="add" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <AddAds onClickClose={() => setPopup('add', 'none')} setSnackbar={setSnackBar} getBanners={getBanners} />
                         </Box>
-                        <Box id="update" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+                        <Box id="update" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <UpdateAds setSnackbar={setSnackBar} setBanner={setBanner} banner={banner} onClickClose={() => setPopup('update', 'none')} getBanners={getBanners}/>
                         </Box>
-                        <Box id="delete" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
-                            <DeleteDialog onClickConfirm={deleteBanner} onClickCancel={() => setPopup('delete', 'none')} title="تأكيد حذف الإعلان" subtitle="سيتم حذف هذا الإعلان نهائيا ولن يظهر للطلاب مرة أخرى، لا يمكن التراجع عن هذا الإجراء" />
+                        <Box id="delete" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+                            <DeleteDialog onClickConfirm={deleteBanner} onClickCancel={() => setPopup('delete', 'none')} title={<FormattedMessage id="ads_delete" />} subtitle={<FormattedMessage id="ads_delete_description" />} />
                         </Box>
-                        <Box id="details" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+                        <Box id="details" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <AdsDetails onClickClose={() => setPopup('details', 'none')} setSnackBar={setSnackBar} setBanners={setBanners} banner={banner} onClickUpdate={updateBanner}/>
                         </Box>
                         <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />

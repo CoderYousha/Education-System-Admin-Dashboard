@@ -40,7 +40,7 @@ function Wallet() {
                     </Box>
                     :
                     <Box sx={{ backgroundColor: theme.palette.background.default }}>
-                        <Box className="w-4/5 rounded-xl relative" dir="rtl">
+                        <Box className="w-4/5 rounded-xl relative" dir="rtl" sx={{float: language === 'en' && 'right'}}>
                             <Box sx={{ backgroundColor: theme.palette.background.paper }} className="w-2/5 mx-auto text-center mt-10 rounded-xl py-10 px-5">
                                 <Typography variant="h4" fontWeight={800}><FormattedMessage id="fill_wallet" /></Typography>
                                 <TextField label={<FormattedMessage id="amount" />} className="w-full !my-10 !z-0" variant="outlined" onChange={(e) => setAmount(e.target.value)} />

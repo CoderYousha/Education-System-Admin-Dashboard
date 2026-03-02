@@ -13,6 +13,7 @@ import { useWaits } from "../../hooks/UseWait";
 import DeleteDialog from "../../popup/DeleteDialog";
 import Fetch from "../../services/Fetch";
 import { useWithdrawFilter } from "../../filter/UseWithdrawFilter";
+import { FormattedMessage, useIntl } from "react-intl";
 
 function ProfitWithdrawalRequests() {
     const { language, host } = useConstants();
@@ -29,6 +30,7 @@ function ProfitWithdrawalRequests() {
     const [search, setSearch] = useState('');
     const [order, setOrder] = useState('');
     const theme = useTheme();
+    const intl = useIntl();
 
     const getWithdraws = async () => {
         let result = await Fetch(host + `/admin/profit/withdraws?page=${page+1}${order}${search && `&search=${search}`}${from  && `&from=${from}`}${to && `&to=${to}`}${teacherId && `&user_id=${teacherId}`}`);
@@ -72,51 +74,51 @@ function ProfitWithdrawalRequests() {
                     <Box sx={{ backgroundColor: theme.palette.background.default }}>
                         {
                             getWait ?
-                                <Box className="w-4/5 h-screen relative flex justify-center items-center">
+                                <Box className="w-4/5 h-screen relative flex justify-center items-center" sx={{float: language === 'en' && 'right'}}>
                                     <CircularProgress size={70} />
                                 </Box>
                                 :
                                 <>
-                                    <Box className="w-4/5 rounded-xl relative px-2" dir="rtl">
+                                    <Box className="w-4/5 rounded-xl relative px-2" dir={language === 'en' ? 'ltr' : 'rtl'} sx={{float: language === 'en' && 'right'}}>
                                         <Box className="rounded-xl">
                                             <Box sx={{ backgroundColor: theme.palette.background.default }} className="flex justify-between items-center px-2">
-                                                <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">سجل الأرباح</Typography>
+                                                <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg"><FormattedMessage id="earnings_record" /></Typography>
                                             </Box>
                                             <Box>
-                                                <TableContainer sx={{ borderRadius: '0' }} className="!rounded-b-xl" component={Paper} dir="rtl">
+                                                <TableContainer sx={{ borderRadius: '0' }} className="!rounded-b-xl" component={Paper} dir={language === 'en' ? 'ltr' : 'rtl'}>
                                                     <Box className="min-h-12 py-2 px-2 flex justify-between items-center max-sm:flex-col">
                                                         <Box className="w-full flex items-center">
                                                             <FilterAltOutlinedIcon className="cursor-pointer" onClick={() => setPopup('filter', 'flex')} fontSize="large" />
                                                             <Box className="w-2/4 relative mr-3 max-sm:w-full">
-                                                                <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-8/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder="البحث باسم المدرس" />
-                                                                <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" />
+                                                                <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-8/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder={intl.formatMessage({id:"search_earnings_record"})} />
+                                                                <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" sx={{right: language === 'en' && '90%'}}/>
                                                             </Box>
                                                         </Box>
                                                         <Box className="flex w-2/4 items-center max-sm:w-full max-sm:mt-2 max-sm:justify-between">
-                                                            <select style={{ backgroundColor: theme.palette.background.select }} onChange={(e) => setOrder(e.target.value)} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
-                                                                <option value=''>التاريخ</option>
-                                                                <option value='&order_by=amount&direction=asc'>المبلغ</option>
+                                                            <select style={{ backgroundColor: theme.palette.background.select }} onChange={(e) => setOrder(e.target.value)} className="w-2/5 py-1 rounded-lg mx-3 outline-none">
+                                                                <option value=''><FormattedMessage id="date" /></option>
+                                                                <option value='&order_by=amount&direction=asc'><FormattedMessage id="amount" /></option>
                                                             </select>
-                                                            <Typography variant="body1" className="!text-gray-500">إجمالي السجل: {withdrawCounts}</Typography>
+                                                            <Typography variant="body1" className="!text-gray-500"><FormattedMessage id="total_record" />: {withdrawCounts}</Typography>
                                                         </Box>
                                                     </Box>
                                                     <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                         <TableHead className="bg-gray-200">
                                                             <TableRow sx={{ backgroundColor: theme.palette.background.paper }} className="!rounded-none">
-                                                                <StyledTableCell align="right">رقم السجل</StyledTableCell>
-                                                                <StyledTableCell align="right">اسم المدرس</StyledTableCell>
-                                                                <StyledTableCell align="right">الرصيد المتاح</StyledTableCell>
-                                                                <StyledTableCell align="right">التاريخ</StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id="record_id" /></StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id="teacher_name" /></StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id="available_balance" /></StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id="date" /></StyledTableCell>
                                                             </TableRow>
                                                         </TableHead>
                                                         <TableBody>
                                                             {
                                                                 withdraws.map((withdraw, index) =>
                                                                     <StyledTableRow key={index} className="h-20">
-                                                                        <StyledTableCell align="right" component="th" scope="row">{withdraw.id}</StyledTableCell>
-                                                                        <StyledTableCell align="right" className=""><Box className="flex flex-row-reverse items-center justify-end"><Box className="mr-2">{withdraw.user.first_name + ' ' + withdraw.user.last_name}</Box><Box className="w-7 h-7 rounded-full bg-gray-300 flex justify-center items-center font-bold">{withdraw.user.first_name.charAt(0) + withdraw.user.last_name.charAt(0)}</Box><Box className=""></Box></Box></StyledTableCell>
-                                                                        <StyledTableCell align="right" component="th" scope="row">{withdraw.amount}$</StyledTableCell>
-                                                                        <StyledTableCell align="right">{withdraw.created_at.split(' ')[0]}</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'} component="th" scope="row">{withdraw.id}</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'} className=""><Box className="flex flex-row-reverse items-center justify-end"><Box className="mr-2">{withdraw.user.first_name + ' ' + withdraw.user.last_name}</Box><Box className="w-7 h-7 rounded-full bg-gray-300 flex justify-center items-center font-bold">{withdraw.user.first_name.charAt(0) + withdraw.user.last_name.charAt(0)}</Box><Box className=""></Box></Box></StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'} component="th" scope="row">{withdraw.amount}$</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'}>{withdraw.created_at.split(' ')[0]}</StyledTableCell>
                                                                     </StyledTableRow>
                                                                 )
                                                             }
@@ -137,11 +139,8 @@ function ProfitWithdrawalRequests() {
                                     </Box>
                                 </>
                         }
-                        <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
+                        <Box id="filter" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
                             <WithdrawalRequestsFilter onClickClose={() => setPopup('filter', 'none')} onClickConfirm={filteringWithdraw} filterWait={filterWait} setFilterWait={setFilterWait} from={from} to={to} teachrrId={teacherId} teacherValue={teacherValue} setFrom={setFrom} setTo={setTo} setTeacherId={setTeacherId} setTeacherValue={setTeacherValue} />
-                        </Box>
-                        <Box id="delete" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
-                            <DeleteDialog onClickCancel={() => setPopup('delete', 'none')} title="تأكيد رفض طلب السحب" subtitle="أنت على وشك رفض طلب سحب الأرباح لهذا المدرس، يرجى التأكد من صحة القرار قبل المتابعة." hasInput={true} placeholder="اكتب سبب الرفض هنا..." warning="سيتم إشعار المدرس بسبب الرفض فور التأكيد" label="سبب الرفض" />
                         </Box>
                     </Box>
             }

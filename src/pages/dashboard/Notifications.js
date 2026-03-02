@@ -37,7 +37,7 @@ function Notifications() {
                     </Box>
                     :
                     <Box sx={{ backgroundColor: theme.palette.background.default }}>
-                        <Box className="w-4/5 rounded-xl relative px-5 py-5" dir="rtl">
+                        <Box className="w-4/5 rounded-xl relative px-5 py-5" dir="rtl" sx={{float: language === 'en' && 'right'}}>
                             <Typography variant="h6" className="pb-3">مركز الإشعارات</Typography>
                             <Box sx={{ backgroundColor: theme.palette.background.paper }} className="w-full rounded-lg">
                                 <Box className="w-full min-h-12 py-2 px-2 flex justify-between items-center max-sm:flex-col">

@@ -48,9 +48,9 @@ function CoursesFilter({ onClickClose, onClickConfirm, categoriesValue, setCateg
     }
 
     return (
-        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="shadow-lg w-3/5 h-fit rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative" dir="rtl">
+        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="shadow-lg w-3/5 h-fit rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative" dir={language === 'en' ? 'ltr' : "rtl"}>
             <Typography variant="h5" className="!font-semibold max-sm:!text-xl"><FormattedMessage id='filtering_courses' /></Typography>
-            <CloseIcon onClick={onClickClose} className="text-gray-700 cursor-pointer absolute top-5 left-5" fontSize="large"></CloseIcon>
+            <CloseIcon onClick={onClickClose} className="text-gray-700 cursor-pointer absolute top-5 left-5" sx={{left: language === 'en' && '90%'}} fontSize="large"></CloseIcon>
             <Divider className="!my-5" />
             <Box className=""></Box>
             <Typography variant="body1"><FormattedMessage id='category' /></Typography>
@@ -99,7 +99,9 @@ function CoursesFilter({ onClickClose, onClickConfirm, categoriesValue, setCateg
                 <TextField sx={{ '& input::-webkit-datetime-edit': { color: 'transparent' }, '& input:focus::-webkit-datetime-edit': { color: 'inherit' } }} value={fromDate} onChange={(e) => setFromDate(e.target.value)} type="date" className="w-5/12" label={<FormattedMessage id='from' />}></TextField>
                 <TextField sx={{ '& input::-webkit-datetime-edit': { color: 'transparent' }, '& input:focus::-webkit-datetime-edit': { color: 'inherit' } }} defaultValue="2026-12-30" value={toDate} onChange={(e) => setToDate(e.target.value)} type="date" className="w-5/12" label={<FormattedMessage id='to' />}></TextField>
             </Box>
-            <Box className="w-full flex justify-between mt-10 max-sm:flex-col">
+
+            {/* Buttons Container */}
+            <Box className="w-full flex justify-between mt-10 max-sm:!flex-col" sx={{flexDirection: language === 'en' && 'row-reverse'}}>
                 <Button variant="contained" className="w-5/12 h-10 !bg-gray-300 !text-gray-500 !font-semibold hover:!bg-gray-200 duration-300 max-sm:w-full" onClick={resetFilter}><FormattedMessage id='reset' /></Button>
                 <Button variant="contained" className="w-5/12 h-10 max-sm:w-full max-sm:!mt-5 !text-white hover:bg-blue-400 duration-300" onClick={() => { setFilterWait(true); onClickConfirm(); }}>
                     <Box>

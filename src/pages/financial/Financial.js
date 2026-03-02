@@ -22,6 +22,7 @@ import Fetch from "../../services/Fetch";
 import SnackbarAlert from "../../components/SnackBar";
 import useSnackBar from "../../hooks/UseSnackBar";
 import { FormattedMessage } from "react-intl";
+import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 
 function Financial() {
     const { host, language } = useConstants();
@@ -111,19 +112,21 @@ function Financial() {
                     <Box sx={{ backgroundColor: theme.palette.background.default }}>
                         {
                             getWait ?
-                                <Box className="w-4/5 h-screen relative flex justify-center items-center">
+                                <Box className="w-4/5 h-screen relative flex justify-center items-center" sx={{float: language === 'en' && 'right'}}>
                                     <CircularProgress size={70} />
                                 </Box>
                                 :
                                 <>
-                                    <Box className="w-4/5 flex justify-between mt-10 max-sm:block" dir="rtl">
+                                    {/* Financial Percentage Cards */}
+                                    <Box className="w-4/5 flex justify-between mt-10 max-sm:block" sx={{float: language === 'en' && 'right'}} dir={language === 'en' ? 'ltr' : "rtl"}>
+                                        {/* Total Sales Card */}
                                         <Box sx={{ backgroundColor: theme.palette.background.paper }} className="rounded-xl bg-white w-3/6 mx-2 min-h-32 relative shadow-xl py-2 max-sm:w-5/6 max-sm:mx-auto">
-                                            <Box className="bg-blue-100 w-10 h-10 rounded-lg flex justify-center items-center mr-2 mt-2 text-blue-900">
+                                            <Box className="bg-blue-100 w-10 h-10 rounded-lg flex justify-center items-center mx-2 mt-2 text-blue-900">
                                                 <img src={MoneyImage} />
                                             </Box>
-                                            <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm"><FormattedMessage id="total_sales" /></Typography>
-                                            <Typography variant="h4" className="pr-2 pt-3">{cards.total_sales.total}$</Typography>
-                                            <Box className="absolute top-5 left-2">
+                                            <Typography variant="h6" className="text-gray-500 px-2 pt-2 !text-sm"><FormattedMessage id="total_sales" /></Typography>
+                                            <Typography variant="h4" className="px-2 pt-3">{cards.total_sales.total}$</Typography>
+                                            <Box className="absolute top-5 left-2" sx={{ left: language === 'en' && '80%' }}>
                                                 {
                                                     cards.total_sales.percent > 0 ?
                                                         <Box>
@@ -144,13 +147,15 @@ function Financial() {
                                                 }
                                             </Box>
                                         </Box>
+
+                                        {/* Total Platform Commission Card */}
                                         <Box sx={{ backgroundColor: theme.palette.background.paper }} className="rounded-xl bg-white w-3/6 mx-2 min-h-32 py-2 relative shadow-xl max-sm:w-5/6 max-sm:mx-auto max-sm:mt-2">
-                                            <Box className="bg-blue-100 w-10 h-10 rounded-lg flex justify-center items-center text-blue-900 mr-2 mt-2">
+                                            <Box className="bg-blue-100 w-10 h-10 rounded-lg flex justify-center items-center text-blue-900 mx-2 mt-2">
                                                 <img src={BankImage} />
                                             </Box>
-                                            <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm"><FormattedMessage id="total_platform_commission" /></Typography>
-                                            <Typography variant="h4" className="pr-2 pt-3">{cards.total_admin_revenue.total}$</Typography>
-                                            <Box className="absolute top-5 left-2">
+                                            <Typography variant="h6" className="text-gray-500 px-2 pt-2 !text-sm"><FormattedMessage id="total_platform_commission" /></Typography>
+                                            <Typography variant="h4" className="px-2 pt-3">{cards.total_admin_revenue.total}$</Typography>
+                                            <Box className="absolute top-5 left-2" sx={{ left: language === 'en' && '80%' }}>
                                                 {
                                                     cards.total_admin_revenue.percent > 0 ?
                                                         <Box>
@@ -171,13 +176,15 @@ function Financial() {
                                                 }
                                             </Box>
                                         </Box>
+
+                                        {/* Total Teachers Earnings Card */}
                                         <Box sx={{ backgroundColor: theme.palette.background.paper }} className="rounded-xl bg-white w-3/6 mx-2 min-h-32 py-2 relative shadow-xl max-sm:w-5/6 max-sm:mx-auto max-sm:mt-2">
-                                            <Box className="bg-blue-100 w-10 h-10 rounded-lg flex justify-center items-center mr-2 mt-2 text-blue-900">
+                                            <Box className="bg-blue-100 w-10 h-10 rounded-lg flex justify-center items-center mx-2 mt-2 text-blue-900">
                                                 <img src={TeachersImage} />
                                             </Box>
-                                            <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm"><FormattedMessage id="total_teacher_earnings" /></Typography>
-                                            <Typography variant="h4" className="pr-2 pt-3">{cards.total_teacher_revenue.total}$</Typography>
-                                            <Box className="absolute top-5 left-2">
+                                            <Typography variant="h6" className="text-gray-500 px-2 pt-2 !text-sm"><FormattedMessage id="total_teacher_earnings" /></Typography>
+                                            <Typography variant="h4" className="px-2 pt-3">{cards.total_teacher_revenue.total}$</Typography>
+                                            <Box className="absolute top-5 left-2" sx={{ left: language === 'en' && '80%' }}>
                                                 {
                                                     cards.total_teacher_revenue.percent > 0 ?
                                                         <Box>
@@ -198,13 +205,15 @@ function Financial() {
                                                 }
                                             </Box>
                                         </Box>
+
+                                        {/* Student Platform Balance Card */}
                                         <Box sx={{ backgroundColor: theme.palette.background.paper }} className="rounded-xl bg-white w-3/6 mx-2 min-h-32 py-2 relative shadow-xl max-sm:w-5/6 max-sm:mx-auto max-sm:mt-2">
-                                            <Box className="bg-blue-100 w-10 h-10 rounded-lg flex justify-center items-center mr-2 mt-2 text-blue-900">
+                                            <Box className="bg-blue-100 w-10 h-10 rounded-lg flex justify-center items-center mx-2 mt-2 text-blue-900">
                                                 <img src={WalletImage} />
                                             </Box>
-                                            <Typography variant="h6" className="text-gray-500 pr-2 pt-2 !text-sm"><FormattedMessage id="student_wallets" /></Typography>
-                                            <Typography variant="h4" className="pr-2 pt-3">{cards.total_student_wallets.total}$</Typography>
-                                            <Box className="absolute top-5 left-2">
+                                            <Typography variant="h6" className="text-gray-500 px-2 pt-2 !text-sm"><FormattedMessage id="student_wallets" /></Typography>
+                                            <Typography variant="h4" className="px-2 pt-3">{cards.total_student_wallets.total}$</Typography>
+                                            <Box className="absolute top-5 left-2" sx={{ left: language === 'en' && '80%' }}>
                                                 {
                                                     cards.total_student_wallets.percent > 0 ?
                                                         <Box>
@@ -226,17 +235,20 @@ function Financial() {
                                             </Box>
                                         </Box>
                                     </Box>
-                                    <Box className="w-4/5 flex flex-row-reverse">
+
+
+                                    <Box className="w-4/5 flex flex-row-reverse" sx={{ flexDirection: language === 'en' && 'row', float: language === 'en' && 'right' }} dir={language === 'en' ? 'ltr' : "rtl"}>
+                                        {/* Revenue Distribution Settings */}
                                         <Box sx={{ backgroundColor: theme.palette.background.paper }} className="w-1/4 rounded-xl mt-10 mr-2 py-2 px-3">
-                                            <Box className="flex justify-end items-center">
-                                                <Typography variant="h6" fontWeight="800" className="!mr-2"><FormattedMessage id="revenue_distribution_settings" /></Typography>
+                                            <Box className="flex justify-end items-center" sx={{ flexDirection: language === 'en' && 'row-reverse' }}>
+                                                <Typography variant="h6" fontWeight="800" className="!mx-2"><FormattedMessage id="revenue_distribution_settings" /></Typography>
                                                 <img src={SettingsImage} className="" />
                                             </Box>
-                                            <TextField type="number" variant="outlined" label={<FormattedMessage id="platform_commission_percentage" />} dir="rtl" className="w-full !my-5" value={systemProfits} onChange={(e) => { setSystemProfits(e.target.value); setTeacherProfits(100 - e.target.value); }} />
-                                            <TextField variant="outlined" label={<FormattedMessage id="teachers_earnings_percentage" />} dir="rtl" className="w-full !my-5" value={teacherProfits} aria-readonly />
-                                            <Box className="w-full rounded-lg bg-blue-100 border border-blue-400 py-2 px-2 flex items-center mt-10" dir="rtl">
+                                            <TextField type="number" variant="outlined" label={<FormattedMessage id="platform_commission_percentage" />} dir={language === 'en' ? 'ltr' : "rtl"} className="w-full !my-5" value={systemProfits} onChange={(e) => { setSystemProfits(e.target.value); setTeacherProfits(100 - e.target.value); }} />
+                                            <TextField variant="outlined" label={<FormattedMessage id="teachers_earnings_percentage" />} dir={language === 'en' ? 'ltr' : "rtl"} className="w-full !my-5" value={teacherProfits} aria-readonly />
+                                            <Box className="w-full rounded-lg bg-blue-100 border border-blue-400 py-2 px-2 flex items-center mt-10" dir={language === 'en' ? 'ltr' : "rtl"}>
                                                 <img src={WarningImage} className="" />
-                                                <Typography variant="body1" className="text-blue-600 !mr-5"><FormattedMessage id="revenue_distribution_settings_note" /></Typography>
+                                                <Typography variant="body1" className="text-blue-600 !mx-5"><FormattedMessage id="revenue_distribution_settings_note" /></Typography>
                                             </Box>
                                             <Button onClick={updatePercentage} variant="contained" className="w-full !mt-8 !text-white !text-lg hover:!bg-blue-400 duration-300 max-sm:w-full">
                                                 {
@@ -250,28 +262,37 @@ function Financial() {
                                                 }
                                             </Button>
                                         </Box>
-                                        <Box className="w-2/3 ml-2 mt-10 flex-grow mr-5">
+
+                                        {/* Earnings Records */}
+                                        <Box className="w-2/3 ml-2 mt-10 flex-grow mr-5" dir={language === 'en' ? 'ltr' : "rtl"}>
                                             <Box sx={{ backgroundColor: theme.palette.background.default }} className="bg-white mr-2 rounded-xl">
-                                                <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2 py-4 rounded-t-xl" dir="rtl">
+                                                <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2 py-4 rounded-t-xl" dir={language === 'en' ? 'ltr' : "rtl"}>
                                                     <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg"><FormattedMessage id="earnings_record" /></Typography>
-                                                    <Typography variant="body1" className="cursor-pointer max-sm:!text-sm text-blue-600" onClick={() => navigate('withdrawal-requests')}><FormattedMessage id="view_record" /><ArrowBackIosNewIcon /></Typography>
+                                                    <Typography variant="body1" className="cursor-pointer max-sm:!text-sm text-blue-600" onClick={() => navigate('withdrawal-requests')}><FormattedMessage id="view_record" />
+                                                        {
+                                                            language === 'en' ?
+                                                            <ArrowForwardIosOutlinedIcon />
+                                                            :
+                                                            <ArrowBackIosNewIcon />
+                                                        }
+                                                    </Typography>
                                                 </Box>
-                                                <TableContainer sx={{ borderRadius: '0' }} className="!rounded-b-xl" component={Paper} dir="rtl">
+                                                <TableContainer sx={{ borderRadius: '0' }} className="!rounded-b-xl" component={Paper} dir={language === 'en' ? 'ltr' : "rtl"}>
                                                     <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                         <TableHead className="bg-gray-200">
                                                             <TableRow sx={{ backgroundColor: theme.palette.background.paper }} className="!rounded-none">
-                                                                <StyledTableCell align="right"><FormattedMessage id="teacher_name" /></StyledTableCell>
-                                                                <StyledTableCell align="right"><FormattedMessage id="available_balance" /></StyledTableCell>
-                                                                <StyledTableCell align="right"><FormattedMessage id="date" /></StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id="teacher_name" /></StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id="available_balance" /></StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id="date" /></StyledTableCell>
                                                             </TableRow>
                                                         </TableHead>
                                                         <TableBody>
                                                             {
                                                                 visibleWithdraws.map((withdraw, index) =>
                                                                     <StyledTableRow key={index} className="h-20">
-                                                                        <StyledTableCell align="right" className=""><Box className="flex flex-row-reverse items-center justify-end"><Box className="mr-2">{withdraw.user.first_name + ' ' + withdraw.user.last_name}</Box><Box className="w-7 h-7 rounded-full bg-gray-300 flex justify-center items-center font-bold">{withdraw.user.first_name.charAt(0) + withdraw.user.last_name.charAt(0)}</Box><Box className=""></Box></Box></StyledTableCell>
-                                                                        <StyledTableCell align="right" component="th" scope="row">{withdraw.amount}$</StyledTableCell>
-                                                                        <StyledTableCell align="right">{withdraw.created_at.split(" ")[0]}</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'} className=""><Box className="flex flex-row-reverse items-center justify-end"><Box className="mx-2">{withdraw.user.first_name + ' ' + withdraw.user.last_name}</Box><Box className="w-7 h-7 rounded-full bg-gray-300 flex justify-center items-center font-bold">{withdraw.user.first_name.charAt(0) + withdraw.user.last_name.charAt(0)}</Box><Box className=""></Box></Box></StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'} component="th" scope="row">{withdraw.amount}$</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'}>{withdraw.created_at.split(" ")[0]}</StyledTableCell>
                                                                     </StyledTableRow>
                                                                 )
                                                             }
@@ -281,40 +302,49 @@ function Financial() {
                                             </Box>
                                         </Box>
                                     </Box>
-                                    <Box className="w-4/5 mt-5">
+
+                                    {/* Records of Financial Transactions */}
+                                    <Box className="w-4/5 mt-5" dir={language === 'en' ? 'ltr' : "rtl"} sx={{float: language === 'en' && 'right'}}>
                                         <Box sx={{ backgroundColor: theme.palette.background.default }} className="bg-white mx-2 rounded-xl">
-                                            <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2 py-4 rounded-t-xl" dir="rtl">
+                                            <Box sx={{ backgroundColor: theme.palette.background.paper }} className="flex justify-between items-center px-2 py-4 rounded-t-xl" dir={language === 'en' ? 'ltr' : "rtl"}>
                                                 <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg"><FormattedMessage id="record_financial_transactions" /></Typography>
-                                                <Typography variant="body1" className="cursor-pointer max-sm:!text-sm text-blue-600" onClick={() => navigate('financial-operations')}><FormattedMessage id="view_record" /> <ArrowBackIosNewIcon /></Typography>
+                                                <Typography variant="body1" className="cursor-pointer max-sm:!text-sm text-blue-600" onClick={() => navigate('financial-operations')}><FormattedMessage id="view_record" />
+                                                    {
+                                                        language === 'en' ?
+                                                            <ArrowForwardIosOutlinedIcon />
+                                                            :
+                                                            <ArrowBackIosNewIcon />
+                                                    }
+                                                </Typography>
                                             </Box>
-                                            <TableContainer sx={{ borderRadius: '0' }} className="!rounded-b-xl" component={Paper} dir="rtl">
+                                            <TableContainer sx={{ borderRadius: '0' }} className="!rounded-b-xl" component={Paper} dir={language === 'en' ? 'ltr' : "rtl"}>
                                                 <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                     <TableHead className="bg-gray-200">
                                                         <TableRow sx={{ backgroundColor: theme.palette.background.paper }} className="!rounded-none">
-                                                            <StyledTableCell align="right"><FormattedMessage id="transaction_id" /></StyledTableCell>
-                                                            <StyledTableCell align="right"><FormattedMessage id="transaction_type" /></StyledTableCell>
-                                                            <StyledTableCell align="right"><FormattedMessage id="transaction_details" /></StyledTableCell>
-                                                            <StyledTableCell align="right"><FormattedMessage id="student_name" /></StyledTableCell>
-                                                            <StyledTableCell align="right"><FormattedMessage id="teacher_name" /></StyledTableCell>
-                                                            <StyledTableCell align="right"><FormattedMessage id="amount" /></StyledTableCell>
-                                                            <StyledTableCell align="right"><FormattedMessage id="platform_commission" /></StyledTableCell>
-                                                            <StyledTableCell align="right"><FormattedMessage id="teacher_earnings" /></StyledTableCell>
-                                                            <StyledTableCell align="right"><FormattedMessage id="transaction_date" /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : "right"}><FormattedMessage id="transaction_id" /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : "right"}><FormattedMessage id="transaction_type" /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : "right"}><FormattedMessage id="transaction_details" /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : "right"}><FormattedMessage id="student_name" /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : "right"}><FormattedMessage id="teacher_name" /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : "right"}><FormattedMessage id="amount" /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : "right"}><FormattedMessage id="platform_commission" /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : "right"}><FormattedMessage id="teacher_earnings" /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : "right"}><FormattedMessage id="transaction_date" /></StyledTableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
                                                         {
                                                             visibleSales.map((sale, index) =>
                                                                 <StyledTableRow key={index} className="h-20">
-                                                                    <StyledTableCell align="right" className="">{sale.id}</StyledTableCell>
-                                                                    <StyledTableCell align="right" component="th" scope="row">{sale.type === 'Course' ? 'شراء دورة' : 'شراء مسار'}</StyledTableCell>
-                                                                    <StyledTableCell align="right">{language === 'en' ? sale.name_en : sale.name_ar}</StyledTableCell>
-                                                                    <StyledTableCell align="right">{sale.student}</StyledTableCell>
-                                                                    <StyledTableCell align="right">{sale.teacher}</StyledTableCell>
-                                                                    <StyledTableCell align="right">{sale.amount}$</StyledTableCell>
-                                                                    <StyledTableCell align="right" className="!font-bold !text-blue-500">{calculatingPercentage(sale.amount, sale.admin_profit)}%</StyledTableCell>
-                                                                    <StyledTableCell align="right" className="!font-bold">{sale.teacher_profit}$</StyledTableCell>
-                                                                    <StyledTableCell align="right">{sale.date}</StyledTableCell>
+                                                                    <StyledTableCell align={language === 'en' ? 'left' : "right"} className="">{sale.id}</StyledTableCell>
+                                                                    <StyledTableCell align={language === 'en' ? 'left' : "right"} component="th" scope="row">{sale.type === 'Course' ? 'شراء دورة' : 'شراء مسار'}</StyledTableCell>
+                                                                    <StyledTableCell align={language === 'en' ? 'left' : "right"}>{language === 'en' ? sale.name_en : sale.name_ar}</StyledTableCell>
+                                                                    <StyledTableCell align={language === 'en' ? 'left' : "right"}>{sale.student}</StyledTableCell>
+                                                                    <StyledTableCell align={language === 'en' ? 'left' : "right"}>{sale.teacher}</StyledTableCell>
+                                                                    <StyledTableCell align={language === 'en' ? 'left' : "right"}>{sale.amount}$</StyledTableCell>
+                                                                    <StyledTableCell align={language === 'en' ? 'left' : "right"} className="!font-bold !text-blue-500">{calculatingPercentage(sale.amount, sale.admin_profit)}%</StyledTableCell>
+                                                                    <StyledTableCell align={language === 'en' ? 'left' : "right"} className="!font-bold">{sale.teacher_profit}$</StyledTableCell>
+                                                                    <StyledTableCell align={language === 'en' ? 'left' : "right"}>{sale.date}</StyledTableCell>
                                                                 </StyledTableRow>
                                                             )
                                                         }

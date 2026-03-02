@@ -83,9 +83,9 @@ function AddAds({ onClickClose, setSnackbar, getBanners }) {
     }
 
     return (
-        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="shadow-lg w-3/5 h-screen rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative max-sm:h-screen" dir="rtl">
+        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="shadow-lg w-3/5 h-screen rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative max-sm:h-screen" dir={language === 'en' ? 'ltr' : "rtl"}>
             <Typography variant="h5" className="!font-semibold max-sm:!text-xl"><FormattedMessage id='add_ads' /></Typography>
-            <CloseIcon onClick={() => { resetInputs(); onClickClose(); }} className="text-gray-700 cursor-pointer absolute top-5 left-5" fontSize="large" />
+            <CloseIcon onClick={() => { resetInputs(); onClickClose(); }} className="text-gray-700 cursor-pointer absolute top-5 left-5" sx={{left: language === 'en' && '90%'}} fontSize="large" />
             <Divider className="!my-5" />
             <TextField variant="outlined" label={<FormattedMessage id='ads_title_ar' />} className="w-full" onChange={(e) => setNameAr(e.target.value)} value={nameAr} />
             <TextField variant="outlined" label={<FormattedMessage id='ads_title_en' />} className="w-full !mt-5" onChange={(e) => setNameEn(e.target.value)} value={nameEn} />
@@ -133,10 +133,10 @@ function AddAds({ onClickClose, setSnackbar, getBanners }) {
             <Box className="mt-7">
                 <Typography variant="body2" className="!font-semibold text-gray-400"><FormattedMessage id='ads_state' /></Typography>
                 <Select value={isActive} variant="standard" onChange={(e) => setIsActive(e.target.value)} className="w-full !rounded-xl !border-none" sx={{ '& .MuiOutlinedInput-notchedOutline': { border: 'none', }, '&:hover .MuiOutlinedInput-notchedOutline': { border: 'none', }, '&.Mui-focused .MuiOutlinedInput-notchedOutline': { border: 'none', }, }}>
-                    <MenuItem dir="rtl" value="1">
+                    <MenuItem dir={language === 'en' ? 'ltr' : "rtl"} value="1">
                         <CircleIcon className="text-green-700" fontSize="small" /> <FormattedMessage id='active' />
                     </MenuItem>
-                    <MenuItem dir="rtl" value="0">
+                    <MenuItem dir={language === 'en' ? 'ltr' : "rtl"} value="0">
                         <CircleIcon className="text-gray-700" fontSize="small" /> <FormattedMessage id='stopped' />
                     </MenuItem>
                 </Select>
@@ -146,7 +146,9 @@ function AddAds({ onClickClose, setSnackbar, getBanners }) {
                 <Typography variant="body1" className="text-gray-700"><FormattedMessage id='add_image' /></Typography>
                 <input type="file" accept="image/*" className="w-full h-full opacity-0 absolute cursor-pointer" onChange={(e) => setImage(e.target.files[0])} />
             </Box>
-            <Box className="flex justify-between mt-5 w-full max-sm:flex-col max-sm:items-center">
+
+            {/* Buttons Container */}
+            <Box className="flex justify-between mt-5 w-full max-sm:!flex-col max-sm:items-center" sx={{flexDirection: language === 'en' && 'row-reverse'}}>
                 <Button onClick={addAds} variant="contained" className="w-5/12 !text-white !font-bold hover:bg-blue-200 duration-300 max-sm:w-full">
                     {
                         sendWait ?

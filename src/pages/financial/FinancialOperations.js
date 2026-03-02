@@ -12,6 +12,7 @@ import { useWaits } from "../../hooks/UseWait";
 import FinancialOperationsFilter from "../../popup/FinancialOperationsFilter";
 import Fetch from "../../services/Fetch";
 import { useFinancialOperationsFilter } from "../../filter/UseFinancialOperationsFilter";
+import { FormattedMessage, useIntl } from "react-intl";
 
 function FinancialOperations() {
     const { language, host } = useConstants();
@@ -28,6 +29,7 @@ function FinancialOperations() {
     const [search, setSearch] = useState('');
     const [order, setOrder] = useState('');
     const theme = useTheme();
+    const intil = useIntl();
 
     const calculatingPercentage = (total, profit) => {
         let value = 100 * profit / total;
@@ -82,56 +84,56 @@ function FinancialOperations() {
                                 </Box>
                                 :
                                 <>
-                                    <Box className="w-4/5 rounded-xl relative px-2" dir="rtl">
+                                    <Box className="w-4/5 rounded-xl relative px-2" dir={language === 'en' ? 'ltr' : 'rtl'}>
                                         <Box className="rounded-xl">
                                             <Box sx={{ backgroundColor: theme.palette.background.default }} className="flex justify-between items-center px-2">
-                                                <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg">سجل العمليات المالية</Typography>
+                                                <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg"><FormattedMessage id="record_financial_transactions" /></Typography>
                                             </Box>
                                             <Box>
-                                                <TableContainer sx={{ borderRadius: '0' }} className="!rounded-b-xl" component={Paper} dir="rtl">
+                                                <TableContainer sx={{ borderRadius: '0' }} className="!rounded-b-xl" component={Paper} dir={language === 'en' ? 'ltr' : 'rtl'}>
                                                     <Box className="min-h-12 py-2 px-2 flex justify-between items-center max-sm:flex-col">
                                                         <Box className="w-full flex items-center">
                                                             <FilterAltOutlinedIcon className="cursor-pointer" onClick={() => setPopup('filter', 'flex')} fontSize="large" />
                                                             <Box className="w-2/4 relative mr-3 max-sm:w-full">
-                                                                <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder="البحث برقم العملية أو اسم المستخدم" />
-                                                                <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" />
+                                                                <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder={intil.formatMessage({id: 'search_transaction'})} />
+                                                                <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" sx={{right: language === 'en' && '90%'}}/>
                                                             </Box>
                                                         </Box>
                                                         <Box className="flex w-2/4 items-center max-sm:w-full max-sm:mt-2 max-sm:justify-between">
-                                                            <select style={{ backgroundColor: theme.palette.background.select }} onChange={(e) => setOrder(e.target.value)} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
-                                                                <option value=''>التاريخ</option>
-                                                                <option value='&order_by=id&direction=asc'>رقم العملية</option>
+                                                            <select style={{ backgroundColor: theme.palette.background.select }} onChange={(e) => setOrder(e.target.value)} className="w-2/5 py-1 rounded-lg mx-3 outline-none">
+                                                                <option value=''><FormattedMessage id="date" /></option>
+                                                                <option value='&order_by=id&direction=asc'><FormattedMessage id="transaction_id" /></option>
                                                             </select>
-                                                            <Typography variant="body1" className="!text-gray-500">إجمالي السجل: {saleCounts}</Typography>
+                                                            <Typography variant="body1" className="!text-gray-500"><FormattedMessage id="total_record" />: {saleCounts}</Typography>
                                                         </Box>
                                                     </Box>
                                                     <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                         <TableHead className="bg-gray-200">
                                                             <TableRow sx={{ backgroundColor: theme.palette.background.paper }} className="!rounded-none">
-                                                                <StyledTableCell align="right">رقم العملية</StyledTableCell>
-                                                                <StyledTableCell align="right">نوع العملية</StyledTableCell>
-                                                                <StyledTableCell align="right">تفاصيل العملية</StyledTableCell>
-                                                                <StyledTableCell align="right">اسم الطالب</StyledTableCell>
-                                                                <StyledTableCell align="right">اسم المدرس</StyledTableCell>
-                                                                <StyledTableCell align="right">المبلغ</StyledTableCell>
-                                                                <StyledTableCell align="right">عمولة المنصة</StyledTableCell>
-                                                                <StyledTableCell align="right">أرباح المدرس</StyledTableCell>
-                                                                <StyledTableCell align="right">تاريخ العملية</StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id="transaction_id" /></StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id="transaction_type" /></StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id="transaction_details" /></StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id="student_name" /></StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id="teacher_name" /></StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id="amount" /></StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id="platform_commission" /></StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id="teacher_earnings" /></StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id="transaction_date" /></StyledTableCell>
                                                             </TableRow>
                                                         </TableHead>
                                                         <TableBody>
                                                             {
                                                                 sales.map((sale, index) =>
                                                                     <StyledTableRow key={index} className="h-20">
-                                                                        <StyledTableCell align="right" className="">{sale.id}</StyledTableCell>
-                                                                        <StyledTableCell align="right" component="th" scope="row">{sale.type === 'Course' ? 'شراء دورة' : 'شراء مسار'}</StyledTableCell>
-                                                                        <StyledTableCell align="right">{language === 'en' ? sale.name_en : sale.name_ar}</StyledTableCell>
-                                                                        <StyledTableCell align="right">{sale.student}</StyledTableCell>
-                                                                        <StyledTableCell align="right">{sale.teacher}</StyledTableCell>
-                                                                        <StyledTableCell align="right">{sale.amount}$</StyledTableCell>
-                                                                        <StyledTableCell align="right" className="!font-bold !text-blue-500">{calculatingPercentage(sale.amount, sale.admin_profit)}%</StyledTableCell>
-                                                                        <StyledTableCell align="right" className="!font-bold">{sale.teacher_profit}$</StyledTableCell>
-                                                                        <StyledTableCell align="right">{sale.date}</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="">{sale.id}</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'} component="th" scope="row">{sale.type === 'Course' ? 'شراء دورة' : 'شراء مسار'}</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'}>{language === 'en' ? sale.name_en : sale.name_ar}</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'}>{sale.student}</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'}>{sale.teacher}</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'}>{sale.amount}$</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="!font-bold !text-blue-500">{calculatingPercentage(sale.amount, sale.admin_profit)}%</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="!font-bold">{sale.teacher_profit}$</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'}>{sale.date}</StyledTableCell>
                                                                     </StyledTableRow>
                                                                 )
                                                             }

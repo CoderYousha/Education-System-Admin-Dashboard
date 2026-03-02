@@ -34,7 +34,7 @@ function UpdatePassword({ onClickCancel, setSnackBar }) {
 
         if (result.status === 200) {
             resetInputs();
-            setSnackBar('success', 'تم تعديل كلمة المرور بنجاح')
+            setSnackBar('success', <FormattedMessage id='updated_success' />);
             onClickCancel();
         } else if (result.status === 422 || result.status === 400) {
             setSnackBar('error', result.data.errors[0]);
@@ -53,7 +53,7 @@ function UpdatePassword({ onClickCancel, setSnackBar }) {
             <TextField type='password' className='w-full !mt-5' label={<FormattedMessage id="basic_password" />} onChange={(e) => setPassword(e.target.value)} value={password} />
             <TextField type='password' className='w-full !mt-5' label={<FormattedMessage id="new_password" />} onChange={(e) => setNewPassword(e.target.value)} value={newPassword} />
             <TextField type='password' className='w-full !mt-5' label={<FormattedMessage id="confirm_new_password" />} onChange={(e) => setConfirmNewPassword(e.target.value)} value={confirmNewPassword} />
-            <Box className="py-3 flex justify-between max-sm:flex-col">
+            <Box className="py-3 flex justify-between max-sm:flex-col" sx={{flexDirection: language === 'en' && 'row-reverse'}}>
                 <Button onClick={updatePassword} variant='contained' className='w-2/5 !py-3 flex max-sm:w-full !text-white'>
                     {
                         sendWait ?

@@ -127,14 +127,16 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
     }
 
     return (
-        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="shadow-lg w-3/5 h-fit rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative max-sm:overflow-y-scroll max-sm:h-screen" dir="rtl">
+        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="shadow-lg w-3/5 h-fit rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative max-sm:overflow-y-scroll max-sm:h-screen" dir={language === 'en' ? 'ltr' : "rtl"}>
             <Typography variant="h5" className="!font-semibold max-sm:!text-xl"><FormattedMessage id='add_teacher' /></Typography>
-            <CloseIcon onClick={() => {resetInputs(); onClickClose();}} className="text-gray-700 cursor-pointer absolute top-5 left-5" fontSize="large"></CloseIcon>
+            <CloseIcon onClick={() => {resetInputs(); onClickClose();}} className="text-gray-700 cursor-pointer absolute top-5 left-5" fontSize="large" sx={{left: language === 'en' && '90%'}}></CloseIcon>
             <Divider className="!my-5" />
             <Box className=""></Box>
             <Box className="grid grid-cols-2 w-full gap-x-2 gap-y-5 mt-5 max-sm:grid-cols-1 max-sm:gap-x-0">
                 <TextField value={firstName} onChange={(e) => setFirstName(e.target.value)} variant="outlined" className="w-full" label={<FormattedMessage id='first_name' />} />
                 <TextField value={lastName} onChange={(e) => setLastName(e.target.value)} variant="outlined" className="w-full" label={<FormattedMessage id='last_name' />} />
+                
+                {/* Name Input Container */}
                 <Box className="col-span-2 max-sm:col-span-1">
                     <Typography variant="body1"><FormattedMessage id='specialization' /></Typography>
                     <AsyncPaginate
@@ -155,6 +157,8 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
                         isSearchable={false}
                     />
                 </Box>
+
+                {/* Specialization Async Pagination */}
                 <Box className="">
                     <Typography variant="body1"><FormattedMessage id='education_specialization' /></Typography>
                     <AsyncPaginate
@@ -175,6 +179,8 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
                         isSearchable={false}
                     />
                 </Box>
+
+                {/* Education Specialization & Academic Degree Async Pagination */}
                 <Box className="">
                     <Typography variant="body1"><FormattedMessage id='academic_degree' /></Typography>
                     <AsyncPaginate
@@ -195,6 +201,7 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
                         isSearchable={false}
                     />
                 </Box>
+                
                 <TextField type="number" value={experienceYears} onChange={(e) => setExperienceYears(e.target.value)} variant="outlined" className="w-full" label={<FormattedMessage id='experience_years' />} />
                 <TextField value={birthdate} onChange={(e) => setBirthDate(e.target.value)} variant="outlined" type="date" defaultValue="2025-01-01" className="w-full" label={<FormattedMessage id='birth_date' />} />
                 <TextField value={email} onChange={(e) => setEmail(e.target.value)} variant="outlined" className="w-full" label={<FormattedMessage id='email' />} />
@@ -204,7 +211,9 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
                 <TextField value={password} onChange={(e) => setPassword(e.target.value)} variant="outlined" type="password" className="w-full" label={<FormattedMessage id='password' />} />
                 <TextField value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} variant="outlined" type="password" className="w-full" label={<FormattedMessage id='confirm_password' />} />
             </Box>
-            <Box className="flex justify-between mt-5 w-full max-sm:flex-col max-sm:items-center">
+
+            {/* Buttons Container */}
+            <Box className="flex justify-between mt-5 w-full max-sm:flex-col max-sm:items-center" sx={{flexDirection: language === 'en' && 'row-reverse'}}>
                 <Button variant="contained" className="w-5/12 !text-white !font-bold hover:!bg-blue-400 duration-300 max-sm:w-full" onClick={addTeacher}>
                     {
                         sendWait ?

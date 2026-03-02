@@ -95,12 +95,12 @@ function Students() {
         <>
             {
                 wait ?
-                    <Box className="w-full h-screen relative flex justify-center items-center">
+                    <Box className="w-full h-screen relative flex justify-center items-center" sx={{float: language === 'en' && 'right'}}>
                         <CircularProgress size={70} />
                     </Box>
                     :
                     <Box sx={{ backgroundColor: theme.palette.background.default }}>
-                        <Box className="w-4/5 rounded-xl relative" dir="rtl">
+                        <Box className="w-4/5 rounded-xl relative" dir={language === 'en' ? 'ltr' : "rtl"} sx={{float: language === 'en' && 'right'}}>
                             {
                                 getWait ?
                                     <Box className="w-full h-screen relative flex justify-center items-center">
@@ -112,17 +112,18 @@ function Students() {
                                             <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg"><FormattedMessage id='students' /></Typography>
                                         </Box>
                                         <Box>
-                                            <TableContainer component={Paper} dir="rtl">
+                                            <TableContainer component={Paper} dir={language === 'en' ? 'ltr' : "rtl"}>
+                                                {/* Top Table */}
                                                 <Box className="min-h-12 py-2 px-2 flex justify-between items-center max-sm:flex-col">
                                                     <Box className="w-full flex items-center">
                                                         <FilterAltOutlinedIcon className="cursor-pointer" onClick={() => setPopup('filter', 'flex')} fontSize="large" />
                                                         <Box className="w-2/4 relative mr-3 max-sm:w-full">
                                                             <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder={intl.formatMessage({id: "search_students"})} />
-                                                            <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" />
+                                                            <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" sx={{right: language === 'en' && '90%'}}/>
                                                         </Box>
                                                     </Box>
                                                     <Box className="flex w-2/4 items-center max-sm:w-full max-sm:mt-2 max-sm:justify-between">
-                                                        <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.select }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
+                                                        <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.select }} className="w-2/5 py-1 rounded-lg mx-3 outline-none">
                                                             <option value=""><FormattedMessage id='date' /></option>
                                                             <option value="first_name"><FormattedMessage id='student_name' /></option>
                                                             <option value="email"><FormattedMessage id='email' /></option>
@@ -130,28 +131,30 @@ function Students() {
                                                         <Typography variant="body1" className="!text-gray-500"><FormattedMessage id='total_students' />: {studentsCount}</Typography>
                                                     </Box>
                                                 </Box>
+
+                                                {/* Students Table */}
                                                 <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                     <TableHead className="bg-gray-200">
                                                         <TableRow sx={{ backgroundColor: theme.palette.background.paper }}>
-                                                            <StyledTableCell align="right"><FormattedMessage id='full_name' /></StyledTableCell>
-                                                            <StyledTableCell align="right"><FormattedMessage id='email' /></StyledTableCell>
-                                                            <StyledTableCell align="right"><FormattedMessage id='education_specialization' /></StyledTableCell>
-                                                            <StyledTableCell align="right" className="!text-center"><FormattedMessage id='registeration_courses_count' /></StyledTableCell>
-                                                            <StyledTableCell align="right"><FormattedMessage id='registeration_date' /></StyledTableCell>
-                                                            <StyledTableCell align="right" className="!text-center"><FormattedMessage id='procedures' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en'? "left" : "right"}><FormattedMessage id='full_name' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en'? "left" : "right"}><FormattedMessage id='email' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en'? "left" : "right"}><FormattedMessage id='education_specialization' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en'? "left" : "right"} className="!text-center"><FormattedMessage id='registeration_courses_count' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en'? "left" : "right"}><FormattedMessage id='registeration_date' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en'? "left" : "right"} className="!text-center"><FormattedMessage id='procedures' /></StyledTableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
                                                         {students.map((student, index) => (
                                                             <StyledTableRow key={index} onClick={() => studentDetails(student.id)} className="hover:bg-gray-400 duration-100 cursor-pointer">
-                                                                <StyledTableCell align="right" component="th" scope="row">
+                                                                <StyledTableCell align={language === 'en'? "left" : "right"} component="th" scope="row">
                                                                     {student.first_name + ' ' + student.last_name}
                                                                 </StyledTableCell>
-                                                                <StyledTableCell align="right" className="">{student.email}</StyledTableCell>
-                                                                <StyledTableCell align="right">{language === 'en' ? student.major?.name_en : student.major?.name_ar}</StyledTableCell>
-                                                                <StyledTableCell align="right" className="!text-center">{student.enrolled_courses_count}</StyledTableCell>
-                                                                <StyledTableCell align="right" className="text-center">{student?.verified_at?.split("T")[0]}</StyledTableCell>
-                                                                <StyledTableCell align="right" className="!text-center">
+                                                                <StyledTableCell align={language === 'en'? "left" : "right"} className="">{student.email}</StyledTableCell>
+                                                                <StyledTableCell align={language === 'en'? "left" : "right"}>{language === 'en' ? student.major?.name_en : student.major?.name_ar}</StyledTableCell>
+                                                                <StyledTableCell align={language === 'en'? "left" : "right"} className="!text-center">{student.enrolled_courses_count}</StyledTableCell>
+                                                                <StyledTableCell align={language === 'en'? "left" : "right"} className="text-center">{student?.verified_at?.split("T")[0]}</StyledTableCell>
+                                                                <StyledTableCell align={language === 'en'? "left" : "right"} className="!text-center">
                                                                     <Button variant="contained" className="mr-2 h-8 !bg-red-300 !text-red-600 !font-bold hover:!bg-red-600 hover:!text-white" onClick={(e) => { e.stopPropagation(); setStudentId(student.id); setPopup('delete', 'flex'); }}><FormattedMessage id='delete' /></Button>
                                                                 </StyledTableCell>
                                                             </StyledTableRow>
@@ -172,13 +175,13 @@ function Students() {
                                     </Box>
                             }
                         </Box>
-                        <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
+                        <Box id="filter" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
                             <StudentFilter onClickConfirm={filteringStudents} value={value} setValue={setValue} majorId={majorId} setMajorId={setMajorId} fromCount={fromCount} setFromCount={setFromCount} toCount={toCount} setToCount={setToCount} fromDate={fromDate} setFromDate={setFromDate} toDate={toDate} setToDate={setToDate} onClickClose={() => setPopup('filter', 'none')} filterWait={filterWait} setFilterWait={setFilterWait} />
                         </Box>
-                        <Box id="details" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+                        <Box id="details" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <StudentDetails student={student} onClickClose={() => setPopup('details', 'none')} />
                         </Box>
-                        <Box id="delete" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+                        <Box id="delete" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <DeleteDialog onClickConfirm={deleteStudent} onClickCancel={() => setPopup('delete', 'none')} title={<FormattedMessage id='delete_title' />} subtitle={<FormattedMessage id='delete_description' />} />
                         </Box>
                         <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />

@@ -65,7 +65,7 @@ function Profile() {
             setProfile(result.data.data);
             localStorage.setItem('language', language);
             handleClose();
-            setSnackBar('success', 'تم تعديل بيانات حسابك بنجاح');
+            setSnackBar('success', <FormattedMessage id="updated_success" />);
             window.location.reload();
         } else if (result.status === 422) {
             setSnackBar('error', result.data.errors[0]);
@@ -83,8 +83,9 @@ function Profile() {
                     </Box>
                     :
                     <Box className="w-full px-5">
-                        <Box sx={{ background: theme.palette.mode === 'dark' ? theme.palette.background.paper : 'linear-gradient(to right, #2563EA, #85A4E8, white 80%)' }} className="h-48 py-5 px-5 rounded-xl mt-10 flex justify-between items-center shadow-lg max-sm:min-h-52 max-sm:flex-col" dir="rtl">
-                            <Box className="flex items-center">
+                        {/* Profile Information */}
+                        <Box sx={{ background: theme.palette.mode === 'dark' ? theme.palette.background.paper : language==='en' ? 'linear-gradient(to left, #2563EA, #85A4E8, white 80%)' : 'linear-gradient(to right, #2563EA, #85A4E8, white 80%)', flexDirection: language === 'en' && 'row-reverse' }} className="h-48 py-5 px-5 rounded-xl mt-10 flex justify-between items-center shadow-lg max-sm:min-h-52 max-sm:flex-col" dir="rtl">
+                            <Box className="flex items-center" sx={{flexDirection: language === 'en' && 'row-reverse'}}>
                                 {
                                     profile.image ?
                                         <Box className="w-14 h-14 text-white rounded-full flex justify-center items-center">
@@ -96,11 +97,11 @@ function Profile() {
                                         </Box>
                                 }
                                 <Box className="mr-5 flex flex-col">
-                                    <Box className="flex items-center">
+                                    <Box className="flex items-center" sx={{flexDirection: language === 'en' && 'row-reverse'}}>
                                         <Typography variant="h5" fontWeight={800} className="">{profile.first_name + ' ' + profile.last_name}</Typography>
-                                        <Typography variant="body2" className="!text-blue-400 w-fit h-full bg-blue-200 px-2 py-1 rounded-full !mr-3"><FormattedMessage id="general_manager" /></Typography>
+                                        <Typography variant="body2" className="!text-blue-400 w-fit h-full bg-blue-200 px-2 py-1 rounded-full !mx-3"><FormattedMessage id="general_manager" /></Typography>
                                     </Box>
-                                    <Box className="flex items-center my-5">
+                                    <Box className="flex items-center my-5" sx={{flexDirection: language === 'en' && 'row-reverse'}}>
                                         <EmailOutlinedIcon className="ml-5" />
                                         <Typography variant="body2" className="!ml-5">{profile.email}</Typography>
                                         <LocalPhoneOutlinedIcon className="ml-5" />
@@ -123,8 +124,11 @@ function Profile() {
                                 </Box>
                             </Box>
                         </Box>
+                        
+                        {/* Admin Roles & Profile Management */}
                         <Box className="" dir="rtl">
-                            <Box sx={{ backgroundColor: theme.palette.background.paper }} className="mt-10 w-7/12 rounded-xl px-4 py-4 float-right max-sm:float-none max-sm:w-full" dir="rtl">
+                            {/* Permissions & Access */}
+                            <Box sx={{ backgroundColor: theme.palette.background.paper, float: language === 'en' && 'left !important' }} className="mt-10 w-7/12 rounded-xl px-4 py-4 float-right max-sm:float-none max-sm:w-full" dir={language === 'en' ? 'ltr' : 'rtl'}>
                                 <Box className="flex items-center">
                                     <AdminPanelSettingsOutlinedIcon fontSize="large" />
                                     <Typography variant="h6" fontWeight={800} className="!mr-2"><FormattedMessage id="permissions_access" /></Typography>
@@ -180,7 +184,9 @@ function Profile() {
                                     </Box>
                                 </Box>
                             </Box>
-                            <Box sx={{ backgroundColor: theme.palette.background.paper }} className="mt-10 w-4/12 rounded-xl px-4 py-4 float-left max-sm:float-none max-sm:w-full" dir="rtl">
+
+                            {/* Security & Settings */}
+                            <Box sx={{ backgroundColor: theme.palette.background.paper, float: language === 'en' ? 'right' : 'left' }} className="mt-10 w-4/12 rounded-xl px-4 py-4 float-left max-sm:float-none max-sm:w-full" dir={language === 'en' ? 'ltr' : "rtl"}>
                                 <Box className="flex items-center">
                                     <GppGoodOutlinedIcon fontSize="large" />
                                     <Typography variant="h6" fontWeight={800} className="!mr-2"><FormattedMessage id="security_settings" /></Typography>
@@ -209,12 +215,13 @@ function Profile() {
                                 </Box>
                             </Box>
                         </Box>
+
+                        {/* Languages Menu */}
                         <Menu
                             anchorEl={anchorEl}
                             id="account-menu"
                             open={open}
                             onClose={handleClose}
-                            // onClick={handleClose}
                             slotProps={{
                                 paper: {
                                     elevation: 0,
@@ -272,12 +279,17 @@ function Profile() {
                             </MenuItem>
                         </Menu>
 
+                        {/* Update Profile Popup */}
                         <Box id="update" className="w-screen h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <UpdateProfile onClickCancel={() => setPopup('update', 'none')} setSnackBar={setSnackBar} />
                         </Box>
+
+                        {/* Update Password Popup */}
                         <Box id="update-password" className="w-screen h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <UpdatePassword onClickCancel={() => setPopup('update-password', 'none')} setSnackBar={setSnackBar} />
                         </Box>
+
+                        {/* Snackbar Alert */}
                         <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
                     </Box>
             }

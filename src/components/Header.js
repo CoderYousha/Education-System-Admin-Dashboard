@@ -16,8 +16,10 @@ import { useNavigate } from "react-router-dom";
 import LogoutPopup from "../popup/Logout";
 import { usePopups } from "../hooks/UsePopups";
 import { FormattedMessage } from "react-intl";
+import { useConstants } from "../hooks/UseConstants";
 
 function Header({ isFullWidth = false }) {
+     const { language } = useConstants();
      const { wait, profile } = useContext(AuthContext);
      const theme = useTheme();
      const { setPopup } = usePopups();
@@ -54,9 +56,9 @@ function Header({ isFullWidth = false }) {
                {
                     !wait &&
                     <React.Fragment>
-                         <Box sx={{ backgroundColor: theme.palette.background.paper, width: isFullWidth && '100% !important' }} className="flex justify-between items-center px-2 py-3 !w-4/5 bg-white max-sm:w-5/6 max-sm:justify-start" dir="rtl">
+                         <Box sx={{ backgroundColor: theme.palette.background.paper, width: isFullWidth && '100% !important', float: language === 'en' && "right" }} className="flex justify-between items-center px-2 py-3 !w-4/5 bg-white max-sm:w-5/6 max-sm:justify-start" dir={language === 'en' ? 'ltr' : 'rtl'}>
                               <Typography variant="h4" className="font-bold pr-5 max-sm:!text-lg max-sm:!ml-3"><FormattedMessage id="admin_control_panel" /></Typography>
-                              <Box className="flex items-center w-1/5">
+                              <Box className="flex items-center w-1/5" sx={{flexDirection: language === 'en' && 'row-reverse'}}>
                                    <NotificationsNoneOutlinedIcon onClick={() => openNotification()} src={NotificationImage} alt="notification" className="w-6 h-6 cursor-pointer max-sm:ml-3" />
                                    {
                                         theme.palette.mode == 'dark' ?
@@ -75,7 +77,7 @@ function Header({ isFullWidth = false }) {
                                                        <PermIdentityIcon fontSize="medium" />
                                                   </Box>
                                         }
-                                        <Box className="mr-2">
+                                        <Box className="mx-2">
                                              <Typography variant="body1" className="max-sm:hidden">{profile.first_name} {profile.last_name}</Typography>
                                              <Typography variant="body2" className="max-sm:hidden"><FormattedMessage id="general_manager" /></Typography>
                                         </Box>
@@ -133,7 +135,7 @@ function Header({ isFullWidth = false }) {
                                    <FormattedMessage id="logout" />
                               </MenuItem>
                          </Menu>
-                         <Box sx={{ backgroundColor: theme.palette.background.default }} id="notification-box" className="w-1/3 min-h-20 bg-white z-50 shadow-md rounded-lg absolute top-15 left-44 max-sm:w-8/12 max-sm:left-10 max-sm:top-16 hidden" dir="rtl">
+                         <Box sx={{ backgroundColor: theme.palette.background.default, left: language === 'en' && '44%' }} id="notification-box" className="w-1/3 min-h-20 bg-white z-50 shadow-md rounded-lg absolute top-15 left-44 max-sm:w-8/12 max-sm:left-10 max-sm:top-16 hidden" dir="rtl">
                               <Box className="flex justify-between items-center px-5 py-3">
                                    <Typography variant="h6" className="font-bold max-sm:!text-sm">الإشعارات</Typography>
                                    <Typography variant="body2" className="font-bold text-blue-800 cursor-pointer max-sm:!text-sm">تحديد الكل كمقروءة</Typography>

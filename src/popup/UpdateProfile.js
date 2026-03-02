@@ -55,7 +55,7 @@ function UpdateProfile({ onClickCancel, setSnackBar }) {
         
         if(result.status === 200){
             setProfile(result.data.data);
-            setSnackBar('success', 'تم تعديل بيانات حسابك بنجاح')
+            setSnackBar('success', <FormattedMessage id='updated_success' />)
             onClickCancel();
         }else if(result.status === 422){
             setSnackBar('error', result.data.errors[0]);
@@ -86,7 +86,7 @@ function UpdateProfile({ onClickCancel, setSnackBar }) {
                 <Typography variant="body1" className="text-gray-700"><FormattedMessage id="add_image" /></Typography>
                 <input type="file" accept="image/*" className="w-full h-full opacity-0 absolute cursor-pointer" onChange={(e) => setImage(e.target.files[0])} />
             </Box>
-            <Box className="py-3 flex justify-between max-sm:flex-col">
+            <Box className="py-3 flex justify-between max-sm:flex-col" sx={{flexDirection: language === 'en' && 'row-reverse'}}>
                 <Button onClick={updateProfile} variant='contained' className='w-2/5 !py-3 flex max-sm:w-full !text-white'>
                     {
                         sendWait ?

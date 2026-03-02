@@ -77,12 +77,12 @@ function Courses() {
         <>
             {
                 wait ?
-                    <Box className="w-full h-screen relative flex justify-center items-center">
+                    <Box className="w-full h-screen relative flex justify-center items-center" sx={{float: language === 'en' && 'right'}}>
                         <CircularProgress size={70} />
                     </Box>
                     :
                     <Box sx={{ backgroundColor: theme.palette.background.default }}>
-                        <Box className="w-4/5 rounded-xl relative" dir="rtl">
+                        <Box className="w-4/5 rounded-xl relative" dir={language === 'en' ? 'ltr' : "rtl"} sx={{float: language === 'en' && 'right'}}>
                             {
                                 getWait ?
                                     <Box className="w-full h-screen relative flex justify-center items-center">
@@ -94,17 +94,18 @@ function Courses() {
                                             <Typography variant="h5" className="py-2 px-3 max-sm:!text-lg"><FormattedMessage id='courses' /></Typography>
                                         </Box>
                                         <Box>
-                                            <TableContainer component={Paper} dir="rtl">
+                                            <TableContainer component={Paper} dir={language === 'en' ? 'ltr' : "rtl"}>
+                                                {/* Top Table */}
                                                 <Box className="min-h-12 py-2 px-2 flex justify-between items-center max-sm:flex-col">
                                                     <Box className="w-full flex items-center">
                                                         <FilterAltOutlinedIcon onClick={() => setPopup('filter', 'flex')} className="cursor-pointer" fontSize="large" />
                                                         <Box className="w-2/4 relative mr-3 max-sm:w-full">
                                                             <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder={intl.formatMessage({id: "search_course_teacher_name"})} />
-                                                            <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" />
+                                                            <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" sx={{right: language === 'en' && '90%'}}/>
                                                         </Box>
                                                     </Box>
                                                     <Box className="flex w-2/4 items-center max-sm:mt-2 max-sm:w-full max-sm:justify-between">
-                                                        <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.select }} className="w-2/5 py-1 rounded-lg ml-3 outline-none">
+                                                        <select onChange={(e) => setOrder(e.target.value)} style={{ backgroundColor: theme.palette.background.select }} className="w-2/5 py-1 rounded-lg mx-3 outline-none">
                                                             <option value=''><FormattedMessage id='date' /></option>
                                                             <option value={language === 'en' ? 'order_by=name_en&direction=asc' : 'order_by=name_ar&direction=asc'}><FormattedMessage id='course_name' /></option>
                                                             <option value='order_by=teacher.name&direction=asc'><FormattedMessage id='teacher_name' /></option>
@@ -112,15 +113,17 @@ function Courses() {
                                                         <Typography variant="body1" className="!text-gray-500"><FormattedMessage id='total_courses' />: {coursesCounts}</Typography>
                                                     </Box>
                                                 </Box>
+
+                                                {/* Courses Table */}
                                                 <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                     <TableHead className="bg-gray-200">
                                                         <TableRow sx={{ backgroundColor: theme.palette.background.paper }}>
-                                                            <StyledTableCell align="right"><FormattedMessage id='course_name' /></StyledTableCell>
-                                                            <StyledTableCell align="right"><FormattedMessage id='teacher_name' /></StyledTableCell>
-                                                            <StyledTableCell align="right"><FormattedMessage id='category' /></StyledTableCell>
-                                                            <StyledTableCell align="right" className=""><FormattedMessage id='education_path' /></StyledTableCell>
-                                                            <StyledTableCell align="right"><FormattedMessage id='course_files_count' /></StyledTableCell>
-                                                            <StyledTableCell align="right" className="!text-center"><FormattedMessage id='publication_date' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id='course_name' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id='teacher_name' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id='category' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : 'right'} className=""><FormattedMessage id='education_path' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id='course_files_count' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="!text-center"><FormattedMessage id='publication_date' /></StyledTableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
@@ -128,26 +131,27 @@ function Courses() {
                                                             course.paths.length !== 0 ?
                                                                 course.paths.map((path, index) =>
                                                                     <StyledTableRow key={index} className="hover:bg-gray-400 duration-100 cursor-pointer" onClick={() => getCourseDetails(course.id, path.id)}>
-                                                                        <StyledTableCell align="right" component="th" scope="row">{language === 'en' ? course.name_en : course.name_ar}</StyledTableCell>
-                                                                        <StyledTableCell align="right" className="">{course.teacher.first_name + ' ' + course.teacher.last_name}</StyledTableCell>
-                                                                        <StyledTableCell align="right">{language === 'en' ? course.category.name_en : course.category.name_ar}</StyledTableCell>
-                                                                        <StyledTableCell align="right" className="text-center">{language === 'en' ? path.name_en : path.name_ar}</StyledTableCell>
-                                                                        <StyledTableCell align="right" className="">{course.contents?.filter((content) => content.content_type === 'CourseFile').length}</StyledTableCell>
-                                                                        <StyledTableCell align="right" className="!text-center" dir="ltr">{course.created_at.split(" ")[0]}</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'} component="th" scope="row">{language === 'en' ? course.name_en : course.name_ar}</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="">{course.teacher.first_name + ' ' + course.teacher.last_name}</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'}>{language === 'en' ? course.category.name_en : course.category.name_ar}</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="text-center">{language === 'en' ? path.name_en : path.name_ar}</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="">{course.contents?.filter((content) => content.content_type === 'CourseFile').length}</StyledTableCell>
+                                                                        <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="!text-center" dir="ltr">{course.created_at.split(" ")[0]}</StyledTableCell>
                                                                     </StyledTableRow>
                                                                 )
                                                                 :
                                                                 <StyledTableRow key={index} className="hover:bg-gray-400 duration-100 cursor-pointer" onClick={() => getCourseDetails(course.id, null)}>
-                                                                    <StyledTableCell align="right" component="th" scope="row">{language === 'en' ? course.name_en : course.name_ar}</StyledTableCell>
-                                                                    <StyledTableCell align="right" className="">{course.teacher.first_name + ' ' + course.teacher.last_name}</StyledTableCell>
-                                                                    <StyledTableCell align="right">{language === 'en' ? course.category.name_en : course.category.name_ar}</StyledTableCell>
-                                                                    <StyledTableCell align="right" className="text-center">لا يوجد</StyledTableCell>
-                                                                    <StyledTableCell align="right" className="">{course.contents?.filter((content) => content.content_type === 'CourseFile').length}</StyledTableCell>
-                                                                    <StyledTableCell align="right" className="!text-center" dir="ltr">{course.created_at.split(" ")[0]}</StyledTableCell>
+                                                                    <StyledTableCell align={language === 'en' ? 'left' : 'right'} component="th" scope="row">{language === 'en' ? course.name_en : course.name_ar}</StyledTableCell>
+                                                                    <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="">{course.teacher.first_name + ' ' + course.teacher.last_name}</StyledTableCell>
+                                                                    <StyledTableCell align={language === 'en' ? 'left' : 'right'}>{language === 'en' ? course.category.name_en : course.category.name_ar}</StyledTableCell>
+                                                                    <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="text-center"><FormattedMessage id="nothing" /></StyledTableCell>
+                                                                    <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="">{course.contents?.filter((content) => content.content_type === 'CourseFile').length}</StyledTableCell>
+                                                                    <StyledTableCell align={language === 'en' ? 'left' : 'right'} className="!text-center" dir="ltr">{course.created_at.split(" ")[0]}</StyledTableCell>
                                                                 </StyledTableRow>
                                                         )}
                                                     </TableBody>
                                                 </Table>
+
                                                 <Box className="flex justify-center items-center" dir="rtl">
                                                     <Button disabled={page + 1 === totalPages} className="cursor-pointer" onClick={() => setPage(currentPage + 1)}>
                                                         <NavigateNextIcon fontSize="large" />
@@ -162,17 +166,23 @@ function Courses() {
                                     </Box>
                             }
                         </Box>
-                        <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
-                        <Box id="details" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center hidden max-sm:left-0">
+
+                        {/* Course Details Popup */}
+                        <Box id="details" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center hidden max-sm:left-0">
                             <CourseDetails onClickClose={() => setPopup('details', 'none')} data={course} />
                         </Box>
-                        <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+
+                        {/* Course Filter Popup */}
+                        <Box id="filter" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <CoursesFilter onClickClose={() => setPopup('filter', 'none')} onClickConfirm={filteringCourses}
                                 categoriesValue={categoriesValue} fromCount={fromCount} toCount={toCount} fromDate={fromDate}
                                 toDate={toDate} pathsValue={pathsValue} filterWait={filterWait} setCategoriesValue={setCategoriesValue}
                                 setPathsValue={setPathsValue} setToDate={setToDate} setCategory={setCategory} setPath={setPath}
                                 setFromCount={setFromCount} setFromDate={setFromDate} setToCount={setToCount} setFilterWait={setFilterWait} />
                         </Box>
+
+                        {/* Snackbar Alert */}
+                        <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
                     </Box>
             }
         </>

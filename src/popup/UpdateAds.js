@@ -94,9 +94,9 @@ function UpdateAds({ onClickClose, setSnackbar, banner, setBanner, getBanners })
     }, [category]);
 
     return (
-        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="shadow-lg w-3/5 h-screen rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative max-sm:h-screen" dir="rtl">
+        <Box sx={{ backgroundColor: theme.palette.background.paper }} className="shadow-lg w-3/5 h-screen rounded-3xl px-4 py-5 overflow-y-scroll none-view-scroll max-sm:w-4/5 max-sm:translate-x-0 max-sm:left-0 relative max-sm:h-screen" dir={language === 'en' ? 'ltr' : "rtl"}>
             <Typography variant="h5" className="!font-semibold max-sm:!text-xl"><FormattedMessage id='ads_update' /></Typography>
-            <CloseIcon onClick={() => { setBanner(''); onClickClose(); }} className="text-gray-700 cursor-pointer absolute top-5 left-5" fontSize="large" />
+            <CloseIcon onClick={() => { setBanner(''); onClickClose(); }} className="text-gray-700 cursor-pointer absolute top-5 left-5" sx={{left: language === 'en' && '90%'}} fontSize="large" />
             <Divider className="!my-5" />
             <TextField variant="outlined" label={<FormattedMessage id='ads_title_ar' />} className="w-full" onChange={(e) => setNameAr(e.target.value)} value={nameAr} />
             <TextField variant="outlined" label={<FormattedMessage id='ads_title_en' />} className="w-full !mt-5" onChange={(e) => setNameEn(e.target.value)} value={nameEn} />
