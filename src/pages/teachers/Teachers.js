@@ -129,7 +129,7 @@ function Teachers() {
                                                         <TableRow sx={{ backgroundColor: theme.palette.background.paper }}>
                                                             <StyledTableCell align={language === 'en' ? "left" : "right"}><FormattedMessage id='teacher_name' /></StyledTableCell>
                                                             <StyledTableCell align={language === 'en' ? "left" : "right"}><FormattedMessage id='specialization' /></StyledTableCell>
-                                                            <StyledTableCell align={language === 'en' ? "left" : "right"}><FormattedMessage id='education_specialization' /></StyledTableCell>
+                                                            {/* <StyledTableCell align={language === 'en' ? "left" : "right"}><FormattedMessage id='education_specialization' /></StyledTableCell> */}
                                                             <StyledTableCell align={language === 'en' ? "left" : "right"} className=""><FormattedMessage id='academic_degree' /></StyledTableCell>
                                                             <StyledTableCell align={language === 'en' ? "left" : "right"}><FormattedMessage id='email' /></StyledTableCell>
                                                             <StyledTableCell align={language === 'en' ? "left" : "right"} className="!text-center"><FormattedMessage id='phone' /></StyledTableCell>
@@ -140,7 +140,7 @@ function Teachers() {
                                                             <StyledTableRow key={index} onClick={() => teacherDetails(teacher.id)} className="hover:bg-gray-400 duration-100 cursor-pointer">
                                                                 <StyledTableCell align={language === 'en' ? "left" : "right"} component="th" scope="row">{teacher.first_name + ' ' + teacher.last_name}</StyledTableCell>
                                                                 <StyledTableCell align={language === 'en' ? "left" : "right"} className="">{language === 'en' ? teacher.specialization?.name_en : teacher.specialization?.name_ar}</StyledTableCell>
-                                                                <StyledTableCell align={language === 'en' ? "left" : "right"}>{teacher.major?.level === 'university' ? <FormattedMessage id='university_education' /> : <FormattedMessage id='school_education' />}</StyledTableCell>
+                                                                {/* <StyledTableCell align={language === 'en' ? "left" : "right"}>{teacher.major?.level === 'university' ? <FormattedMessage id='university_education' /> : <FormattedMessage id='school_education' />}</StyledTableCell> */}
                                                                 <StyledTableCell align={language === 'en' ? "left" : "right"} className="text-center">{language === 'en' ? teacher.academic_degree?.name_en : teacher.academic_degree?.name_ar}</StyledTableCell>
                                                                 <StyledTableCell align={language === 'en' ? "left" : "right"} className="">{teacher.email}</StyledTableCell>
                                                                 <StyledTableCell align={language === 'en' ? "left" : "right"} className="!text-center" dir="ltr">{teacher.phone_code + teacher.phone}</StyledTableCell>

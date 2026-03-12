@@ -21,12 +21,12 @@ function TeacherDetails({ onClickClose, teacher }) {
             <TextField variant="outlined" label={<FormattedMessage id='teacher_name' />} className="w-full" value={teacher.first_name + ' ' + teacher.last_name} />
             <TextField variant="outlined" className="w-full !mt-5" label={<FormattedMessage id='specialization' />} value={language === 'en' ? teacher.major?.name_en : teacher.major?.name_ar} />
             <Box className="grid grid-cols-2 w-full gap-x-2 gap-y-5 mt-5 max-sm:grid-cols-1">
-                <TextField variant="outlined" className="w-full" label={<FormattedMessage id='education_specialization' />} value={teacher.major?.level === 'school' ? intl.formatMessage({id: "school_education"}): intl.formatMessage({id: "university_education"})} />
+                {/* <TextField variant="outlined" className="w-full" label={<FormattedMessage id='education_specialization' />} value={teacher.major?.level === 'school' ? intl.formatMessage({id: "school_education"}): intl.formatMessage({id: "university_education"})} /> */}
                 <TextField variant="outlined" className="w-full" label={<FormattedMessage id='academic_degree' />} value={language === 'en' ? teacher.academic_degree?.name_en : teacher.academic_degree?.name_ar} />
                 <TextField variant="outlined" className="w-full" label={<FormattedMessage id='experience_years' />} />
                 <TextField variant="outlined" className="w-full" label={<FormattedMessage id='age' />} value={age} />
                 <TextField variant="outlined" className="w-full" label={<FormattedMessage id='email' />} value={teacher.email} />
-                <TextField variant="outlined" className="w-full" label={<FormattedMessage id='phone' />} value={teacher.phone_code + ' ' + teacher.phone} dir="ltr" />
+                <TextField variant="outlined" className="w-full col-span-2" label={<FormattedMessage id='phone' />} value={teacher.phone_code + ' ' + teacher.phone} dir="ltr" />
             </Box>
         </Box>
     );

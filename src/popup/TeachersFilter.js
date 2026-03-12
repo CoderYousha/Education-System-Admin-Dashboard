@@ -83,7 +83,7 @@ function TeachersFilter({ onClickClose, onClickConfirm, majorsValue, academicDeg
                 }}
                 isSearchable={false}
             />
-            <Typography variant="body1" className="!mt-5"><FormattedMessage id='education_specialization' /></Typography>
+            {/* <Typography variant="body1" className="!mt-5"><FormattedMessage id='education_specialization' /></Typography>
             <AsyncPaginate
                 value={majorsValue}
                 loadOptions={loadMajors}
@@ -100,7 +100,7 @@ function TeachersFilter({ onClickClose, onClickConfirm, majorsValue, academicDeg
                     }),
                 }}
                 isSearchable={false}
-            />
+            /> */}
             <Typography variant="body1" className="!mt-5"><FormattedMessage id='academic_degree' /></Typography>
             <AsyncPaginate
                 value={academicDegreeValue}

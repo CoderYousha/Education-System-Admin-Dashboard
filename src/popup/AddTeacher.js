@@ -146,7 +146,7 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
                         additional={{
                             page: 1
                         }}
-                        className="mt-2 !bg-gray-200"
+                        className="mt-2 !bg-gray-200 z-[600]"
                         placeholder={<FormattedMessage id='specialization' />}
                         styles={{
                             option: (provided, state) => ({
@@ -159,7 +159,7 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
                 </Box>
 
                 {/* Specialization Async Pagination */}
-                <Box className="">
+                {/* <Box className="">
                     <Typography variant="body1"><FormattedMessage id='education_specialization' /></Typography>
                     <AsyncPaginate
                         value={majorValue}
@@ -178,10 +178,10 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
                         }}
                         isSearchable={false}
                     />
-                </Box>
+                </Box> */}
 
                 {/* Education Specialization & Academic Degree Async Pagination */}
-                <Box className="">
+                <Box className="col-span-2">
                     <Typography variant="body1"><FormattedMessage id='academic_degree' /></Typography>
                     <AsyncPaginate
                         value={academicDegreeValue}
@@ -190,7 +190,7 @@ function AddTeacher({ onClickClose, setSnackBar, setTeachers }) {
                         additional={{
                             page: 1
                         }}
-                        className="mt-2 !bg-gray-200"
+                        className="mt-2 !bg-gray-200 z-50"
                         placeholder={<FormattedMessage id='academic_degree' />}
                         styles={{
                             option: (provided, state) => ({

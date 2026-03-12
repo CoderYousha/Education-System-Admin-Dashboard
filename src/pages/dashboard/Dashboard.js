@@ -270,7 +270,7 @@ function Dashboard() {
                                                                  <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                                       <TableHead className="bg-gray-200">
                                                                            <TableRow sx={{ backgroundColor: theme.palette.background.paper }}>
-                                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id='student_id' /></StyledTableCell>
+                                                                                <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id='request_id' /></StyledTableCell>
                                                                                 <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id='course_name' /></StyledTableCell>
                                                                                 <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id='teacher_name' /></StyledTableCell>
                                                                                 <StyledTableCell align={language === 'en' ? 'left' : 'right'}><FormattedMessage id='request_date' /></StyledTableCell>
