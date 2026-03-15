@@ -18,26 +18,26 @@ import { useTableStyles } from "../../hooks/UseTableStyles";
 import { usePopups } from "../../hooks/UsePopups";
 import { useTeachersFilter } from "../../filter/UseTeachersFilter";
 import { FormattedMessage, useIntl } from "react-intl";
+import { useSearch } from "../../hooks/UseSearch";
+import { usePagination } from "../../hooks/UsePagination";
 
 function Teachers() {
-    const { host, language } = useConstants();
+    const intl = useIntl();
+    const theme = useTheme();
     const { wait } = useContext(AuthContext);
-    const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
-    const { getWait, setGetWait, filterWait, setFilterWait } = useWaits();
-    const { majorId, setMajorId, majorsValue, setMajorsValue, teacherSpecializations, setTeacherSpecializations, teacherSpecializationsValue, setTeacherSpecializationsValue, academicDegree, setAcademicDegree, academicDegreeValue, setAcademicDegreeValue } = useTeachersFilter();
-    const { StyledTableCell, StyledTableRow } = useTableStyles();
     const { setPopup } = usePopups();
-    const [page, setPage] = useState(0);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
+    const { host, language } = useConstants();
+    const { StyledTableCell, StyledTableRow } = useTableStyles();
+    const { search, setSearch, order, setOrder } = useSearch();
+    const { getWait, setGetWait, filterWait, setFilterWait } = useWaits();
+    const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
+    const { page, setPage, currentPage, setCurrentPage, totalPages, setTotalPages } = usePagination();
+    const { majorId, setMajorId, majorsValue, setMajorsValue, teacherSpecializations, setTeacherSpecializations, teacherSpecializationsValue, setTeacherSpecializationsValue, academicDegree, setAcademicDegree, academicDegreeValue, setAcademicDegreeValue } = useTeachersFilter();
     const [teachersCounts, setTeachersCounts] = useState('');
     const [teachers, setTeachers] = useState([]);
     const [teacher, setTeacher] = useState('');
-    const [search, setSearch] = useState('');
-    const [order, setOrder] = useState('');
-    const theme = useTheme();
-    const intl = useIntl();
 
+    {/* Get Teachers Function */ }
     const getTeachers = async () => {
         let result = await Fetch(host + `/admin/users?account_role=teacher&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}${majorId && `&major_id=${majorId}`}${teacherSpecializations && `&specialization_id=${teacherSpecializations}`}${academicDegree && `&academic_degree_id=${academicDegree}`}`, 'GET', null);
 
@@ -51,6 +51,7 @@ function Teachers() {
         setGetWait(false);
     }
 
+    {/* Filtering Teachers Function */ }
     const filteringTeachers = async () => {
         let result = await Fetch(host + `/admin/users?account_role=teacher&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}${majorId && `&major_id=${majorId}`}${teacherSpecializations && `&specialization_id=${teacherSpecializations}`}${academicDegree && `&academic_degree_id=${academicDegree}`}`, 'GET', null);
 
@@ -65,6 +66,7 @@ function Teachers() {
         setFilterWait(false);
     }
 
+    {/*  Get Specefic Teacher Details */ }
     const teacherDetails = async (id) => {
         setTeacher(teachers.filter((teacher) => teacher.id === id)[0]);
 
@@ -79,12 +81,12 @@ function Teachers() {
         <>
             {
                 wait ?
-                    <Box className="w-full h-screen relative flex justify-center items-center" sx={{float: language === 'en' && 'right'}}>
+                    <Box className="w-full h-screen relative flex justify-center items-center" sx={{ float: language === 'en' && 'right' }}>
                         <CircularProgress size={70} />
                     </Box>
                     :
                     <Box sx={{ backgroundColor: theme.palette.background.default }}>
-                        <Box className="w-4/5 rounded-xl relative" dir={language === 'en' ? 'ltr' : "rtl"} sx={{float: language === 'en' && 'right'}}>
+                        <Box className="w-4/5 rounded-xl relative" dir={language === 'en' ? 'ltr' : "rtl"} sx={{ float: language === 'en' && 'right' }}>
                             {
                                 getWait ?
                                     <Box className="w-full h-screen relative flex justify-center items-center">
@@ -109,8 +111,8 @@ function Teachers() {
                                                     <Box className="w-full flex items-center">
                                                         <FilterAltOutlinedIcon onClick={() => setPopup('filter', 'flex')} className="cursor-pointer" fontSize="large" />
                                                         <Box className="w-2/4 relative mr-3 max-sm:w-full">
-                                                            <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-11/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder={intl.formatMessage({id: "search_teachers"})} />
-                                                            <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" sx={{right: language === 'en' && '90%'}}/>
+                                                            <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-11/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder={intl.formatMessage({ id: "search_teachers" })} />
+                                                            <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" sx={{ right: language === 'en' && '90%' }} />
                                                         </Box>
                                                     </Box>
                                                     <Box className="flex w-2/4 items-center max-sm:mt-2 max-sm:w-full max-sm:justify-between">
@@ -148,6 +150,8 @@ function Teachers() {
                                                         ))}
                                                     </TableBody>
                                                 </Table>
+
+                                                {/* Pagination Buttons */}
                                                 <Box className="flex justify-center items-center" dir="rtl">
                                                     <Button disabled={page + 1 === totalPages} className="cursor-pointer" onClick={() => setPage(currentPage + 1)}>
                                                         <NavigateNextIcon fontSize="large" />
@@ -162,15 +166,23 @@ function Teachers() {
                                     </Box>
                             }
                         </Box>
-                        <Box id="filter" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+
+                        {/* Teachers Filter Popup */}
+                        <Box id="filter" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <TeachersFilter onClickClose={() => setPopup('filter', 'none')} onClickConfirm={filteringTeachers} setAcademicDegree={setAcademicDegree} filterWait={filterWait} setFilterWait={setFilterWait} setMajorId={setMajorId} setTeacherSpecializations={setTeacherSpecializations} academicDegreeValue={academicDegreeValue} setAcademicDegreeValue={setAcademicDegreeValue} majorsValue={majorsValue} setMajorsValue={setMajorsValue} teacherSpecializationsValue={teacherSpecializationsValue} setTeacherSpecializationsValue={setTeacherSpecializationsValue} />
                         </Box>
-                        <Box id="add" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+
+                        {/* Add New Teacher Popup */}
+                        <Box id="add" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <AddTeacher setTeachers={setTeachers} onClickClose={() => setPopup('add', 'none')} setSnackBar={setSnackBar} />
                         </Box>
-                        <Box id="details" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+
+                        {/* Teacher Details Popup */}
+                        <Box id="details" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <TeacherDetails teacher={teacher} onClickClose={() => setPopup('details', 'none')} />
                         </Box>
+
+                        {/* Snackbar Alert */}
                         <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
                     </Box>
             }

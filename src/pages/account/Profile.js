@@ -12,7 +12,6 @@ import ResetPasswordImage from '../../images/icons/reset-password.png';
 import LanguageImage from '../../images/icons/language.png';
 import SyImage from '../../images/flags/sy.png';
 import AuImage from '../../images/flags/au.png';
-import { useNavigate } from "react-router-dom";
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import UpdateProfile from "../../popup/UpdateProfile";
@@ -28,25 +27,27 @@ import { buildProfileFormData } from "../../helper/ProfileFormData";
 import { FormattedMessage } from "react-intl";
 
 function Profile() {
+    const theme = useTheme();
+    const { setPopup } = usePopups();
     const { host, language } = useConstants();
-    const { wait, profile, setProfile } = useContext(AuthContext);
     const { sendWait, setSendWait } = useWaits();
+    const { wait, profile, setProfile } = useContext(AuthContext);
     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
-    const { setPopup } = usePopups();
-    const theme = useTheme();
-    const navigate = useNavigate();
     const [lang, setLang] = useState(language);
 
+    {/* Open Language Menue */}
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
+    {/* Close Language Menue */}
     const handleClose = () => {
         setAnchorEl(null);
     };
 
+    {/* Change System Language Function */}
     const changeLanguage = async (language) => {
         setSendWait(true);
 

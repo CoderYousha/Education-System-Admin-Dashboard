@@ -25,12 +25,14 @@ import { FormattedMessage } from "react-intl";
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 
 function Dashboard() {
-     const { host, language } = useConstants();
+     const theme = useTheme();
+     const navigate = useNavigate();
      const { wait } = useContext(AuthContext);
-     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
-     const { getWait, setGetWait, sendWait, setSendWait } = useWaits();
-     const { StyledTableCell, StyledTableRow } = useTableStyles();
      const { setPopup } = usePopups();
+     const { host, language } = useConstants();
+     const { StyledTableCell, StyledTableRow } = useTableStyles();
+     const { getWait, setGetWait, sendWait, setSendWait } = useWaits();
+     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
      const [coursesRequests, setCoursesRequests] = useState([]);
      const [dashboard, setDashboard] = useState('');
      const visibleRequests = coursesRequests.slice(0, 4);
@@ -39,9 +41,8 @@ function Dashboard() {
      const [fromDate, setFromDate] = useState('2026-01-01');
      const [toDate, setToDate] = useState('2026-01-01');
      const [request, setRequest] = useState('');
-     const theme = useTheme();
-     const navigate = useNavigate();
 
+     {/* Get Courses Requests Function */}
      const getCoursesRequests = async () => {
           let result = await Fetch(host + '/courses?not_active=1', 'GET', null);
 
@@ -54,6 +55,7 @@ function Dashboard() {
           }
      }
 
+     {/* Change Course Status Function (Accepted, Rejected) */}
      const changeCourseStatus = async (courseId, status) => {
           setCourseId(courseId);
           setOperation(status);
@@ -69,6 +71,7 @@ function Dashboard() {
           setSendWait(false);
      }
 
+     {/* Get Dashboard Function */}
      const getDashboard = async () => {
           let result = await Fetch(host + `/admin/reports/dashboard?from=${fromDate}&to=${toDate}`, 'GET', null);
 
@@ -77,6 +80,7 @@ function Dashboard() {
           }
      }
 
+     {/* Get Specefic Course Details */}
      const getCourseDetails = async (id) => {
           setRequest(coursesRequests.find((item) => item.id === id));
           setPopup('details', 'flex');

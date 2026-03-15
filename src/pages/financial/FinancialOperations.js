@@ -13,32 +13,33 @@ import FinancialOperationsFilter from "../../popup/FinancialOperationsFilter";
 import Fetch from "../../services/Fetch";
 import { useFinancialOperationsFilter } from "../../filter/UseFinancialOperationsFilter";
 import { FormattedMessage, useIntl } from "react-intl";
+import { useSearch } from "../../hooks/UseSearch";
+import { usePagination } from "../../hooks/UsePagination";
 
 function FinancialOperations() {
-    const { language, host } = useConstants();
-    const { setPopup } = usePopups();
+    const intil = useIntl();
+    const theme = useTheme();
     const { wait } = useContext(AuthContext);
+    const { setPopup } = usePopups();
+    const { language, host } = useConstants();
+    const { search, setSearch, order, setOrder } = useSearch();
+    const { StyledTableCell, StyledTableRow } = useTableStyles();
     const { filterWait, setFilterWait, getWait, setGetWait } = useWaits();
     const { from, setFrom, to, setTo, courseId, setCourseId, courseValue, setCourseValue, pathId, setPathId, pathValue, setPathValue, teacherId, setTeacherId, teacherValue, setTeacherValue } = useFinancialOperationsFilter();
-    const { StyledTableCell, StyledTableRow } = useTableStyles();
-    const [page, setPage] = useState(0);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
+    const { page, setPage, currentPage, setCurrentPage, totalPages, setTotalPages } = usePagination();
     const [saleCounts, setSaleCounts] = useState('');
     const [sales, setSales] = useState([]);
-    const [search, setSearch] = useState('');
-    const [order, setOrder] = useState('');
-    const theme = useTheme();
-    const intil = useIntl();
 
+    {/* Calculating Percentage Function */ }
     const calculatingPercentage = (total, profit) => {
         let value = 100 * profit / total;
 
         return value;
     }
 
+    {/* Get Sales Function */ }
     const getSales = async () => {
-        let result = await Fetch(host + `/reports/sales?is_detailed=1${order}${search && `&search=${search}`}${from  && `&from=${from}`}${to && `&to=${to}`}${courseId && `&course_id=${courseId}`}${pathId && `&path_id=${pathId}`}${teacherId && `&teacher_id=${teacherId}`}`);
+        let result = await Fetch(host + `/reports/sales?is_detailed=1${order}${search && `&search=${search}`}${from && `&from=${from}`}${to && `&to=${to}`}${courseId && `&course_id=${courseId}`}${pathId && `&path_id=${pathId}`}${teacherId && `&teacher_id=${teacherId}`}`);
 
         if (result.status === 200) {
             setTotalPages(result.data.data[0].last_page);
@@ -50,8 +51,9 @@ function FinancialOperations() {
         setGetWait(false);
     }
 
+    {/* Filtering Sales Function */ }
     const filteringSales = async () => {
-        let result = await Fetch(host + `/reports/sales?is_detailed=1${order}${order}${search && `&search=${search}`}${from  && `&from=${from}`}${to && `&to=${to}`}${courseId && `&course_id=${courseId}`}${pathId && `&path_id=${pathId}`}${teacherId && `&teacher_id=${teacherId}`}`);
+        let result = await Fetch(host + `/reports/sales?is_detailed=1${order}${order}${search && `&search=${search}`}${from && `&from=${from}`}${to && `&to=${to}`}${courseId && `&course_id=${courseId}`}${pathId && `&path_id=${pathId}`}${teacherId && `&teacher_id=${teacherId}`}`);
 
         if (result.status === 200) {
             setTotalPages(result.data.data[0].last_page);
@@ -91,12 +93,13 @@ function FinancialOperations() {
                                             </Box>
                                             <Box>
                                                 <TableContainer sx={{ borderRadius: '0' }} className="!rounded-b-xl" component={Paper} dir={language === 'en' ? 'ltr' : 'rtl'}>
+                                                    {/* Top Table */}
                                                     <Box className="min-h-12 py-2 px-2 flex justify-between items-center max-sm:flex-col">
                                                         <Box className="w-full flex items-center">
                                                             <FilterAltOutlinedIcon className="cursor-pointer" onClick={() => setPopup('filter', 'flex')} fontSize="large" />
                                                             <Box className="w-2/4 relative mr-3 max-sm:w-full">
-                                                                <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder={intil.formatMessage({id: 'search_transaction'})} />
-                                                                <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" sx={{right: language === 'en' && '90%'}}/>
+                                                                <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder={intil.formatMessage({ id: 'search_transaction' })} />
+                                                                <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" sx={{ right: language === 'en' && '90%' }} />
                                                             </Box>
                                                         </Box>
                                                         <Box className="flex w-2/4 items-center max-sm:w-full max-sm:mt-2 max-sm:justify-between">
@@ -107,6 +110,8 @@ function FinancialOperations() {
                                                             <Typography variant="body1" className="!text-gray-500"><FormattedMessage id="total_record" />: {saleCounts}</Typography>
                                                         </Box>
                                                     </Box>
+
+                                                    {/* Financial Operations Table */}
                                                     <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                         <TableHead className="bg-gray-200">
                                                             <TableRow sx={{ backgroundColor: theme.palette.background.paper }} className="!rounded-none">
@@ -139,6 +144,8 @@ function FinancialOperations() {
                                                             }
                                                         </TableBody>
                                                     </Table>
+
+                                                    {/* Pagination Buttons */}
                                                     <Box className="flex justify-center items-center" dir="rtl">
                                                         <Button disabled={page + 1 === totalPages} className="cursor-pointer" onClick={() => setPage(currentPage + 1)}>
                                                             <NavigateNextIcon fontSize="large" />
@@ -154,6 +161,8 @@ function FinancialOperations() {
                                     </Box>
                                 </>
                         }
+
+                        {/* Financial Operations Filter Popup */}
                         <Box id="filter" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
                             <FinancialOperationsFilter onClickClose={() => setPopup('filter', 'none')} onClickConfirm={filteringSales} filterWait={filterWait} setFilterWait={setFilterWait} from={from} to={to} courseValue={courseValue} pathValue={pathValue} setCourseId={setCourseId} setCourseValue={setCourseValue} setPathId={setPathId} setFrom={setFrom} setTo={setTo} setPathValue={setPathValue} setTeacherId={setTeacherId} teacherValue={teacherValue} setTeacherValue={setTeacherValue} />
                         </Box>

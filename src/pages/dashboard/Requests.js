@@ -16,29 +16,29 @@ import { useTableStyles } from "../../hooks/UseTableStyles";
 import { usePopups } from "../../hooks/UsePopups";
 import { useRequestsFilter } from "../../filter/UseRequestsFilter";
 import { FormattedMessage, useIntl } from "react-intl";
+import { useSearch } from "../../hooks/UseSearch";
+import { usePagination } from "../../hooks/UsePagination";
 
 function Requests() {
-    const { host, language } = useConstants();
+    const intl = useIntl();
+    const theme = useTheme();
     const { wait } = useContext(AuthContext);
+    const { setPopup } = usePopups();
+    const { host, language } = useConstants();
+    const {search, setSearch, order, setOrder} = useSearch();
+    const { StyledTableCell, StyledTableRow } = useTableStyles();
     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
     const { getWait, setGetWait, sendWait, setSendWait, filterWait, setFilterWait } = useWaits();
+    const {page, setPage, currentPage, setCurrentPage, totalPages, setTotalPages} = usePagination();
     const { status, setStatus, from, setFrom, to, setTo, value, setValue, teacherId, setTeacherId } = useRequestsFilter();
-    const { StyledTableCell, StyledTableRow } = useTableStyles();
-    const { setPopup } = usePopups();
     const [request, setRequest] = useState('');
     const [coursesRequests, setCoursesRequests] = useState([]);
     const [courseId, setCourseId] = useState(null);
     const [operation, setOperation] = useState(null);
-    const [page, setPage] = useState(0);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
     const [requestCounts, setRequestCounts] = useState('');
-    const [search, setSearch] = useState('');
     const [courseName, setCourseName] = useState('');
-    const [order, setOrder] = useState('');
-    const theme = useTheme();
-    const intl = useIntl();
 
+    {/* Set Filter Status Function */}
     const setFilterStatus = (s) => {
         setStatus((prevStatus) => {
             if (prevStatus.includes(s)) {
@@ -50,6 +50,7 @@ function Requests() {
         )
     }
 
+    {/* Get Courses Requests Function */}
     const getCoursesRequests = async () => {
         const queryStatus = status.map(s => `status[]=${s}`).join("&");
         let result = await Fetch(host + `/courses?page=${page + 1}&${order}&search=${search}&${queryStatus}${from && to && `&from=${from}&to=${to}`}${teacherId && `&teacher_id=${teacherId}`}${courseName && `&search=${courseName}`}`, 'GET', null);
@@ -68,6 +69,7 @@ function Requests() {
         setGetWait(false);
     }
 
+    {/* Filtering Requests Function */}
     const requestsFiltering = async () => {
 
         const queryStatus = status.map(s => `status[]=${s}`).join("&");
@@ -84,11 +86,13 @@ function Requests() {
         setFilterWait(false);
     }
 
+    {/* Get Specefic Request Details */}
     const getCourseDetails = async (id) => {
         setRequest(coursesRequests.find((item) => item.id === id));
         setPopup('details', 'flex');
     }
 
+    {/* Change Request Status Function (Accepted, Rejected) */}
     const changeCourseStatus = async (courseId, status) => {
         setCourseId(courseId);
         setOperation(status);
@@ -195,6 +199,8 @@ function Requests() {
                                                         ))}
                                                     </TableBody>
                                                 </Table>
+
+                                                {/* Pagination Buttons */}
                                                 <Box className="flex justify-center items-center" dir="rtl">
                                                     <Button disabled={page + 1 === totalPages} className="cursor-pointer" onClick={() => setPage(currentPage + 1)}>
                                                         <NavigateNextIcon fontSize="large" />

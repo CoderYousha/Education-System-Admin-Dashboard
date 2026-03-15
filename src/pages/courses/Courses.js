@@ -16,26 +16,26 @@ import { usePopups } from "../../hooks/UsePopups";
 import { useTableStyles } from "../../hooks/UseTableStyles";
 import { useConstants } from "../../hooks/UseConstants";
 import { FormattedMessage, useIntl } from "react-intl";
+import { useSearch } from "../../hooks/UseSearch";
+import { usePagination } from "../../hooks/UsePagination";
 
 function Courses() {
-    const {host, language} = useConstants();
+    const intl = useIntl();
+    const theme = useTheme();
     const { wait } = useContext(AuthContext);
+    const { setPopup } = usePopups();
+    const { host, language } = useConstants();
+    const { StyledTableCell, StyledTableRow } = useTableStyles();
+    const { search, setSearch, order, setOrder } = useSearch();
     const { openSnackBar, type, message, setOpenSnackBar } = useSnackBar();
     const { getWait, setGetWait, filterWait, setFilterWait } = useWaits();
     const { category, setCategory, categoriesValue, setCategoriesValue, path, setPath, pathsValue, setPathsValue, fromCount, setFromCount, toCount, setToCount, fromDate, setFromDate, toDate, setToDate } = useCoursesFilter();
-    const { StyledTableCell, StyledTableRow } = useTableStyles();
-    const { setPopup } = usePopups();
-    const [page, setPage] = useState(0);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
+    const { page, setPage, currentPage, setCurrentPage, totalPages, setTotalPages } = usePagination();
     const [coursesCounts, setCoursesCounts] = useState('');
     const [courses, setCourses] = useState([]);
-    const [search, setSearch] = useState('');
     const [course, setCourse] = useState('');
-    const [order, setOrder] = useState('');
-    const theme = useTheme();
-    const intl = useIntl();
 
+    {/* Get Courses Function */}
     const getCourses = async () => {
         let result = await Fetch(host + `/courses?status[]=accepted&page=${page + 1}&search=${search}&${order}${category && `&category_id=${category}`}${path && `&path_id=${path}`}${fromCount && `&files_number[from]=${fromCount}`}${category && `&files_number[to]=${toCount}`}${fromDate && `&from=${fromDate}`}${toDate && `&to=${toDate}`}`, 'GET', null);
 
@@ -49,6 +49,7 @@ function Courses() {
         setGetWait(false);
     }
 
+    {/* Get Specefic Course Details */}
     const getCourseDetails = (id, pathId) => {
         const courseDetails = courses.find((course) => course.id === id)
         const path = courseDetails?.paths.find((path) => path.id === pathId);
@@ -57,6 +58,7 @@ function Courses() {
         setPopup('details', 'flex');
     }
 
+    {/* Filtering Courses Function */}
     const filteringCourses = async () => {
         let result = await Fetch(host + `/courses?status[]=accepted&page=${page + 1}&search=${search}&${order}${category && `&category_id=${category}`}${path && `&path_id=${path}`}${fromCount && `&files_number[from]=${fromCount}`}${category && `&files_number[to]=${toCount}`}${fromDate && `&from=${fromDate}`}${toDate && `&to=${toDate}`}`, 'GET', null);
 
@@ -77,12 +79,12 @@ function Courses() {
         <>
             {
                 wait ?
-                    <Box className="w-full h-screen relative flex justify-center items-center" sx={{float: language === 'en' && 'right'}}>
+                    <Box className="w-full h-screen relative flex justify-center items-center" sx={{ float: language === 'en' && 'right' }}>
                         <CircularProgress size={70} />
                     </Box>
                     :
                     <Box sx={{ backgroundColor: theme.palette.background.default }}>
-                        <Box className="w-4/5 rounded-xl relative" dir={language === 'en' ? 'ltr' : "rtl"} sx={{float: language === 'en' && 'right'}}>
+                        <Box className="w-4/5 rounded-xl relative" dir={language === 'en' ? 'ltr' : "rtl"} sx={{ float: language === 'en' && 'right' }}>
                             {
                                 getWait ?
                                     <Box className="w-full h-screen relative flex justify-center items-center">
@@ -100,8 +102,8 @@ function Courses() {
                                                     <Box className="w-full flex items-center">
                                                         <FilterAltOutlinedIcon onClick={() => setPopup('filter', 'flex')} className="cursor-pointer" fontSize="large" />
                                                         <Box className="w-2/4 relative mr-3 max-sm:w-full">
-                                                            <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder={intl.formatMessage({id: "search_course_teacher_name"})} />
-                                                            <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" sx={{right: language === 'en' && '90%'}}/>
+                                                            <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder={intl.formatMessage({ id: "search_course_teacher_name" })} />
+                                                            <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" sx={{ right: language === 'en' && '90%' }} />
                                                         </Box>
                                                     </Box>
                                                     <Box className="flex w-2/4 items-center max-sm:mt-2 max-sm:w-full max-sm:justify-between">
@@ -152,6 +154,7 @@ function Courses() {
                                                     </TableBody>
                                                 </Table>
 
+                                                {/* Pagination Buttons */}
                                                 <Box className="flex justify-center items-center" dir="rtl">
                                                     <Button disabled={page + 1 === totalPages} className="cursor-pointer" onClick={() => setPage(currentPage + 1)}>
                                                         <NavigateNextIcon fontSize="large" />
@@ -168,12 +171,12 @@ function Courses() {
                         </Box>
 
                         {/* Course Details Popup */}
-                        <Box id="details" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center hidden max-sm:left-0">
+                        <Box id="details" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center hidden max-sm:left-0">
                             <CourseDetails onClickClose={() => setPopup('details', 'none')} data={course} />
                         </Box>
 
-                        {/* Course Filter Popup */}
-                        <Box id="filter" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+                        {/* Filtering Courses Popup */}
+                        <Box id="filter" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <CoursesFilter onClickClose={() => setPopup('filter', 'none')} onClickConfirm={filteringCourses}
                                 categoriesValue={categoriesValue} fromCount={fromCount} toCount={toCount} fromDate={fromDate}
                                 toDate={toDate} pathsValue={pathsValue} filterWait={filterWait} setCategoriesValue={setCategoriesValue}

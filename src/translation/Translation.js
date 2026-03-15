@@ -196,6 +196,8 @@ function Translation() {
             filtering_record_financial_transactions: "Filtering Record Financial Transactions",
             teacher: "Teacher",
             search_transaction: "Search by transaction id or user name",
+            confirm: "Confirm",
+            logout_description: "Are you sure that you want logout from your account?",
         },
         ar: {
             total_students: "إجمالي الطلاب",
@@ -393,6 +395,8 @@ function Translation() {
             filtering_record_financial_transactions: "تصفية سجل العمليات المالية",
             teacher: "المدرس",
             search_transaction: "البحث برقم العملية أو اسم المستخدم",
+            confirm: "تأكيد",
+            logout_description: "هل أنت متأكد أنك ترغب تسجيل الخروج من الحساب؟",
         }
     };
 }

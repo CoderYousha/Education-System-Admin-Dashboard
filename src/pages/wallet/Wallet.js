@@ -11,12 +11,12 @@ import QrCodeWallet from "../../popup/QrCodeWallet";
 import { FormattedMessage } from "react-intl";
 
 function Wallet() {
-    const { host, language } = useConstants();
     const theme = useTheme();
     const { wait } = useContext(AuthContext);
+    const { setPopup } = usePopups();
+    const { host, language } = useConstants();
     const { sendWait, setSendWait } = useWaits();
     const { amount, setAmount } = useWallet();
-    const { setPopup } = usePopups();
     const [qrCode, setQrCode] = useState('');
 
     const addToWallet = async () => {
@@ -56,6 +56,8 @@ function Wallet() {
                                 </Button>
                             </Box>
                         </Box>
+
+                        {/* Qr Code Wallet Popup */}
                         <Box id="qrcode" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <QrCodeWallet value={qrCode.qr_data} onClickClose={() => setPopup('qrcode', 'none')} />
                         </Box>

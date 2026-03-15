@@ -13,12 +13,13 @@ import { buildLoginFormData } from "../../helper/LoginFormData";
 import SnackbarAlert from "../../components/SnackBar";
 
 function Login() {
-    const { host, language } = useConstants();
-    const { openSnackBar, type, message, setOpenSnackBar, setSnackBar } = useSnackBar();
-    const { getWait, setGetWait, sendWait, setSendWait } = useWaits();
-    const { email, setEmail, password, setPassword } = useLogin();
     const navigate = useNavigate();
+    const { host } = useConstants();
+    const { email, setEmail, password, setPassword } = useLogin();
+    const { getWait, setGetWait, sendWait, setSendWait } = useWaits();
+    const { openSnackBar, type, message, setOpenSnackBar, setSnackBar } = useSnackBar();
 
+    {/* Check Login Function */ }
     const checkLogin = async () => {
         let result = await CheckLogin(host);
         if (result) {
@@ -28,6 +29,7 @@ function Login() {
         }
     }
 
+    {/* Login Function */ }
     const login = async () => {
         setSendWait(true);
 
@@ -64,6 +66,7 @@ function Login() {
                     <Box className="flow-root px-7 py-20 h-screen">
                         <img src={BackgroundImage} className="float-left max-sm:hidden" />
                         <Box className="w-1/3 max-sm:w-full float-right">
+                            {/* Form */}
                             <Box className="w-full py-3 px-2 rounded-xl mx-auto" sx={{ boxShadow: '1px 0px 5px 0px' }}>
                                 <img src={LogoImage} className="w-2/5 mx-auto my-10 max-sm:w-2/5" />
                                 <Typography variant="h6" fontWeight={800} className="!my-3 text-center">تسجيل الدخول</Typography>
@@ -82,6 +85,8 @@ function Login() {
                                 </Button>
                             </Box>
                         </Box>
+
+                        {/* Snackbar Alert */}
                         <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
                     </Box>
             }

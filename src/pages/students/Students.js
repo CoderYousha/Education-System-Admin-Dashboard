@@ -19,28 +19,28 @@ import { usePopups } from "../../hooks/UsePopups";
 import { useStudentsFilter } from "../../filter/UseStudentsFilter";
 import DeleteDialog from "../../popup/DeleteDialog";
 import { FormattedMessage, useIntl } from "react-intl";
+import { useSearch } from "../../hooks/UseSearch";
+import { usePagination } from "../../hooks/UsePagination";
 
 function Students() {
-    const { host, language } = useConstants();
+    const intl = useIntl();
+    const theme = useTheme();
     const { wait } = useContext(AuthContext);
+    const { setPopup } = usePopups();
+    const { host, language } = useConstants();
+    const { StyledTableCell, StyledTableRow } = useTableStyles();
+    const { search, setSearch, order, setOrder } = useSearch();
     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
     const { getWait, setGetWait, sendWait, setSendWait, filterWait, setFilterWait } = useWaits();
+    const { page, setPage, currentPage, setCurrentPage, totalPages, setTotalPages } = usePagination();
     const { majorId, setMajorId, value, setValue, fromCount, setFromCount, toCount, setToCount, fromDate, setFromDate, toDate, setToDate } = useStudentsFilter();
-    const { StyledTableCell, StyledTableRow } = useTableStyles();
-    const { setPopup } = usePopups();
     const [students, setStudents] = useState([]);
     const [studentId, setStudentId] = useState(null);
-    const [page, setPage] = useState(0);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
     const [studentsCount, setStudentsCount] = useState('');
-    const [search, setSearch] = useState('');
     const { description, open, setDialog, setOpen, title } = useDialog();
     const [student, setStudent] = useState('');
-    const [order, setOrder] = useState('');
-    const theme = useTheme();
-    const intl = useIntl();
 
+    {/* Get Students Function */ }
     const getStudents = async () => {
         let result = await Fetch(host + `/admin/users?account_role=student&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}${fromCount && `&enrolled_courses[from]=${fromCount}`}${toCount && `&enrolled_courses[to]=${toCount}`}${fromDate && `&from=${fromDate}`}${toDate && `&to=${toDate}`}${majorId && `&major_id=${majorId}`}`, 'GET', null);
 
@@ -54,12 +54,14 @@ function Students() {
         setGetWait(false);
     }
 
+    {/* Get Specefic Student Details */ }
     const studentDetails = async (id) => {
         setStudent(students.filter((student) => student.id === id)[0]);
 
         setPopup('details', 'flex');
     }
 
+    {/* Filtering Students Function */ }
     const filteringStudents = async () => {
         let result = await Fetch(host + `/admin/users?account_role=student&page=${page + 1}&search=${search}&direction=asc&${order && `order_by=${order}`}${fromCount && `&enrolled_courses[from]=${fromCount}`}${toCount && `&enrolled_courses[to]=${toCount}`}${fromDate && `&from=${fromDate}`}${toDate && `&to=${toDate}`}${majorId && `&major_id=${majorId}`}`, 'GET', null);
         if (result.status === 200) {
@@ -73,6 +75,7 @@ function Students() {
         setFilterWait(false);
     }
 
+    {/* Delete Student Function */ }
     const deleteStudent = async () => {
         setSendWait(true);
 
@@ -95,12 +98,12 @@ function Students() {
         <>
             {
                 wait ?
-                    <Box className="w-full h-screen relative flex justify-center items-center" sx={{float: language === 'en' && 'right'}}>
+                    <Box className="w-full h-screen relative flex justify-center items-center" sx={{ float: language === 'en' && 'right' }}>
                         <CircularProgress size={70} />
                     </Box>
                     :
                     <Box sx={{ backgroundColor: theme.palette.background.default }}>
-                        <Box className="w-4/5 rounded-xl relative" dir={language === 'en' ? 'ltr' : "rtl"} sx={{float: language === 'en' && 'right'}}>
+                        <Box className="w-4/5 rounded-xl relative" dir={language === 'en' ? 'ltr' : "rtl"} sx={{ float: language === 'en' && 'right' }}>
                             {
                                 getWait ?
                                     <Box className="w-full h-screen relative flex justify-center items-center">
@@ -118,8 +121,8 @@ function Students() {
                                                     <Box className="w-full flex items-center">
                                                         <FilterAltOutlinedIcon className="cursor-pointer" onClick={() => setPopup('filter', 'flex')} fontSize="large" />
                                                         <Box className="w-2/4 relative mr-3 max-sm:w-full">
-                                                            <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder={intl.formatMessage({id: "search_students"})} />
-                                                            <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" sx={{right: language === 'en' && '90%'}}/>
+                                                            <input style={{ backgroundColor: theme.palette.background.default }} onChange={(e) => setSearch(e.target.value)} className="w-10/12 h-12 rounded-md border indent-14 outline-none max-sm:w-full" placeholder={intl.formatMessage({ id: "search_students" })} />
+                                                            <SearchOutlinedIcon className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500" sx={{ right: language === 'en' && '90%' }} />
                                                         </Box>
                                                     </Box>
                                                     <Box className="flex w-2/4 items-center max-sm:w-full max-sm:mt-2 max-sm:justify-between">
@@ -136,31 +139,33 @@ function Students() {
                                                 <Table className="" sx={{ minWidth: 700 }} aria-label="customized table">
                                                     <TableHead className="bg-gray-200">
                                                         <TableRow sx={{ backgroundColor: theme.palette.background.paper }}>
-                                                            <StyledTableCell align={language === 'en'? "left" : "right"}><FormattedMessage id='full_name' /></StyledTableCell>
-                                                            <StyledTableCell align={language === 'en'? "left" : "right"}><FormattedMessage id='email' /></StyledTableCell>
-                                                            <StyledTableCell align={language === 'en'? "left" : "right"}><FormattedMessage id='education_specialization' /></StyledTableCell>
-                                                            <StyledTableCell align={language === 'en'? "left" : "right"} className="!text-center"><FormattedMessage id='registeration_courses_count' /></StyledTableCell>
-                                                            <StyledTableCell align={language === 'en'? "left" : "right"}><FormattedMessage id='registeration_date' /></StyledTableCell>
-                                                            <StyledTableCell align={language === 'en'? "left" : "right"} className="!text-center"><FormattedMessage id='procedures' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? "left" : "right"}><FormattedMessage id='full_name' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? "left" : "right"}><FormattedMessage id='email' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? "left" : "right"}><FormattedMessage id='education_specialization' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? "left" : "right"} className="!text-center"><FormattedMessage id='registeration_courses_count' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? "left" : "right"}><FormattedMessage id='registeration_date' /></StyledTableCell>
+                                                            <StyledTableCell align={language === 'en' ? "left" : "right"} className="!text-center"><FormattedMessage id='procedures' /></StyledTableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
                                                         {students.map((student, index) => (
                                                             <StyledTableRow key={index} onClick={() => studentDetails(student.id)} className="hover:bg-gray-400 duration-100 cursor-pointer">
-                                                                <StyledTableCell align={language === 'en'? "left" : "right"} component="th" scope="row">
+                                                                <StyledTableCell align={language === 'en' ? "left" : "right"} component="th" scope="row">
                                                                     {student.first_name + ' ' + student.last_name}
                                                                 </StyledTableCell>
-                                                                <StyledTableCell align={language === 'en'? "left" : "right"} className="">{student.email}</StyledTableCell>
-                                                                <StyledTableCell align={language === 'en'? "left" : "right"}>{language === 'en' ? student.major?.name_en : student.major?.name_ar}</StyledTableCell>
-                                                                <StyledTableCell align={language === 'en'? "left" : "right"} className="!text-center">{student.enrolled_courses_count}</StyledTableCell>
-                                                                <StyledTableCell align={language === 'en'? "left" : "right"} className="text-center">{student?.verified_at?.split("T")[0]}</StyledTableCell>
-                                                                <StyledTableCell align={language === 'en'? "left" : "right"} className="!text-center">
+                                                                <StyledTableCell align={language === 'en' ? "left" : "right"} className="">{student.email}</StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? "left" : "right"}>{language === 'en' ? student.major?.name_en : student.major?.name_ar}</StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? "left" : "right"} className="!text-center">{student.enrolled_courses_count}</StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? "left" : "right"} className="text-center">{student?.verified_at?.split("T")[0]}</StyledTableCell>
+                                                                <StyledTableCell align={language === 'en' ? "left" : "right"} className="!text-center">
                                                                     <Button variant="contained" className="mr-2 h-8 !bg-red-300 !text-red-600 !font-bold hover:!bg-red-600 hover:!text-white" onClick={(e) => { e.stopPropagation(); setStudentId(student.id); setPopup('delete', 'flex'); }}><FormattedMessage id='delete' /></Button>
                                                                 </StyledTableCell>
                                                             </StyledTableRow>
                                                         ))}
                                                     </TableBody>
                                                 </Table>
+
+                                                {/* Pagination Buttons */}
                                                 <Box className="flex justify-center items-center" dir="rtl">
                                                     <Button disabled={page + 1 === totalPages} className="cursor-pointer" onClick={() => setPage(currentPage + 1)}>
                                                         <NavigateNextIcon fontSize="large" />
@@ -175,16 +180,26 @@ function Students() {
                                     </Box>
                             }
                         </Box>
-                        <Box id="filter" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
+
+                        {/* Students Filter Popup */}
+                        <Box id="filter" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 justify-center items-center hidden max-sm:left-0">
                             <StudentFilter onClickConfirm={filteringStudents} value={value} setValue={setValue} majorId={majorId} setMajorId={setMajorId} fromCount={fromCount} setFromCount={setFromCount} toCount={toCount} setToCount={setToCount} fromDate={fromDate} setFromDate={setFromDate} toDate={toDate} setToDate={setToDate} onClickClose={() => setPopup('filter', 'none')} filterWait={filterWait} setFilterWait={setFilterWait} />
                         </Box>
-                        <Box id="details" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+
+                        {/* Student Details Popup */}
+                        <Box id="details" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <StudentDetails student={student} onClickClose={() => setPopup('details', 'none')} />
                         </Box>
-                        <Box id="delete" sx={{right: language === 'en' && '0'}} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
+
+                        {/* Delete Student Popup */}
+                        <Box id="delete" sx={{ right: language === 'en' && '0' }} className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
                             <DeleteDialog onClickConfirm={deleteStudent} onClickCancel={() => setPopup('delete', 'none')} title={<FormattedMessage id='delete_title' />} subtitle={<FormattedMessage id='delete_description' />} />
                         </Box>
+
+                        {/* Snackbar Alert */}
                         <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
+
+                        {/* Alert Dialog */}
                         <AlertDialog wait={sendWait} openDialog={open} title={title} description={description} onCancel={() => setOpen(false)} onConfirm={() => deleteStudent()} />
                     </Box>
             }

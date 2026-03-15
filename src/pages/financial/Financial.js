@@ -14,7 +14,6 @@ import WarningImage from "../../images/icons/warning.png";
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import { useTableStyles } from "../../hooks/UseTableStyles";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import DeleteDialog from "../../popup/DeleteDialog";
 import { usePopups } from "../../hooks/UsePopups";
 import { useNavigate } from "react-router-dom";
 import { useWaits } from "../../hooks/UseWait";
@@ -25,10 +24,12 @@ import { FormattedMessage } from "react-intl";
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 
 function Financial() {
-    const { host, language } = useConstants();
-    const { wait } = useContext(AuthContext);
-    const { StyledTableCell, StyledTableRow } = useTableStyles();
+    const theme = useTheme();
+    const navigate = useNavigate();
     const { setPopup } = usePopups();
+    const { wait } = useContext(AuthContext);
+    const { host, language } = useConstants();
+    const { StyledTableCell, StyledTableRow } = useTableStyles();
     const { getWait, setGetWait, sendWait, setSendWait } = useWaits();
     const { openSnackBar, type, message, setSnackBar, setOpenSnackBar } = useSnackBar();
     const [systemProfits, setSystemProfits] = useState('');
@@ -38,15 +39,15 @@ function Financial() {
     const [cards, setCards] = useState('');
     const visibleSales = sales.slice(0, 4);
     const visibleWithdraws = withdraws.slice(0, 4);
-    const theme = useTheme();
-    const navigate = useNavigate();
 
+    {/* Calculating Percentage Function */}
     const calculatingPercentage = (total, profit) => {
         let value = 100 * profit / total;
 
         return value;
     }
 
+    {/* Get Sales Function */}
     const getSales = async () => {
         let result = await Fetch(host + '/reports/sales?is_detailed=1');
 
@@ -56,6 +57,7 @@ function Financial() {
         }
     }
 
+    {/* Get Admin Profit Percentage Function */}
     const getAdminPercentage = async () => {
         let result = await Fetch(host + '/lists/config?keys[]=admin_percentage');
 
@@ -65,6 +67,7 @@ function Financial() {
         }
     }
 
+    {/* Get Withdraws Function */}
     const getWithdraws = async () => {
         let result = await Fetch(host + '/admin/profit/withdraws');
 
@@ -73,6 +76,7 @@ function Financial() {
         }
     }
 
+    {/* Update Percentage Function */}
     const updatePercentage = async () => {
         setSendWait(true);
 
@@ -355,9 +359,8 @@ function Financial() {
                                     </Box>
                                 </>
                         }
-                        <Box id="delete" className="w-4/5 h-screen fixed top-0 bg-gray-200 bg-opacity-5 hidden justify-center items-center max-sm:left-0">
-                            <DeleteDialog onClickCancel={() => setPopup('delete', 'none')} title="تأكيد رفض طلب السحب" subtitle="أنت على وشك رفض طلب سحب الأرباح لهذا المدرس، يرجى التأكد من صحة القرار قبل المتابعة." hasInput={true} placeholder="اكتب سبب الرفض هنا..." warning="سيتم إشعار المدرس بسبب الرفض فور التأكيد" label="سبب الرفض" />
-                        </Box>
+
+                        {/* Snackbar Alert */}
                         <SnackbarAlert open={openSnackBar} message={message} severity={type} onClose={() => setOpenSnackBar(false)} />
                     </Box>
             }

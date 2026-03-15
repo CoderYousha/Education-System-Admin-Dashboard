@@ -67,11 +67,11 @@ function Sidebar() {
                'icon': <WalletOutlinedIcon fontSize="medium" className="mx-2 max-sm:mx-auto" />,
                'link': '../wallet',
           },
-          {
-               'title': <FormattedMessage id="reports" />,
-               'icon': <AssessmentOutlinedIcon fontSize="medium" className="mx-2 max-sm:mx-auto" />,
-               'link': '../reports',
-          },
+          // {
+          //      'title': <FormattedMessage id="reports" />,
+          //      'icon': <AssessmentOutlinedIcon fontSize="medium" className="mx-2 max-sm:mx-auto" />,
+          //      'link': '../reports',
+          // },
      ];
      return (
           <>
